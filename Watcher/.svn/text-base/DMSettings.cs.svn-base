@@ -1,0 +1,68 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
+using System.Text;
+
+namespace DeskMetrics
+{
+    static class DMSettings
+    {
+        /// <summary>
+        /// Field User agent
+        /// </summary>
+        public const string _userAgent = "DeskMetricsNET";
+        /// <summary>
+        /// Field URL Server
+        /// </summary>
+        public const string _defaultServer = "api.deskmetrics.com";
+        /// <summary>
+        /// Field HTTPS Port
+        /// </summary>
+        public const int _defaultPort = 443;
+        /// <summary>
+        /// Field Connection timeout
+        /// </summary>
+        public const int _defaultTimeout = 8000;
+        /// <summary>
+        /// Field Storage usage
+        /// </summary>
+        public const int _maxStorageData = 204800;
+        /// <summary>
+        /// Field Network usage
+        /// </summary>
+        public const int _maxDailyNetwork = -1;
+        /// <summary>
+        /// Field Error Codes
+        /// </summary>
+        /// 
+        public static readonly Dictionary<string, string> _errorCodes = new Dictionary<string, string> 
+        { 
+          {"-14","Application version not found"},
+          {"-13","Use POST Request"},
+          {"-12","UserID not found"},
+          {"-11","AppID not found"},
+          {"-10","Missing required JSON data"},
+          {"-9","Invalid JSON file"},
+          {"-8","Empty POST data"},
+          {"-7",""},
+          {"-6",""},
+          {"-5",""},
+          {"-4",""},
+          {"-3",""},
+          {"-2",""},
+          {"-1","Generic Exception"},
+          {"0","OK"},
+          {"1","OK"},
+          {"2","Could not open HTTP component (InternetOpen)"},
+          {"3","Could not connect to server (InternetConnect)"},
+          {"4","Could not modify HTTP options (InternetSetOption)"},
+          {"5","Could not modify HTTP security parameters (InternetQueryOption)"},
+          {"6","Could not send HTTP request to server (HttpSendRequest)"},
+          {"7","Could not read server response (InternetReadFile)"},
+          {"8","Could not detect internet connection (InternetGetConnectedState)"}
+        };    
+       
+
+    }
+}

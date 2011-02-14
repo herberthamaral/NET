@@ -1,0 +1,140 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Net;
+
+
+namespace DeskMetrics
+{
+    public class DMProxy
+    {
+        /// <summary>
+        /// Field Username
+        /// </summary>
+        private string _username;
+        /// <summary>
+        /// Field Password
+        /// </summary>
+        private string _password;
+        /// <summary>
+        /// Field Host
+        /// </summary>
+        private string _host;
+        /// <summary>
+        /// Field Port
+        /// </summary>
+        private Int32 _port;
+
+        /// <summary>
+        /// GetProcessorFrequency and Set Username
+        /// </summary>
+        public string Username
+        {
+            get
+            {
+                return this._username;
+            }
+            set
+            {
+                this._username = value;
+            }
+        }
+
+        /// <summary>
+        /// GetProcessorFrequency and Set Password
+        /// </summary>
+        public string Password
+        {
+            get
+            {
+                return this._password;
+            }
+            set
+            {
+                this._password = value;
+            }
+        }
+
+        /// <summary>
+        /// GetProcessorFrequency and Set Host
+        /// </summary>
+        public string Host
+        {
+            get
+            {
+                return this._host;
+            }
+            set
+            {
+                this._host = value;
+            }
+        }
+
+        /// <summary>
+        /// GetProcessorFrequency and Set Port number
+        /// </summary>
+        public int Port
+        {
+            get
+            {
+                return this._port;
+            }
+            set
+            {
+                this._port = value;
+            }
+        }
+
+        /// <summary>
+        /// Set Proxy GetComponentName
+        /// </summary>
+        public void SetProxy(ref HttpWebRequest _request)
+        {
+            try
+            {
+                string _username = null;
+                string _password = null;
+                string _uri = null;
+                IWebProxy proxy = WebRequest.DefaultWebProxy;
+                if (proxy == null)
+                {
+                    WebProxy myProxy = new WebProxy();
+                    if (!string.IsNullOrEmpty(Username))
+                    {
+                        _username = Username; 
+
+                    }
+                    if (!string.IsNullOrEmpty(Password))
+                    {
+                        _password = Password;
+                    }
+                    if (!string.IsNullOrEmpty(Host))
+                    {
+                        _uri = Host;
+
+                    }
+                    if (Port != 0)
+                    {
+                        
+                        _uri = _uri +":"+Port ;
+                    }
+                    if (!string.IsNullOrEmpty(_uri))
+                    {
+                        Uri newUri = new Uri(_uri);
+                        myProxy.Address = newUri;
+                        myProxy.Credentials = new NetworkCredential(_username, _password);
+                        _request.Proxy = myProxy;
+                    }
+                }
+                else
+                {
+                    proxy.GetProxy(_request.RequestUri);
+                }              
+            }
+            catch (Exception)
+            {
+            }
+        }
+    }
+}

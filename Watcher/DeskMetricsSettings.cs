@@ -1,0 +1,65 @@
+﻿// **********************************************************************//
+//                                                                       //
+//     DeskMetrics NET - DeskMetricsSettings.cs                          //
+//     Copyright (c) 2010-2011 DeskMetrics Limited                       //
+//                                                                       //
+//     http://deskmetrics.com                                            //
+//     http://support.deskmetrics.com                                    //
+//                                                                       //
+//     support@deskmetrics.com                                           //
+//                                                                       //
+//     This code is provided under the DeskMetrics Modified BSD License  //
+//     A copy of this license has been distributed in a file called      //
+//     LICENSE with this source code.                                    //
+//                                                                       //
+// **********************************************************************//
+
+using System;
+using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
+using System.Text;
+
+namespace DeskMetrics
+{
+    static class DMSettings
+    {
+        public const string _userAgent = "DeskMetricsNET";
+        public const string _defaultServer = "api.deskmetrics.com";
+        public const string _nullstr = "null";
+        public const string _API_SENDDATA = "/sendData";
+
+        public const int _defaultPort = 443;
+        public const int _defaultTimeout = 25000; // 20 seconds
+        public const int _maxStorageData = 51200; // 50 KB
+        public const int _maxDailyNetwork = -1;
+
+        public static readonly Dictionary<string, string> _errorCodes = new Dictionary<string, string> 
+        { 
+          {"-14","Application version not found"},
+          {"-13","Use POST Request"},
+          {"-12","UserID not found"},
+          {"-11","AppID not found"},
+          {"-10","Missing required JSON data"},
+          {"-9","Invalid JSON file"},
+          {"-8","Empty POST data"},
+          {"-7",""},
+          {"-6",""},
+          {"-5",""},
+          {"-4",""},
+          {"-3",""},
+          {"-2",""},
+          {"-1","Generic Exception"},
+          {"0","OK"},
+          {"1","OK"},
+          {"2","Could not open HTTP component (InternetOpen)"},
+          {"3","Could not connect to server (InternetConnect)"},
+          {"4","Could not modify HTTP options (InternetSetOption)"},
+          {"5","Could not modify HTTP security parameters (InternetQueryOption)"},
+          {"6","Could not send HTTP request to server (HttpSendRequest)"},
+          {"7","Could not read server response (InternetReadFile)"},
+          {"8","Could not detect internet connection (InternetGetConnectedState)"},
+          {"9","Bandwidth exceeded"}
+        };    
+    }
+}

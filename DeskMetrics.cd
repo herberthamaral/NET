@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="DeskMetrics.Watcher">
+    <Position X="0.5" Y="0.5" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>EAPUYIcpAKgDoU2CARIRBACFBEKYIA0bpJEJGgKhxIg=</HashCode>
+      <FileName>watcher\DeskMetricsWatcher.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Orientation="Right" Position="0.305" />
+  </Class>
+  <Class Name="DeskMetrics.DMOperatingSystem">
+    <Position X="6.75" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAMAAEABAAUIAAAAAAAAAAQAAAAAAAEaCgAgAEIIUAA=</HashCode>
+      <FileName>watcher\DeskMetricsOS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeskMetrics.DMHardware">
+    <Position X="10" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAEkAAAAJAAAABAQgAAAYAAAhSAAAACIAYBIQoAAA=</HashCode>
+      <FileName>watcher\DeskMetricsHardware.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeskMetrics.DMSettings">
+    <Position X="6.25" Y="10.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAEACAAAAAAAEIAAAAAAiAAAAAAAAAgAAAYAAA=</HashCode>
+      <FileName>watcher\DeskMetricsSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeskMetrics.DMJSON">
+    <Position X="8.75" Y="7.25" Width="4.75" />
+    <TypeIdentifier>
+      <HashCode>AAIRCAAhAEAAEAIAFDgABMqAAFAAQAEAAQAAAACEABg=</HashCode>
+      <FileName>watcher\DeskMetricsJSON.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

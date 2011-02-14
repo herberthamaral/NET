@@ -1,0 +1,431 @@
+﻿// **********************************************************************//
+//                                                                       //
+//     DeskMetrics NET - DeskMetricsOS.cs                                //
+//     Copyright (c) 2010-2011 DeskMetrics Limited                       //
+//                                                                       //
+//     http://deskmetrics.com                                            //
+//     http://support.deskmetrics.com                                    //
+//                                                                       //
+//     support@deskmetrics.com                                           //
+//                                                                       //
+//     This code is provided under the DeskMetrics Modified BSD License  //
+//     A copy of this license has been distributed in a file called      //
+//     LICENSE with this source code.                                    //
+//                                                                       //
+// **********************************************************************//
+
+using System;
+using System.Collections.Generic;
+using Microsoft.Win32;
+using System.Threading;
+using System.Text;
+using System.Management;
+using System.IO;
+using System.Runtime.InteropServices;
+
+
+
+namespace DeskMetrics
+{
+    internal class DMOperatingSystem
+    {
+        /// <summary>
+        /// Field Framework ApplicationVersion
+        /// </summary>
+        private string _frameworkVersion;
+        /// <summary>
+        /// Field OS Archicteture - 32 or 64 bits
+        /// </summary>
+        private int _osArchicteture;
+        /// <summary>
+        /// Field OS ApplicationVersion
+        /// </summary>
+        private string _osName;
+        /// <summary>
+        /// Field Framework Service Pack
+        /// </summary>
+        private string _frameworkServicePack;
+        /// <summary>
+        /// Field OS LCID - Language Culture Id
+        /// </summary>
+        private int _osLCID;
+        /// <summary>
+        /// Field OS Language
+        /// </summary>
+        private string _osLanguage;
+        /// <summary>
+        /// Field JavaVersion
+        /// </summary>
+        private string _javaVersion;
+        /// <summary>
+        /// Field OS Service Pack
+        /// </summary>
+        private string _osServicePack;
+
+        /// <summary>
+        /// GetProcessorFrequency and Set Framework ApplicationVersion
+        /// </summary>
+        public string FrameworkVersion
+        {
+            get
+            {
+                return _frameworkVersion;
+            }
+            set
+            {
+                _frameworkVersion = value;
+            }
+        }
+
+        /// <summary>
+        /// GetProcessorFrequency and Set OS Archicteture
+        /// </summary>
+        public int OSArchicteture
+        {
+            get
+            {
+                return _osArchicteture;
+            }
+            set
+            {
+                _osArchicteture = value;
+            }
+        }
+
+        /// <summary>
+        /// GetProcessorFrequency and Set OS Language
+        /// </summary>
+        public string OSLanguage
+        {
+            get
+            {
+                return _osLanguage;
+            }
+            set
+            {
+                _osLanguage = value;
+            }
+        }
+
+        /// <summary>
+        /// GetProcessorFrequency and Set OS ApplicationVersion
+        /// </summary>
+        public string OSVersion
+        {
+            get
+            {
+                return _osName;
+            }
+            set
+            {
+                _osName = value;
+            }
+        }
+
+        /// <summary>
+        /// GetProcessorFrequency and Set Frameworl Service Pack
+        /// </summary>
+        public string FrameworkServicePack
+        {
+            get
+            {
+                return _frameworkServicePack;
+            }
+            set
+            {
+                _frameworkServicePack = value;
+            }
+        }
+
+        /// <summary>
+        /// GetProcessorFrequency and Set OS LCID - Language Culture Id
+        /// </summary>
+        public int OSLcid
+        {
+            get
+            {
+                return _osLCID;
+            }
+            set
+            {
+                _osLCID = value;
+            }
+        }
+
+        /// <summary>
+        /// GetProcessorFrequency and Set Java ApplicationVersion
+        /// </summary>
+        public string JavaVersion
+        {
+            get
+            {
+                return _javaVersion;
+            }
+            set
+            {
+                _javaVersion = value;
+            }
+        }
+
+        /// <summary>
+        /// GetProcessorFrequency and Set OS Service Pack
+        /// </summary>
+        public string OSServicePack
+        {
+            get
+            {
+                return _osServicePack;
+            }
+            set
+            {
+                _osServicePack = value;
+            }
+        }
+
+        /// <summary>
+        /// GetProcessorFrequency Framework ApplicationVersion GetComponentName
+        /// </summary>
+        public void GetFrameworkVersion()
+        {
+            try
+            {
+                FrameworkVersion = "none";
+                FrameworkServicePack = "";
+
+                RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\NET Framework Setup\NDP");
+                if (key != null)
+                {
+                    if ((key.OpenSubKey("v4")) != null)
+                    {
+                        FrameworkVersion     = "4.0";
+                        FrameworkServicePack = "0"; 
+                        return;
+                    }
+
+                    if ((key.OpenSubKey("v3.5")) != null)
+                    {
+                        FrameworkVersion     = "3.5";
+                        FrameworkServicePack = key.GetValue("SP", 0).ToString();
+                        return;
+                    }
+
+                    if ((key.OpenSubKey("v3.0")) != null)
+                    {
+                        FrameworkVersion     = "3.0";
+                        FrameworkServicePack = key.GetValue("SP", 0).ToString();
+                        return;
+                    }
+
+                    if ((key.OpenSubKey("v2.0.50727")) != null)
+                    {
+                        FrameworkVersion = "2.0.50727";
+                        FrameworkServicePack = key.GetValue("SP", 0).ToString();
+                        return;
+                    }
+                    
+                    if ((key.OpenSubKey("v1.1.4322")) != null)
+                    {
+                        FrameworkVersion = "1.1.4322";
+                        FrameworkServicePack = key.GetValue("SP", 0).ToString();
+                        return;
+                    }
+
+                                        
+                    if ((key.OpenSubKey("v1.0")) != null)
+                    {
+                        FrameworkVersion = "1.0";
+                        FrameworkServicePack = key.GetValue("SP", 0).ToString();
+                        return;
+                    }
+                }
+            }
+            catch 
+            {    
+                FrameworkVersion = "null";
+                FrameworkServicePack = "";
+            }
+        }
+      
+        /// <summary>
+        /// GetProcessorFrequency OS Archicteture GetComponentName
+        /// </summary>
+        public void GetOSArchicteture()
+        {
+            try
+            {
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
+                foreach (ManagementObject sysItem in searcher.Get())
+                {
+                   
+                    if (sysItem.Properties.Count <= 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (PropertyData PC in sysItem.Properties)
+                    {
+                        if (PC.Name.Equals("OSArchitecture"))
+                        {
+                            if (PC.Value !=null)
+                            {
+                                string value = PC.Value.ToString().Remove(2);
+                                OSArchicteture = int.Parse(value);
+                            }
+                        }
+                    }
+                }
+     
+                if (OSArchicteture <= 0)
+                {
+                    if (IntPtr.Size == 8)
+                    {
+                        OSArchicteture = 64;
+                    }
+                    else
+                    {
+                        if (IntPtr.Size == 4)
+                        {
+                            OSArchicteture = 32;
+                        }
+                    }
+                }
+            }
+            catch 
+            {
+                OSArchicteture = -1;
+            }
+        }
+
+        /// <summary>
+        /// GetProcessorFrequency OS Language GetComponentName
+        /// </summary>
+        public void GetOSLanguage()
+        {
+            try
+            {
+                OSLanguage = Thread.CurrentThread.CurrentCulture.DisplayName;
+                OSLcid     = Thread.CurrentThread.CurrentCulture.LCID;
+            }
+            catch
+            {
+                OSLanguage = "null";
+                OSLcid = -1;
+            }
+        }
+
+        /// <summary>
+        /// GetProcessorFrequency OS ApplicationVersion GetComponentName
+        /// </summary>
+        public void GetOSVersion()
+        {
+            try
+            {
+                OperatingSystem _osInfo = Environment.OSVersion;
+                _osServicePack = _osInfo.ServicePack;
+                
+                switch (_osInfo.Platform)
+                {
+                    case PlatformID.MacOSX:
+                        break;
+                    case PlatformID.Unix:
+                        break;
+                    case PlatformID.Win32NT:
+                        switch (_osInfo.Version.Major)
+	                    {
+                            case 3:
+                                OSVersion = "Windows NT 3.51";
+                                break;
+                            case 4:
+                                OSVersion = "Windows NT 4.0";
+                                break;
+                            case 5:
+                                if (_osInfo.Version.Minor == 0)
+                                {
+                                    OSVersion = "Windows 2000";
+                                }
+                                else
+                                {
+                                    if (_osInfo.Version.Minor == 1)
+                                    {
+                                        OSVersion = "Windows XP";
+                                    }
+                                    else
+                                    {
+                                        if (_osInfo.Version.Minor == 2)
+                                        {
+                                            OSVersion = "Windows Server 2003";
+                                        }
+                                    }
+                                }
+                                break;
+                            case 6:
+                                if (_osInfo.Version.Minor == 0)
+                                {
+                                    OSVersion = "Windows Vista";
+                                }
+                                else
+                                {
+                                    if (_osInfo.Version.Minor == 1)
+                                    {
+                                        OSVersion = "Windows 7";
+                                    }
+                                    else
+                                    {
+                                        if (_osInfo.Version.Minor == 3)
+                                        {
+                                            OSVersion = "Windows Server 2008";
+                                        }
+                                    }
+                                }
+                                break;
+                            default:
+                                break;
+	                    }
+                        break;
+                    case PlatformID.Win32S:
+                        break;
+                    case PlatformID.Win32Windows:
+                        switch (_osInfo.Version.Minor)
+	                    {   
+		                    default:
+                                break;
+	                    }
+                        break;
+                    case PlatformID.WinCE:
+                        break;
+                    case PlatformID.Xbox:
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            catch
+            {
+                OSVersion = "null";    
+            }
+
+        }
+
+        /// <summary>
+        /// GetProcessorFrequency Java version GetComponentName
+        /// </summary>
+        public void GetJavaVersion()
+        {
+            try
+            {
+                JavaVersion = "none";
+                RegistryKey registry = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment");
+                if (registry != null)
+                {
+                    JavaVersion = registry.GetValue("CurrentVersion").ToString();
+                    registry.Close();
+                }
+            }
+            catch
+            {
+                JavaVersion = "null";
+            }
+        }
+    }
+}

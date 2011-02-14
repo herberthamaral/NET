@@ -1,0 +1,1222 @@
+﻿using System;
+using System.Reflection;
+using System.Data;
+using System.Diagnostics;
+using System.Collections;
+using System.Globalization;
+using System.Text;
+using System.IO;
+using System.Net;
+using System.Net.Security;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
+using Microsoft.Win32;
+
+namespace DeskMetrics
+{
+    public class Watcher : IDisposable
+    {
+
+        /// <summary>
+        /// Field Close - boolean
+        /// </summary>
+        private bool _closed;
+        /// <summary>
+        /// Field Initialized
+        /// </summary>
+        private bool _initialized;
+        /// <summary>
+        /// Field Timestamp
+        /// </summary>
+        private int _timestamp;
+        /// <summary>
+        /// Field User GUID
+        /// </summary>
+        private object _userGUID;
+        /// <summary>
+        /// Field Session Id
+        /// </summary>
+        private object _sessionGUID;
+        /// <summary>
+        /// Field Json
+        /// </summary>
+        private string _json;
+        /// <summary>
+        /// Field Application Id
+        /// </summary>
+        private string _applicationId;
+        /// <summary>
+        /// Field Error Message
+        /// </summary>
+        private string _error;
+        /// <summary>
+        /// Field Test mode
+        /// </summary>
+        private int _test;
+        /// <summary>
+        /// Field Check ApplicationVersion
+        /// </summary>
+        private int _checkVersion;
+        /// <summary>
+        /// Field Type JSON
+        /// </summary>
+        private string _type;
+
+        private int _flownumber;
+        /// <summary>
+        /// Field Event Category
+        /// </summary>
+        private string _eventCategory;
+        /// <summary>
+        /// Field Event Name
+        /// </summary>
+        private string _eventName;
+        /// <summary>
+        /// Field EventValue Value
+        /// </summary>
+        private string _eventValue;
+        /// <summary>
+        /// Field Sent Json
+        /// </summary>
+        private bool _sent;
+        /// <summary>
+        /// Field Custom Name
+        /// </summary>
+        private string _customDataName;
+        /// <summary>
+        /// Field Custom Data Value
+        /// </summary>
+        private string _customDataValue;
+        /// <summary>
+        /// Field Custom Log
+        /// </summary>
+        private string _log;
+        /// <summary>
+        /// Field ApplicationVersion
+        /// </summary>
+        private string _applicationVersion;
+        /// <summary>
+        /// Field Component Name
+        /// </summary>
+        private string _componentName;
+        /// <summary>
+        /// Field Component Version
+        /// </summary>
+        private string _componentVersion;
+        /// <summary>
+        /// Field Auto Send
+        /// </summary>
+        private bool _autosend;
+        /// <summary>
+        /// </summary>
+        private int _flowglobalnumber = 0;
+        /// <summary>
+        /// </summary>
+        public bool Closed
+        {
+            get
+            {
+                return _closed;
+            }
+            set
+            {
+                _closed = value;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                return _initialized;
+            }
+            set
+            {
+                _initialized = value;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public string ApplicationId
+        {
+            get
+            {
+                return _applicationId;
+            }
+            set
+            {
+                _applicationId = value;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public string Json
+        {
+            get
+            {
+                return _json;
+            }
+            set
+            {
+                _json = value;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public string Error
+        {
+            get
+            {
+                return _error;
+            }
+
+        }
+
+        /// <summary>
+        /// </summary>
+        public string Type
+        {
+            get
+            {
+                return _type;
+            }
+            set
+            {
+                _type = value;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public string EventCategory
+        {
+            get
+            {
+                return _eventCategory;
+            }
+            set
+            {
+                _eventCategory = value;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public string EventName
+        {
+            get
+            {
+                return _eventName;
+            }
+            set
+            {
+                _eventName = value;
+            }
+
+        }
+
+        /// <summary>
+        /// </summary>
+        public string EventValue
+        {
+            get
+            {
+                return _eventValue;
+            }
+            set
+            {
+                _eventValue = value;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public bool Sent
+        {
+            get
+            {
+                return _sent;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public string CustomDataName
+        {
+            get
+            {
+                return _customDataName;
+            }
+            set
+            {
+                _customDataName = value;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public string CustomDataValue
+        {
+            get
+            {
+                return _customDataValue;
+            }
+            set
+            {
+                _customDataValue = value;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public string Log
+        {
+            get
+            {
+                return _log;
+            }
+            set
+            {
+                _log = value;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public string ApplicationVersion
+        {
+            get
+            {
+                return _applicationVersion;
+            }
+            set
+            {
+                _applicationVersion = value;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public string ComponentName
+        {
+            get
+            {
+                Assembly thisAsm = this.GetType().Assembly;
+                object[] attrs = thisAsm.GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+                _componentName = ((AssemblyTitleAttribute)attrs[0]).Title;
+                return _componentName;
+            }
+
+        }
+
+        /// <summary>
+        /// </summary>
+        public string ComponentVersion
+        {
+            get
+            {
+                _componentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                return _componentVersion;
+            }
+
+        }
+
+        /// <summary>
+        /// </summary>
+        public bool AutoSend
+        {
+            get
+            {
+                return _autosend;
+            }
+            set
+            {
+                _autosend = value;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="ApplicationId">Application Id</param>
+        /// <param name="TestMode">Test Mode - True or False</param>
+        /// <param name="CheckVersion">Check ApplicationVersion - True or False</param>
+        /// <param name="AutoSend">Check Auto Send - True or False</param>
+        public bool Start(string ApplicationId, bool TestMode, bool CheckVersion, bool AutoSend)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ApplicationId))
+                {
+                    _applicationId = ApplicationId;
+
+                    FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(Environment.GetCommandLineArgs()[0]);
+                    _applicationVersion = myFileVersionInfo.FileVersion;
+
+                    _type = "strApp";
+                    _timestamp = GetTimeStamp();
+                    _userGUID = GetUserID();
+                    _sessionGUID = GetGUID();
+                    _test = Convert.ToInt32(TestMode);
+                    _checkVersion = Convert.ToInt32(CheckVersion);
+                    _autosend = AutoSend;
+
+                    SetJSON();
+
+                    if (_autosend)
+                    {
+                        _sent = SendData();
+                        
+                    }
+
+                    return _initialized;
+
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                _error = DMSettings._errorCodes["-1"].ToString();
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public void Stop()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ApplicationId))
+                {
+                    _type = "stApp";
+                    _timestamp = GetTimeStamp();
+
+                    SetJSON();
+
+                    if (AutoSend)
+                    {
+                        _sent = SendData();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                _error = DMSettings._errorCodes["-1"].ToString();
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="EventCategory">EventCategory Category</param>
+        /// <param name="eventName">EventCategory Name</param>
+        public void TrackEvent(string EventCategory, string EventName)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ApplicationId))
+                {
+                    _type = "ev";
+                    _timestamp = GetTimeStamp();
+                    _eventCategory = EventCategory;
+                    _eventName = EventName;
+                    _flownumber = GetFlowNumber();
+
+                    SetJSON();
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="EventCategory">EventName Category Name</param>
+        /// <param name="EventName">EventName Name</param>
+        public void TrackEventStart(string EventCategory, string EventName)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ApplicationId))
+                {
+                    _type = "evS";
+                    _timestamp = GetTimeStamp();
+                    _eventCategory = EventCategory;
+                    _eventName = EventName;
+                    _flownumber = GetFlowNumber();
+
+                    SetJSON();
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="EventCategory">EventName Category</param>
+        /// <param name="EventName">EventName Name</param>
+        public void TrackEventStop(string EventCategory, string EventName)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ApplicationId))
+                {
+                    _type = "evST";
+                    _timestamp = GetTimeStamp();
+                    _eventCategory = EventCategory;
+                    _eventName = EventName;
+                    _flownumber = GetFlowNumber();
+
+                    SetJSON();
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="Log">json message</param>
+        public bool SendData()
+        {
+            try
+            {
+                DMProxy Proxy = new DMProxy();
+                Hashtable o = new Hashtable();
+                bool _decode = false;
+                int status_code = -1;
+
+                System.Net.ServicePointManager.ServerCertificateValidationCallback +=
+                       delegate(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors sslError)
+                       {
+                           bool validationResult = true;
+                           return validationResult;
+                       };
+
+                if (!string.IsNullOrEmpty(this.ApplicationId))
+                {
+                    string url = "https://" + this.ApplicationId + "." + DMSettings._defaultServer + "/sendData";
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                    //timeOut
+                    request.Timeout = DMSettings._defaultTimeout;
+                    //Setar o Proxy. Default do brownser
+                    Proxy.SetProxy(ref request);
+                    request.UserAgent = "DeskMetricsNET";
+                    request.KeepAlive = false;
+                    request.ProtocolVersion = HttpVersion.Version10;
+                    request.Method = "POST";
+                    //Json
+                    byte[] postBytes = Encoding.ASCII.GetBytes("data=[" + this.Json + "]");
+                    //ContentType and Lenght do Json
+                    request.ContentType = "application/x-www-form-urlencoded";
+                    request.ContentLength = postBytes.Length;
+                    //
+                    Stream requestStream = request.GetRequestStream();
+                    requestStream.Write(postBytes, 0, postBytes.Length);
+                    requestStream.Close();
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    StreamReader streamreader = new StreamReader(response.GetResponseStream());
+                    string stream = streamreader.ReadToEnd();
+                    HttpStatusCode statuscode = response.StatusCode;
+
+                    o = (Hashtable)DMJSON.JsonDecode(stream, ref _decode);
+
+
+                    if (_decode)
+                    {
+                        if (o.Count > 0)
+                        {
+                            if (o.ContainsKey("status_code"))
+                            {
+                                status_code = int.Parse(o["status_code"].ToString());
+                                if ((status_code == 0) || (status_code == 1))
+                                {
+                                    _sent = true;
+                                }
+                            }
+                            else
+                            {
+                                //retorno quando o checkversion for 1
+                            }
+                        }
+
+                    }
+                }
+                else
+                {
+                    _error = DMSettings._errorCodes["-11"].ToString();
+                    _sent = false;
+                }
+
+
+                return _sent;
+            }
+            catch (WebException webException)
+            {
+                _error = webException.ToString();
+                return false;
+            }
+
+
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="Enabled">Enabled param</param>
+        public void TrackException(bool Enabled)
+        {
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="ExceptionMessage">ExceptionMessage Message</param>
+        public void TrackSendException(Exception ExceptionMessage)
+        {
+            try
+            {
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="ApplicationId">ApplicationId param</param>
+        /// <param name="ApplicationVersion">Application ApplicationVersion param</param>
+        /// <param name="TestMode">Test Mode param</param>
+        public void TrackUninstallation(string ApplicationId, string ApplicationVersion, bool TestMode)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ApplicationId))
+                {
+                    _applicationId = ApplicationId;
+
+                    _type = "ust";
+                    _test = Convert.ToInt32(TestMode);
+                    _timestamp = GetTimeStamp();
+                    _sessionGUID = GetGUID();
+                    _applicationVersion = ApplicationVersion;
+
+                    SetJSON();
+
+                    _sent = SendData();
+                }
+
+            }
+            catch (Exception)
+            {
+
+
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        void IDisposable.Dispose()
+        {
+            try
+            {
+                this.Stop();
+            }
+            catch (Exception e)
+            {
+
+                _error = e.Message;
+            }
+        }
+
+        /// <summary>
+        /// Timestamp GMT +0
+        /// </summary>
+        protected int GetTimeStamp()
+        {
+            try
+            {
+                double _timeStamp = 0;
+                DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+                TimeSpan diff = DateTime.UtcNow - origin;
+                _timeStamp = Math.Floor(diff.TotalSeconds);
+                return Convert.ToInt32(_timeStamp);
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+
+        protected int GetFlowNumber()
+        {
+            try
+            {
+                _flowglobalnumber = _flowglobalnumber + 1;
+                return _flowglobalnumber;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+
+        }
+
+        /// <summary>
+        /// </summary>
+        protected void SetJSON()
+        {
+            try
+            {
+                DMOperatingSystem GetOsInfo = new DMOperatingSystem();
+                DMHardware GetHardwareInfo = new DMHardware();
+                Hashtable o = new Hashtable();
+                StringBuilder _str = new StringBuilder();
+                switch (_type)
+                {
+                    case "strApp":
+
+                        #region "Start"
+                        GetOsInfo.GetFrameworkVersion();
+                        GetOsInfo.GetOSArchicteture();
+                        GetOsInfo.GetOSLanguage();
+                        GetOsInfo.GetOSVersion();
+                        GetOsInfo.GetJavaVersion();
+                        GetHardwareInfo.GetProcessorData();
+                        GetHardwareInfo.GetMemoryData();
+                        GetHardwareInfo.GetDiskData();
+                        GetHardwareInfo.GetScreenResolution();
+                        o["type"] = _type;
+                        o["appCheckVersion"] = _checkVersion;
+                        o["appTestMode"] = _test;
+                        o["appVersion"] = _applicationVersion;
+                        o["userID"] = _userGUID;
+                        o["session"] = _sessionGUID;
+                        o["timestamp"] = _timestamp;
+                        o["os_name"] = GetOsInfo.OSVersion;
+                        o["os_servicepack"] = GetOsInfo.OSServicePack;
+                        o["os_arch"] = GetOsInfo.OSArchicteture;
+                        o["os_java"] = GetOsInfo.JavaVersion;
+                        o["os_dotnet"] = GetOsInfo.FrameworkVersion;
+                        o["os_dotnetsp"] = GetOsInfo.FrameworkServicePack;
+                        o["os_lang"] = GetOsInfo.OSLcid;
+                        o["os_screen"] = GetHardwareInfo.ScreenResolution;
+                        o["cpu_name"] = GetHardwareInfo.ProcessorName;
+                        o["cpu_brand"] = GetHardwareInfo.ProcessorBrand;
+                        o["cpu_freq"] = GetHardwareInfo.ProcessorFrequency;
+                        o["cpu_cores"] = GetHardwareInfo.ProcessorCores;
+                        o["cpu_arch"] = GetHardwareInfo.ProcessorArchicteture;
+                        o["mem_total"] = GetHardwareInfo.MemoryTotal;
+                        o["mem_free"] = GetHardwareInfo.MemoryFree;
+                        o["disk_total"] = GetHardwareInfo.DiskTotal;
+                        o["disk_free"] = GetHardwareInfo.DiskFree;
+
+                        _str.Append("{\"tp\":\"" + o["type"] + "\",");
+                        _str.Append("\"acvr\":" + o["appCheckVersion"] + ",");
+                        _str.Append("\"atst\":" + o["appTestMode"] + ",");
+                        _str.Append("\"aver\":\"" + o["appVersion"] + "\",");
+                        _str.Append("\"ID\":\"" + _userGUID + "\",");
+                        _str.Append("\"ss\":\"" + _sessionGUID + "\",");
+                        _str.Append("\"ts\":" + _timestamp + ",");
+                        _str.Append("\"osv\":\"" + o["os_name"] + "\",");
+                        _str.Append("\"ossp\":\"" + o["os_servicepack"] + "\",");
+                        _str.Append("\"osar\":" + o["os_arch"] + ",");
+                        _str.Append("\"osjv\":\"" + o["os_java"] + "\",");
+                        _str.Append("\"osnet\":\"" + o["os_dotnet"] + "\",");
+                        _str.Append("\"osnsp\":\"" + o["os_dotnetsp"] + "\",");
+                        _str.Append("\"oslng\":" + o["os_lang"] + ",");
+                        _str.Append("\"osscn\":\"" + o["os_screen"] + "\",");
+                        _str.Append("\"cnm\":\"" + o["cpu_name"] + "\",");
+                        _str.Append("\"cbr\":\"" + o["cpu_brand"] + "\",");
+                        _str.Append("\"cfr\":" + o["cpu_freq"] + ",");
+                        _str.Append("\"ccr\":" + o["cpu_cores"] + ",");
+                        _str.Append("\"car\":" + o["cpu_arch"] + ",");
+                        _str.Append("\"mtt\":" + o["mem_total"] + ",");
+                        _str.Append("\"mfr\":" + o["mem_free"] + ",");
+                        _str.Append("\"dtt\":" + o["disk_total"] + ",");
+                        _str.Append("\"dfr\":" + o["disk_free"] + "}");
+                        #endregion
+
+                        break;
+                    case "stApp":
+
+                        #region "Stop"
+                        _str.Append(this.Json + ",");
+                        _str.Append("{\"tp\":\"" + _type + "\",");
+                        _str.Append("\"ts\":" + _timestamp + ",");
+                        _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
+                        #endregion
+
+                        break;
+                    case "ev":
+
+                        #region "Events"
+                        _str.Append(this.Json + ",");
+                        _str.Append("{\"tp\":\"" + _type + "\",");
+                        _str.Append("\"ca\":\"" + _eventCategory + "\",");
+                        _str.Append("\"nm\":\"" + _eventName + "\",");
+                        _str.Append("\"fl\":" + _flownumber + ",");
+                        _str.Append("\"ts\":" + _timestamp + ",");
+                        _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
+                        #endregion
+
+                        break;
+                    case "ctD":
+
+                        #region "Custom Data"
+                        _str.Append(this.Json + ",");
+                        _str.Append("{\"tp\":\"" + _type + "\",");
+                        _str.Append("\"nm\":\"" + _customDataName + "\",");
+                        _str.Append("\"vl\":\"" + _customDataValue + "\",");
+                        _str.Append("\"fl\":" + _flownumber + ",");
+                        _str.Append("\"ts\":" + _timestamp + ",");
+                        _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
+                        #endregion
+
+                        break;
+                    case "ctDR":
+
+                        #region "Custom Data R"
+                        _str.Append("{\"tp\":\"" + _type + "\",");
+                        _str.Append("\"nm\":\"" + _customDataName + "\",");
+                        _str.Append("\"vl\":\"" + _customDataValue + "\",");
+                        _str.Append("\"aver\":\"" + _applicationVersion + "\",");
+                        _str.Append("\"atst\":" + _timestamp + ",");
+                        _str.Append("\"fl\":" + _flownumber + ",");
+                        _str.Append("\"ts\":" + _timestamp + ",");
+                        _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
+                        #endregion
+
+                        break;
+                    case "lg":
+
+                        #region "Logs"
+                        _str.Append(this.Json + ",");
+                        _str.Append("{\"tp\":\"" + _type + "\",");
+                        _str.Append("\"ms\":\"" + _log + "\",");
+                        _str.Append("\"fl\":" + _flownumber + ",");
+                        _str.Append("\"ts\":" + _timestamp + ",");
+                        _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
+                        #endregion
+
+                        break;
+                    case "evS":
+
+                        #region "Event Start"
+                        _str.Append(this.Json + ",");
+                        _str.Append("{\"tp\":\"" + _type + "\",");
+                        _str.Append("\"ca\":\"" + _eventCategory + "\",");
+                        _str.Append("\"nm\":\"" + _eventName + "\",");
+                        _str.Append("\"fl\":" + _flownumber + ",");
+                        _str.Append("\"ts\":" + _timestamp + ",");
+                        _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
+                        #endregion
+
+                        break;
+                    case "evST":
+
+                        #region "Events Stop"
+                        _str.Append(this.Json + ",");
+                        _str.Append("{\"tp\":\"" + _type + "\",");
+                        _str.Append("\"ca\":\"" + _eventCategory + "\",");
+                        _str.Append("\"nm\":\"" + _eventName + "\",");
+                        _str.Append("\"fl\":" + _flownumber + ",");
+                        _str.Append("\"ts\":" + _timestamp + ",");
+                        _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
+                        #endregion
+
+                        break;
+
+                    case "evC":
+                        #region "Events Cancel"
+                        _str.Append(this.Json + ",");
+                        _str.Append("{\"tp\":\"" + _type + "\",");
+                        _str.Append("\"ca\":\"" + _eventCategory + "\",");
+                        _str.Append("\"nm\":\"" + _eventName + "\",");
+                        _str.Append("\"fl\":" + _flownumber + ",");
+                        _str.Append("\"ts\":" + _timestamp + ",");
+                        _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
+                        #endregion
+
+                        break;
+
+                    case "evV":
+
+                        #region "Events Values"
+                        _str.Append(this.Json + ",");
+                        _str.Append("{\"tp\":\"" + _type + "\",");
+                        _str.Append("\"ca\":\"" + _eventCategory + "\",");
+                        _str.Append("\"nm\":\"" + _eventName + "\",");
+                        _str.Append("\"vl\":\"" + _eventValue + "\",");
+                        _str.Append("\"fl\":" + _flownumber + ",");
+                        _str.Append("\"ts\":" + _timestamp + ",");
+                        _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
+                        #endregion
+
+                        break;
+                    case "ist":
+
+                        #region "Install"
+                        _str.Append("{\"tp\":\"" + _type + "\",");
+                        _str.Append("\"aver\":\"" + _applicationVersion + "\",");
+                        _str.Append("\"atst\":\"" + _test + "\",");
+                        _str.Append("\"ID\":\"" + _userGUID + "\",");
+                        _str.Append("\"ts\":" + _timestamp + ",");
+                        _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
+                        #endregion
+
+                        break;
+                    case "ust":
+
+                        #region "Uninstall"
+                        _str.Append("{\"tp\":\"" + _type + "\",");
+                        _str.Append("\"aver\":\"" + _applicationVersion + "\",");
+                        _str.Append("\"atst\":\"" + _test + "\",");
+                        _str.Append("\"ID\":\"" + _userGUID + "\",");
+                        _str.Append("\"ts\":" + _timestamp + ",");
+                        _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
+                        #endregion
+
+                        break;
+                    default:
+                        break;
+                }
+
+                this.Json = _str.ToString();
+            }
+            catch (Exception)
+            {
+
+                _error = DMSettings._errorCodes["-9"].ToString();
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="EventCategory">Event Category param</param>
+        /// <param name="EventName">Event Name param</param>
+        /// <param name="EventValue">Event Value param</param>
+        public void TrackEventValue(string EventCategory, string EventName, string EventValue)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ApplicationId))
+                {
+                    _type = "evV";
+                    _timestamp = GetTimeStamp();
+                    _eventCategory = EventCategory;
+                    _eventName  = EventName;
+                    _eventValue = EventValue;
+                    _flownumber = GetFlowNumber();
+
+                    SetJSON();
+                }
+
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="EventCategory">Event Category param</param>
+        /// <param name="EventName">Event Name param</param>
+        public void TrackEventCancel(string EventCategory, string EventName)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ApplicationId))
+                {
+                    _type = "evC";
+                    _timestamp = GetTimeStamp();
+                    _eventCategory = EventCategory;
+                    _eventName = EventName;
+                    _flownumber = GetFlowNumber();
+
+                    SetJSON();
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="CustomDataName">Custom Data Name param</param>
+        /// <param name="CustomDataValue">Custom Data Value param</param>
+        public void TrackCustomData(string CustomDataName, string CustomDataValue)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ApplicationId))
+                {
+                    _type = "ctD";
+                    _timestamp = GetTimeStamp();
+                    _customDataName = CustomDataName;
+                    _customDataValue = CustomDataValue;
+                    _flownumber = GetFlowNumber();
+
+                    SetJSON();
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="Message">Custom Message param</param>
+        public void TrackLog(string Message)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ApplicationId))
+                {
+                    _type = "lg";
+                    _timestamp = GetTimeStamp();
+                    _log = Message;
+                    _flownumber = GetFlowNumber();
+
+                    SetJSON();
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="ApplicationVersion">ApplicationVersion Param</param>
+        public bool SetApplicationVersion(string Version)
+        {
+            try
+            {
+                _applicationVersion = Version;
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public int CheckVersion()
+        {
+            try
+            {
+
+
+                return 0;
+            }
+            catch (Exception)
+            {
+
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="ApplicationId">ApplicationId param</param>
+        /// <param name="ApplicationVersion">Application ApplicationVersion param</param>
+        /// <param name="TestMode">Test Mode param</param>
+        public void TrackInstallation(string ApplicationId, string ApplicationVersion, bool TestMode)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ApplicationId))
+                {
+                    _applicationId = ApplicationId;
+                    _applicationVersion = ApplicationVersion;
+                    
+                    _type = "ist";
+                    _timestamp = GetTimeStamp();
+                    _sessionGUID = GetGUID();
+                    _test = Convert.ToInt32(TestMode);
+
+                    SetJSON();
+
+                    _sent = SendData();
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+
+        /// <summary>
+        /// </summary>
+        /// <param name="CustomDataName">Custom Data Name param</param>
+        /// <param name="CustomDataValue">Custom Data Value param</param>
+        /// <param name="ApplicationId">Application Id param</param>
+        /// <param name="ApplicationVersion">Application Version param</param>
+        /// <param name="TestMode">Test Mode param</param>
+        public void TrackCustomDataR(string ApplicationId, string ApplicationVersion, string CustomDataName, string CustomDataValue, bool TestMode)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ApplicationId))
+                {
+                    _applicationId = ApplicationId;
+                    _applicationVersion = ApplicationVersion;
+
+                    if (string.IsNullOrEmpty(_sessionGUID.ToString()))
+                    {
+                        _sessionGUID = GetGUID();
+                    }
+
+                    _type = "ctDR";
+                    _timestamp = GetTimeStamp();
+                    _customDataName = CustomDataName;
+                    _customDataValue = CustomDataValue;
+                    _test = Convert.ToInt32(TestMode);
+
+                    string temp = this.Json;
+                    try
+                    {
+                        SetJSON();
+                        _sent = SendData();
+                    }
+                    finally
+                    {
+                        this.Json = temp;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public string GetComponentName()
+        {
+            try
+            {
+                return ComponentName;
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
+        public string GetComponentVersion()
+        {
+           try
+            {
+                return ComponentVersion;
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
+        public bool SetUserID(string UserID)
+        {
+            try
+            {
+                RegistryKey reg = Registry.CurrentUser.CreateSubKey("SOFTWARE\\dskMetrics");
+                reg.SetValue("ID", UserID);
+                reg.Close();
+                
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public string GetJSON()
+        {
+            try
+            {
+                return Json;
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
+        public int GetDailyNetworkUtilizationInKB()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetDailyNetworkUtilizationInKB(int FDataSize)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int GetMaxStorageSizeInKB()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetMaxStorageSizeInKB(int FDataSize)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected string GetGUID()
+        {
+            try
+            { 
+                return System.Guid.NewGuid().ToString().Replace("-","").ToUpper();
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
+        protected string GetUserID()
+        {
+            try
+            {
+                RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\dskMetrics", true);
+                string UserID = (string) reg.GetValue("ID");
+                if (!string.IsNullOrEmpty(UserID))
+                {
+                    return UserID;
+                }
+                else
+                {
+                    UserID = GetGUID();
+                    SetUserID(UserID);
+                    return UserID;
+                }
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
+
+    }
+}
