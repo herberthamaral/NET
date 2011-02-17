@@ -123,15 +123,15 @@ namespace DeskMetrics
         
         private bool _started = false;
         
-        private int _bandwidth = DMSettings._maxDailyNetwork;
+        private int _bandwidth = Settings.MaxDailyNetwork;
         
-        private int _storage = DMSettings._maxStorageData;
+        private int _storage = Settings.MaxStorageData;
 
-        private string _postserver = DMSettings._defaultServer;
+        private string _postserver = Settings.DefaultServer;
 
-        private int _postport = DMSettings._defaultPort;
+        private int _postport = Settings.DefaultPort;
 
-        private int _posttimeout = DMSettings._defaultTimeout;
+        private int _posttimeout = Settings.Timeout;
 
         private bool _postwaitresponse = false;
 
@@ -367,7 +367,7 @@ namespace DeskMetrics
                 }
                 catch
                 {
-                    _error = DMSettings._errorCodes["-1"].ToString();
+                    _error = Settings._errorCodes["-1"].ToString();
                     return false;
                 }
             }
@@ -384,7 +384,7 @@ namespace DeskMetrics
                         int ErrorID;
                         try
                         {
-                            PostData(out ErrorID, DMSettings._API_SENDDATA);
+                            PostData(out ErrorID, Settings.ApiEndpoint);
                         }
                         catch (Exception)
                         {
@@ -427,7 +427,7 @@ namespace DeskMetrics
                 }
                 catch
                 {
-                    _error = DMSettings._errorCodes["-1"].ToString();
+                    _error = Settings._errorCodes["-1"].ToString();
                     return false;
                 }
             }
@@ -461,7 +461,7 @@ namespace DeskMetrics
 
                             try
                             {
-                                PostData(out ErrorID, DMSettings._API_SENDDATA);
+                                PostData(out ErrorID, Settings.ApiEndpoint);
                             }
                             finally
                             {
@@ -635,15 +635,15 @@ namespace DeskMetrics
                                         return validationResult;
                                     };
 
-                                url = "https://" + this.ApplicationId + "." + DMSettings._defaultServer + PostMode;
+                                url = "https://" + this.ApplicationId + "." + Settings.DefaultServer + PostMode;
                             }
                             else
                             {
-                                url = "http://" + this.ApplicationId + "." + DMSettings._defaultServer + PostMode;
+                                url = "http://" + this.ApplicationId + "." + Settings.DefaultServer + PostMode;
                             }
 
                             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                            request.Timeout = DMSettings._defaultTimeout;
+                            request.Timeout = Settings.Timeout;
 
                             if (!string.IsNullOrEmpty(_proxyhost))
                             {
@@ -670,7 +670,7 @@ namespace DeskMetrics
                                 request.Proxy = WebRequest.DefaultWebProxy;
                             }
 
-                            request.UserAgent = DMSettings._userAgent;
+                            request.UserAgent = Settings.UserAgent;
                             request.KeepAlive = false;
                             request.ProtocolVersion = HttpVersion.Version10;
                             request.Method = "POST";
@@ -696,7 +696,7 @@ namespace DeskMetrics
                         }
                         else
                         {
-                            _error = DMSettings._errorCodes["-11"].ToString();
+                            _error = Settings._errorCodes["-11"].ToString();
                             ErrorID = -11;
                             return "";
                         }
@@ -730,7 +730,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             int ErrorID;
-                            PostData(out ErrorID, DMSettings._API_SENDDATA);
+                            PostData(out ErrorID, Settings.ApiEndpoint);
 
                             if (ErrorID == 0)
                             {
@@ -804,7 +804,7 @@ namespace DeskMetrics
                     int ErrorID;
                     try
                     {
-                        PostData(out ErrorID, DMSettings._API_SENDDATA);
+                        PostData(out ErrorID, Settings.ApiEndpoint);
                     }
                     catch (Exception)
                     {
@@ -883,7 +883,7 @@ namespace DeskMetrics
                         SetJSON();
 
                         int ErrorID;
-                        PostData(out ErrorID, DMSettings._API_SENDDATA);
+                        PostData(out ErrorID, Settings.ApiEndpoint);
                     }
 
                 }
@@ -1195,7 +1195,7 @@ namespace DeskMetrics
                     }
                     catch
                     {
-                        _error = DMSettings._errorCodes["-9"].ToString();
+                        _error = Settings._errorCodes["-9"].ToString();
                     }
           
             }
@@ -1350,7 +1350,7 @@ namespace DeskMetrics
                         SetJSON();
 
                         int ErrorID;
-                        PostData(out ErrorID, DMSettings._API_SENDDATA);
+                        PostData(out ErrorID, Settings.ApiEndpoint);
                     }
                 }
                 catch
@@ -1380,7 +1380,7 @@ namespace DeskMetrics
                             {
                                 SetJSON();
                                 int ErrorID;
-                                PostData(out ErrorID, DMSettings._API_SENDDATA);
+                                PostData(out ErrorID, Settings.ApiEndpoint);
 
                                 if (ErrorID == 0)
                                 {
@@ -1480,7 +1480,7 @@ namespace DeskMetrics
                         int ErrorID;
                         try
                         {
-                            PostData(out ErrorID, DMSettings._API_SENDDATA);
+                            PostData(out ErrorID, Settings.ApiEndpoint);
                         }
                         catch
                         {
@@ -1526,7 +1526,7 @@ namespace DeskMetrics
                 }
                 catch
                 {
-                    return DMSettings._maxDailyNetwork;
+                    return Settings.MaxDailyNetwork;
                 }
             }
         }
@@ -1555,7 +1555,7 @@ namespace DeskMetrics
                 }
                 catch
                 {
-                    return DMSettings._maxStorageData;
+                    return Settings.MaxStorageData;
                 }
             }
         }

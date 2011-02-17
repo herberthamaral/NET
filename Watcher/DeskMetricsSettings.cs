@@ -22,17 +22,18 @@ using System.Text;
 
 namespace DeskMetrics
 {
-    static class DMSettings
+    static class Settings
     {
-        public const string _userAgent = "DeskMetricsNET";
-        public const string _defaultServer = "api.deskmetrics.com";
-        public const string _nullstr = "null";
-        public const string _API_SENDDATA = "/sendData";
+        public const string UserAgent = "DeskMetricsNET";
+        public const string DefaultServer = "api.deskmetrics.com";
+        public const string NullStr = "null";
+        public const string ApiEndpoint = "/sendData";
 
-        public const int _defaultPort = 443;
-        public const int _defaultTimeout = 25000; // 20 seconds
-        public const int _maxStorageData = 51200; // 50 KB
-        public const int _maxDailyNetwork = -1;
+        public const int DefaultPort = 443;
+        public const int Timeout = 25000; // 20 seconds
+        public const int MaxStorageData = 51200; // 50 KB
+        public const int MaxDailyNetwork = -1;
+
 
         public static readonly Dictionary<string, string> _errorCodes = new Dictionary<string, string> 
         { 

@@ -1,3 +1,5 @@
 *.suo
 *.sln
 *.dll
+obj/
+obj/**
