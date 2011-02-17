@@ -29,7 +29,7 @@ namespace DeskMetrics
     /// Json uses Arrays and Objects. These correspond here to the datatypes ArrayList and Hashtable.
     /// All numbers are parsed to doubles.
     /// </summary>
-    public class DMJSON
+    public class Json
     {
         public const int TOKEN_NONE = 0;
         public const int TOKEN_CURLY_OPEN = 1;
@@ -104,16 +104,16 @@ namespace DeskMetrics
             while (!done)
             {
                 token = LookAhead(json, index);
-                if (token == DMJSON.TOKEN_NONE)
+                if (token == Json.TOKEN_NONE)
                 {
                     success = false;
                     return null;
                 }
-                else if (token == DMJSON.TOKEN_COMMA)
+                else if (token == Json.TOKEN_COMMA)
                 {
                     NextToken(json, ref index);
                 }
-                else if (token == DMJSON.TOKEN_CURLY_CLOSE)
+                else if (token == Json.TOKEN_CURLY_CLOSE)
                 {
                     NextToken(json, ref index);
                     return table;
@@ -131,7 +131,7 @@ namespace DeskMetrics
 
                     // :
                     token = NextToken(json, ref index);
-                    if (token != DMJSON.TOKEN_COLON)
+                    if (token != Json.TOKEN_COLON)
                     {
                         success = false;
                         return null;
@@ -163,16 +163,16 @@ namespace DeskMetrics
             while (!done)
             {
                 int token = LookAhead(json, index);
-                if (token == DMJSON.TOKEN_NONE)
+                if (token == Json.TOKEN_NONE)
                 {
                     success = false;
                     return null;
                 }
-                else if (token == DMJSON.TOKEN_COMMA)
+                else if (token == Json.TOKEN_COMMA)
                 {
                     NextToken(json, ref index);
                 }
-                else if (token == DMJSON.TOKEN_SQUARED_CLOSE)
+                else if (token == Json.TOKEN_SQUARED_CLOSE)
                 {
                     NextToken(json, ref index);
                     break;
@@ -196,24 +196,24 @@ namespace DeskMetrics
         {
             switch (LookAhead(json, index))
             {
-                case DMJSON.TOKEN_STRING:
+                case Json.TOKEN_STRING:
                     return ParseString(json, ref index, ref success);
-                case DMJSON.TOKEN_NUMBER:
+                case Json.TOKEN_NUMBER:
                     return ParseNumber(json, ref index);
-                case DMJSON.TOKEN_CURLY_OPEN:
+                case Json.TOKEN_CURLY_OPEN:
                     return ParseObject(json, ref index, ref success);
-                case DMJSON.TOKEN_SQUARED_OPEN:
+                case Json.TOKEN_SQUARED_OPEN:
                     return ParseArray(json, ref index, ref success);
-                case DMJSON.TOKEN_TRUE:
+                case Json.TOKEN_TRUE:
                     NextToken(json, ref index);
                     return Boolean.Parse("TRUE");
-                case DMJSON.TOKEN_FALSE:
+                case Json.TOKEN_FALSE:
                     NextToken(json, ref index);
                     return Boolean.Parse("FALSE");
-                case DMJSON.TOKEN_NULL:
+                case Json.TOKEN_NULL:
                     NextToken(json, ref index);
                     return null;
-                case DMJSON.TOKEN_NONE:
+                case Json.TOKEN_NONE:
                     break;
             }
 
@@ -374,7 +374,7 @@ namespace DeskMetrics
 
             if (index == json.Length)
             {
-                return DMJSON.TOKEN_NONE;
+                return Json.TOKEN_NONE;
             }
 
             char c = json[index];
@@ -382,17 +382,17 @@ namespace DeskMetrics
             switch (c)
             {
                 case '{':
-                    return DMJSON.TOKEN_CURLY_OPEN;
+                    return Json.TOKEN_CURLY_OPEN;
                 case '}':
-                    return DMJSON.TOKEN_CURLY_CLOSE;
+                    return Json.TOKEN_CURLY_CLOSE;
                 case '[':
-                    return DMJSON.TOKEN_SQUARED_OPEN;
+                    return Json.TOKEN_SQUARED_OPEN;
                 case ']':
-                    return DMJSON.TOKEN_SQUARED_CLOSE;
+                    return Json.TOKEN_SQUARED_CLOSE;
                 case ',':
-                    return DMJSON.TOKEN_COMMA;
+                    return Json.TOKEN_COMMA;
                 case '"':
-                    return DMJSON.TOKEN_STRING;
+                    return Json.TOKEN_STRING;
                 case '0':
                 case '1':
                 case '2':
@@ -404,9 +404,9 @@ namespace DeskMetrics
                 case '8':
                 case '9':
                 case '-':
-                    return DMJSON.TOKEN_NUMBER;
+                    return Json.TOKEN_NUMBER;
                 case ':':
-                    return DMJSON.TOKEN_COLON;
+                    return Json.TOKEN_COLON;
             }
             index--;
 
@@ -422,7 +422,7 @@ namespace DeskMetrics
                     json[index + 4] == 'e')
                 {
                     index += 5;
-                    return DMJSON.TOKEN_FALSE;
+                    return Json.TOKEN_FALSE;
                 }
             }
 
@@ -435,7 +435,7 @@ namespace DeskMetrics
                     json[index + 3] == 'e')
                 {
                     index += 4;
-                    return DMJSON.TOKEN_TRUE;
+                    return Json.TOKEN_TRUE;
                 }
             }
 
@@ -448,11 +448,11 @@ namespace DeskMetrics
                     json[index + 3] == 'l')
                 {
                     index += 4;
-                    return DMJSON.TOKEN_NULL;
+                    return Json.TOKEN_NULL;
                 }
             }
 
-            return DMJSON.TOKEN_NONE;
+            return Json.TOKEN_NONE;
         }
 
         protected static bool SerializeObjectOrArray(object objectOrArray, StringBuilder builder)

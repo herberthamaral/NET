@@ -35,7 +35,7 @@ namespace DeskMetrics
         public const int MaxDailyNetwork = -1;
 
 
-        public static readonly Dictionary<string, string> _errorCodes = new Dictionary<string, string> 
+        public static readonly Dictionary<string, string> ErrorCodes = new Dictionary<string, string> 
         { 
           {"-14","Application version not found"},
           {"-13","Use POST Request"},

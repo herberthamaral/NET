@@ -26,7 +26,7 @@ using System.Windows.Forms;
 
 namespace DeskMetrics
 {
-    internal class DMHardware
+    internal class Hardware
     {
         /// <summary>
         /// Field Processor Name

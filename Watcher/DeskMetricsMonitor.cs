@@ -367,7 +367,7 @@ namespace DeskMetrics
                 }
                 catch
                 {
-                    _error = Settings._errorCodes["-1"].ToString();
+                    _error = Settings.ErrorCodes["-1"].ToString();
                     return false;
                 }
             }
@@ -427,7 +427,7 @@ namespace DeskMetrics
                 }
                 catch
                 {
-                    _error = Settings._errorCodes["-1"].ToString();
+                    _error = Settings.ErrorCodes["-1"].ToString();
                     return false;
                 }
             }
@@ -696,7 +696,7 @@ namespace DeskMetrics
                         }
                         else
                         {
-                            _error = Settings._errorCodes["-11"].ToString();
+                            _error = Settings.ErrorCodes["-11"].ToString();
                             ErrorID = -11;
                             return "";
                         }
@@ -953,8 +953,8 @@ namespace DeskMetrics
                 {
                     try
                     {
-                        DMOperatingSystem GetOsInfo = new DMOperatingSystem();
-                        DMHardware GetHardwareInfo = new DMHardware();
+                        OperatingSystem GetOsInfo = new OperatingSystem();
+                        Hardware GetHardwareInfo = new Hardware();
                         Hashtable o = new Hashtable();
                         StringBuilder _str = new StringBuilder();
                         switch (_type)
@@ -1195,7 +1195,7 @@ namespace DeskMetrics
                     }
                     catch
                     {
-                        _error = Settings._errorCodes["-9"].ToString();
+                        _error = Settings.ErrorCodes["-9"].ToString();
                     }
           
             }

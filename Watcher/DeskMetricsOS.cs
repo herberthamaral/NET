@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 
 namespace DeskMetrics
 {
-    internal class DMOperatingSystem
+    internal class OperatingSystem
     {
         /// <summary>
         /// Field Framework ApplicationVersion
