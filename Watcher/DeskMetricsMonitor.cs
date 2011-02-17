@@ -333,7 +333,7 @@ namespace DeskMetrics
                         _applicationId = ApplicationId;
                         _applicationVersion = ApplicationVersion;
 
-                        _type = "strApp";
+                        _type = EventType.StartApplication;
                         _timestamp = GetTimeStamp();
                         _userGUID = GetUserID();
                         _sessionGUID = GetGUID();
@@ -444,7 +444,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId))
                         {
-                            _type = "stApp";
+                            _type = EventType.StopApplication;
                             _timestamp = GetTimeStamp();
 
                             SetJSON();
@@ -503,7 +503,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = "ev";
+                            _type = EventType.Event;
                             _timestamp = GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
@@ -534,7 +534,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = "evS";
+                            _type = EventType.EventStart;
                             _timestamp = GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
@@ -565,7 +565,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = "evST";
+                            _type = EventType.EventStop;
                             _timestamp = GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
@@ -592,7 +592,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = "evP";
+                            _type = EventType.EventPeriod;
                             _timestamp = GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
@@ -830,7 +830,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true) && (ApplicationException != null))
                         {
-                            _type = "exC";
+                            _type = EventType.Exception;
                             _timestamp = GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
@@ -875,7 +875,7 @@ namespace DeskMetrics
                     if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                     {
                         _applicationId = ApplicationId;
-                        _type = "ust";
+                        _type = EventType.Uninstall;
                         _timestamp = GetTimeStamp();
                         _sessionGUID = GetGUID();
                         _applicationVersion = ApplicationVersion;
@@ -959,7 +959,7 @@ namespace DeskMetrics
                         StringBuilder _str = new StringBuilder();
                         switch (_type)
                         {
-                            case "strApp":
+                            case EventType.StartApplication:
 
                                 #region "Start"
                                 GetOsInfo.GetFrameworkVersion();
@@ -1019,7 +1019,7 @@ namespace DeskMetrics
                                 #endregion
 
                                 break;
-                            case "stApp":
+                            case EventType.StopApplication:
 
                                 #region "Stop"
                                 _str.Append(this.JSON + ",");
@@ -1029,7 +1029,7 @@ namespace DeskMetrics
                                 #endregion
 
                                 break;
-                            case "ev":
+                            case EventType.Event:
 
                                 #region "Events"
                                 _str.Append(this.JSON + ",");
@@ -1042,7 +1042,7 @@ namespace DeskMetrics
                                 #endregion
 
                                 break;
-                            case "ctD":
+                            case EventType.CustomData:
 
                                 #region "Custom Data"
                                 _str.Append(this.JSON + ",");
@@ -1055,7 +1055,7 @@ namespace DeskMetrics
                                 #endregion
 
                                 break;
-                            case "ctDR":
+                            case EventType.CustomDataRealTime:
 
                                 #region "Custom Data R"
                                 _str.Append("{\"tp\":\"" + _type + "\",");
@@ -1069,7 +1069,7 @@ namespace DeskMetrics
                                 #endregion
 
                                 break;
-                            case "lg":
+                            case EventType.Log:
 
                                 #region "Logs"
                                 _str.Append(this.JSON + ",");
@@ -1081,7 +1081,7 @@ namespace DeskMetrics
                                 #endregion
 
                                 break;
-                            case "exC":
+                            case EventType.Exception:
 
                                 #region "Exceptions"
                                 _str.Append(this.JSON + ",");
@@ -1096,7 +1096,7 @@ namespace DeskMetrics
                                 #endregion
 
                                 break;
-                            case "evS":
+                            case EventType.EventStart:
 
                                 #region "Event Start"
                                 _str.Append(this.JSON + ",");
@@ -1109,7 +1109,7 @@ namespace DeskMetrics
                                 #endregion
 
                                 break;
-                            case "evST":
+                            case EventType.EventStop:
 
                                 #region "Events Stop"
                                 _str.Append(this.JSON + ",");
@@ -1123,7 +1123,7 @@ namespace DeskMetrics
 
                                 break;
 
-                            case "evC":
+                            case EventType.EventCancel:
                                 #region "Events Cancel"
                                 _str.Append(this.JSON + ",");
                                 _str.Append("{\"tp\":\"" + _type + "\",");
@@ -1136,7 +1136,7 @@ namespace DeskMetrics
 
                                 break;
 
-                            case "evV":
+                            case EventType.EventValue:
 
                                 #region "Events Values"
                                 _str.Append(this.JSON + ",");
@@ -1151,7 +1151,7 @@ namespace DeskMetrics
 
                                 break;
 
-                            case "evP":
+                            case EventType.EventPeriod:
                                 #region "Events Period"
                                 _str.Append(this.JSON + ",");
                                 _str.Append("{\"tp\":\"" + _type + "\",");
@@ -1165,7 +1165,7 @@ namespace DeskMetrics
 
                                 break;
 
-                            case "ist":
+                            case EventType.Install:
 
                                 #region "Install"
                                 _str.Append("{\"tp\":\"" + _type + "\",");
@@ -1176,7 +1176,7 @@ namespace DeskMetrics
                                 #endregion
 
                                 break;
-                            case "ust":
+                            case EventType.Uninstall:
 
                                 #region "Uninstall"
                                 _str.Append("{\"tp\":\"" + _type + "\",");
@@ -1217,7 +1217,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = "evV";
+                            _type = EventType.EventValue;
                             _timestamp = GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
@@ -1249,7 +1249,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = "evC";
+                            _type = EventType.EventCancel;
                             _timestamp = GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
@@ -1280,7 +1280,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = "ctD";
+                            _type = EventType.CustomData;
                             _timestamp = GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
@@ -1310,7 +1310,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = "lg";
+                            _type = EventType.Log;
                             _timestamp = GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
@@ -1342,7 +1342,7 @@ namespace DeskMetrics
                         _applicationId = ApplicationId;
                         _applicationVersion = ApplicationVersion;
 
-                        _type = "ist";
+                        _type = EventType.Install;
                         _timestamp = GetTimeStamp();
                         _sessionGUID = GetGUID();
                         _test = Convert.ToInt32(TestMode);
@@ -1359,7 +1359,7 @@ namespace DeskMetrics
             }
         }
 
-        public bool TrackCustomDataR(string CustomDataName, string CustomDataValue)
+        public bool TrackCustomDataRealTime(string CustomDataName, string CustomDataValue)
         {
             lock (ObjectLock)
             {
@@ -1369,7 +1369,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = "ctDR";
+                            _type = EventType.CustomDataRealTime;
                             _timestamp = GetTimeStamp();
                             _customDataName = CustomDataName;
                             _customDataValue = CustomDataValue;
@@ -1423,7 +1423,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = "ctDR";
+                            _type = EventType.CustomDataRealTime;
                             _timestamp = GetTimeStamp();
                             _customDataName = CustomDataName;
                             _customDataValue = CustomDataValue;
