@@ -1661,7 +1661,7 @@ namespace DeskMetrics
                         StreamReader Stream = new StreamReader(FileS);
                         try
                         {
-                            return DecodeFrom64(Stream.ReadToEnd());
+                            return Util.DecodeFrom64(Stream.ReadToEnd());
                         }
                         finally
                         {
@@ -1718,7 +1718,7 @@ namespace DeskMetrics
                         FileStream FileS = new FileStream(@FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                         StreamWriter StreamFile = new StreamWriter(FileS);
 
-                        StreamFile.Write(EncodeTo64(this.JSON));
+                        StreamFile.Write(Util.EncodeTo64(this.JSON));
                         StreamFile.Flush();
 
                         StreamFile.Close();
@@ -1732,7 +1732,7 @@ namespace DeskMetrics
                     {
                         StreamWriter OldFile = File.AppendText(FileName);
 
-                        OldFile.Write("," + EncodeTo64(this.JSON));
+                        OldFile.Write("," + Util.EncodeTo64(this.JSON));
                         OldFile.Flush();
                         OldFile.Close();
 
@@ -1746,43 +1746,5 @@ namespace DeskMetrics
             }
         }
 
-        /// <summary>
-        /// The method create a Base64 encoded string from a normal string.
-        /// </summary>
-        /// <param name="toEncode">The String containing the characters to encode.</param>
-        /// <returns>The Base64 encoded string.</returns>
-        public static string EncodeTo64(string toEncode)
-        {
-            try
-            {
-                byte[] toEncodeAsBytes = System.Text.Encoding.Unicode.GetBytes(toEncode);
-                string returnValue = System.Convert.ToBase64String(toEncodeAsBytes);
-                return returnValue;
-            }
-            catch
-            {
-                return "";
-            }
-
-        }
-
-        /// <summary>
-        /// The method to Decode your Base64 strings.
-        /// </summary>
-        /// <param name="encodedData">The String containing the characters to decode.</param>
-        /// <returns>A String containing the results of decoding the specified sequence of bytes.</returns>
-        public static string DecodeFrom64(string encodedData)
-        {
-            try
-            {
-                byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
-                string returnValue = System.Text.Encoding.Unicode.GetString(encodedDataAsBytes);
-                return returnValue;
-            }
-            catch
-            {
-                return "";
-            }
-        }
     } 
 }
