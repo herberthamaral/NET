@@ -63,5 +63,26 @@ namespace DeskMetrics
                 return "";
             }
         }
+
+
+        /// <summary>
+        /// Timestamp GMT +0
+        /// </summary>
+        public static int GetTimeStamp()
+        {
+            try
+            {
+                double _timeStamp = 0;
+                DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+                TimeSpan diff = DateTime.UtcNow - origin;
+                _timeStamp = Math.Floor(diff.TotalSeconds);
+                return Convert.ToInt32(_timeStamp);
+            }
+            catch
+            {
+                return 0;
+            }
+         
+        }
     }
 }

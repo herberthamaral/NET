@@ -334,7 +334,7 @@ namespace DeskMetrics
                         _applicationVersion = ApplicationVersion;
 
                         _type = EventType.StartApplication;
-                        _timestamp = GetTimeStamp();
+                        _timestamp = Util.GetTimeStamp();
                         _userGUID = GetUserID();
                         _sessionGUID = GetGUID();
                         _realtime = RealTime;
@@ -445,7 +445,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId))
                         {
                             _type = EventType.StopApplication;
-                            _timestamp = GetTimeStamp();
+                            _timestamp = Util.GetTimeStamp();
 
                             SetJSON();
 
@@ -504,7 +504,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             _type = EventType.Event;
-                            _timestamp = GetTimeStamp();
+                            _timestamp = Util.GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
                             _eventCategory = EventCategory;
@@ -535,7 +535,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             _type = EventType.EventStart;
-                            _timestamp = GetTimeStamp();
+                            _timestamp = Util.GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
                             _eventCategory = EventCategory;
@@ -566,7 +566,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             _type = EventType.EventStop;
-                            _timestamp = GetTimeStamp();
+                            _timestamp = Util.GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
                             _eventCategory = EventCategory;
@@ -593,7 +593,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             _type = EventType.EventPeriod;
-                            _timestamp = GetTimeStamp();
+                            _timestamp = Util.GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
                             _eventCategory = EventCategory;
@@ -614,99 +614,95 @@ namespace DeskMetrics
         {
             lock (ObjectLock)
             {
-
                 try
                 {
-                    try
+                    Hashtable o = new Hashtable();
+                    ErrorID = 0;
+
+                    if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                     {
-                        Hashtable o = new Hashtable();
-                        ErrorID = 0;
+                        string url;
 
-                        if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
+                        if (_postport == 443)
                         {
-                            string url;
-
-                            if (_postport == 443)
-                            {
-                                System.Net.ServicePointManager.ServerCertificateValidationCallback +=
-                                    delegate(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors sslError)
-                                    {
-                                        bool validationResult = true;
-                                        return validationResult;
-                                    };
-
-                                url = "https://" + this.ApplicationId + "." + Settings.DefaultServer + PostMode;
-                            }
-                            else
-                            {
-                                url = "http://" + this.ApplicationId + "." + Settings.DefaultServer + PostMode;
-                            }
-
-                            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                            request.Timeout = Settings.Timeout;
-
-                            if (!string.IsNullOrEmpty(_proxyhost))
-                            {
-                                string uri;
-
-                                WebProxy myProxy = new WebProxy();
-
-                                if (_proxyport != 0)
+                            System.Net.ServicePointManager.ServerCertificateValidationCallback +=
+                                delegate(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors sslError)
                                 {
-                                    uri = _proxyhost + ":" + _proxyport;
-                                }
-                                else
-                                {
-                                    uri = _proxyhost;
-                                }
+                                    bool validationResult = true;
+                                    return validationResult;
+                                };
 
-                                Uri newUri = new Uri(uri);
-                                myProxy.Address = newUri;
-                                myProxy.Credentials = new NetworkCredential(_proxyusername, _proxypassword);
-                                request.Proxy = myProxy;
-                            }
-                            else
-                            {
-                                request.Proxy = WebRequest.DefaultWebProxy;
-                            }
-
-                            request.UserAgent = Settings.UserAgent;
-                            request.KeepAlive = false;
-                            request.ProtocolVersion = HttpVersion.Version10;
-                            request.Method = "POST";
-
-                            byte[] postBytes = null;
-
-                            postBytes = Encoding.UTF8.GetBytes("data=[" + this.JSON + "]");
-
-                            request.ContentType = "application/x-www-form-urlencoded";
-                            request.ContentLength = postBytes.Length;
-
-                            Stream requestStream = request.GetRequestStream();
-                            requestStream.Write(postBytes, 0, postBytes.Length);
-                            requestStream.Close();
-
-                            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                            StreamReader streamreader = new StreamReader(response.GetResponseStream());
-                            string stream = streamreader.ReadToEnd();
-                            streamreader.Close();
-
-                            ErrorID = 0;
-                            return "";
+                            url = "https://" + this.ApplicationId + "." + Settings.DefaultServer + PostMode;
                         }
                         else
                         {
-                            _error = Settings.ErrorCodes["-11"].ToString();
-                            ErrorID = -11;
-                            return "";
+                            url = "http://" + this.ApplicationId + "." + Settings.DefaultServer + PostMode;
                         }
-                    }
-                    catch (WebException webException)
-                    {
-                        _error = webException.ToString();
-                        ErrorID = -1;
+
+                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                        request.Timeout = Settings.Timeout;
+
+                        if (!string.IsNullOrEmpty(_proxyhost))
+                        {
+                            string uri;
+
+                            WebProxy myProxy = new WebProxy();
+
+                            if (_proxyport != 0)
+                            {
+                                uri = _proxyhost + ":" + _proxyport;
+                            }
+                            else
+                            {
+                                uri = _proxyhost;
+                            }
+
+                            Uri newUri = new Uri(uri);
+                            myProxy.Address = newUri;
+                            myProxy.Credentials = new NetworkCredential(_proxyusername, _proxypassword);
+                            request.Proxy = myProxy;
+                        }
+                        else
+                        {
+                            request.Proxy = WebRequest.DefaultWebProxy;
+                        }
+
+                        request.UserAgent = Settings.UserAgent;
+                        request.KeepAlive = false;
+                        request.ProtocolVersion = HttpVersion.Version10;
+                        request.Method = "POST";
+
+                        byte[] postBytes = null;
+
+                        postBytes = Encoding.UTF8.GetBytes("data=[" + this.JSON + "]");
+
+                        request.ContentType = "application/x-www-form-urlencoded";
+                        request.ContentLength = postBytes.Length;
+
+                        Stream requestStream = request.GetRequestStream();
+                        requestStream.Write(postBytes, 0, postBytes.Length);
+                        requestStream.Close();
+
+                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                        StreamReader streamreader = new StreamReader(response.GetResponseStream());
+                        string stream = streamreader.ReadToEnd();
+                        streamreader.Close();
+
+                        ErrorID = 0;
                         return "";
                     }
+                    else
+                    {
+                        _error = Settings.ErrorCodes["-11"].ToString();
+                        ErrorID = -11;
+                        return "";
+                    }
+                }
+                catch (WebException webException)
+                {
+                    _error = webException.ToString();
+                    ErrorID = -1;
+                    return "";
                 }
                 catch
                 {
@@ -831,7 +827,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true) && (ApplicationException != null))
                         {
                             _type = EventType.Exception;
-                            _timestamp = GetTimeStamp();
+                            _timestamp = Util.GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
                             _exceptionMessage = ApplicationException.Message.Trim().Replace("\r\n", "").Replace("  ", " ").Replace("\n", "").Replace(@"\n", "").Replace("\r", "").Replace("&", "").Replace("|", "").Replace(">", "").Replace("<", "").Replace("\t", "").Replace(@"\", @"\\");
@@ -876,7 +872,7 @@ namespace DeskMetrics
                     {
                         _applicationId = ApplicationId;
                         _type = EventType.Uninstall;
-                        _timestamp = GetTimeStamp();
+                        _timestamp = Util.GetTimeStamp();
                         _sessionGUID = GetGUID();
                         _applicationVersion = ApplicationVersion;
 
@@ -907,27 +903,7 @@ namespace DeskMetrics
             }
         }
 
-        /// <summary>
-        /// Timestamp GMT +0
-        /// </summary>
-        protected int GetTimeStamp()
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    double _timeStamp = 0;
-                    DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-                    TimeSpan diff = DateTime.UtcNow - origin;
-                    _timeStamp = Math.Floor(diff.TotalSeconds);
-                    return Convert.ToInt32(_timeStamp);
-                }
-                catch
-                {
-                    return 0;
-                }
-            }
-        }
+        
 
         protected int GetFlowNumber()
         {
@@ -1218,7 +1194,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             _type = EventType.EventValue;
-                            _timestamp = GetTimeStamp();
+                            _timestamp = Util.GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
                             _eventCategory = EventCategory.Trim();
@@ -1250,7 +1226,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             _type = EventType.EventCancel;
-                            _timestamp = GetTimeStamp();
+                            _timestamp = Util.GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
                             _eventCategory = EventCategory.Trim();
@@ -1281,7 +1257,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             _type = EventType.CustomData;
-                            _timestamp = GetTimeStamp();
+                            _timestamp = Util.GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
                             _customDataName = CustomDataName.Trim();
@@ -1311,7 +1287,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             _type = EventType.Log;
-                            _timestamp = GetTimeStamp();
+                            _timestamp = Util.GetTimeStamp();
                             _flownumber = GetFlowNumber();
 
                             _log = Message.Trim();
@@ -1343,7 +1319,7 @@ namespace DeskMetrics
                         _applicationVersion = ApplicationVersion;
 
                         _type = EventType.Install;
-                        _timestamp = GetTimeStamp();
+                        _timestamp = Util.GetTimeStamp();
                         _sessionGUID = GetGUID();
                         _test = Convert.ToInt32(TestMode);
 
@@ -1370,7 +1346,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             _type = EventType.CustomDataRealTime;
-                            _timestamp = GetTimeStamp();
+                            _timestamp = Util.GetTimeStamp();
                             _customDataName = CustomDataName;
                             _customDataValue = CustomDataValue;
                             _flownumber = GetFlowNumber();
@@ -1424,7 +1400,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             _type = EventType.CustomDataRealTime;
-                            _timestamp = GetTimeStamp();
+                            _timestamp = Util.GetTimeStamp();
                             _customDataName = CustomDataName;
                             _customDataValue = CustomDataValue;
                             _flownumber = GetFlowNumber();
