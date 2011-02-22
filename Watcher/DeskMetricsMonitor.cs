@@ -458,7 +458,7 @@ namespace DeskMetrics
             {
                 try
                 {
-                    if (_started)
+                    if (Started)
                     {
                         if (!string.IsNullOrEmpty(ApplicationId))
                         {
@@ -517,7 +517,7 @@ namespace DeskMetrics
             {
                 try
                 {
-                    if (_started)
+                    if (Started)
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
@@ -548,7 +548,7 @@ namespace DeskMetrics
             {
                 try
                 {
-                    if (_started)
+                    if (Started)
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
@@ -579,7 +579,7 @@ namespace DeskMetrics
             {
                 try
                 {
-                    if (_started)
+                    if (Started)
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
@@ -606,7 +606,7 @@ namespace DeskMetrics
             {
                 try
                 {
-                    if (_started)
+                    if (Started)
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
@@ -639,7 +639,7 @@ namespace DeskMetrics
             {
                 try
                 {
-                    if (_started)
+                    if (Started)
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true) && (ApplicationException != null))
                         {
@@ -1006,7 +1006,7 @@ namespace DeskMetrics
             {
                 try
                 {
-                    if (_started)
+                    if (Started)
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
@@ -1038,7 +1038,7 @@ namespace DeskMetrics
             {
                 try
                 {
-                    if (_started)
+                    if (Started)
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
@@ -1069,7 +1069,7 @@ namespace DeskMetrics
             {
                 try
                 {
-                    if (_started)
+                    if (Started)
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
@@ -1099,7 +1099,7 @@ namespace DeskMetrics
             {
                 try
                 {
-                    if (_started)
+                    if (Started)
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
@@ -1158,7 +1158,7 @@ namespace DeskMetrics
             {
                 try
                 {
-                    if (_started)
+                    if (Started)
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
@@ -1212,7 +1212,7 @@ namespace DeskMetrics
             {
                 try
                 {
-                    if (_started)
+                    if (Started)
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
