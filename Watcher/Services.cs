@@ -11,7 +11,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace DeskMetrics
 {
-    protected class Services
+    internal class Services
     {
         private Watcher watcher;
         public Services(Watcher watcher)

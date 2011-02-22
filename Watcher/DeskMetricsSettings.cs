@@ -22,7 +22,7 @@ using System.Text;
 
 namespace DeskMetrics
 {
-    static class Settings
+    internal static class Settings
     {
         public const string UserAgent = "DeskMetricsNET";
         public const string DefaultServer = "api.deskmetrics.com";

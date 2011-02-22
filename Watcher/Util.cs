@@ -22,7 +22,7 @@ using System.Text;
 
 namespace DeskMetrics
 {
-    class Util
+    internal class Util
     {
 
         /// <summary>

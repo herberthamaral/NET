@@ -23,19 +23,19 @@ namespace DeskMetrics
 {
     public class EventType
     {
-        public static const string StartApplication = "strApp";
-        public static const string StopApplication = "stApp";
-        public static const string Event = "ev";
-        public static const string CustomData = "ctD";
-        public static const string CustomDataRealTime = "ctDR";
-        public static const string Log = "lg";
-        public static const string Exception = "exC";
-        public static const string EventStart = "evS";
-        public static const string EventStop = "evST";
-        public static const string EventCancel = "evC";
-        public static const string EventValue = "evV";
-        public static const string EventPeriod = "evP";
-        public static const string Install = "ist";
-        public static const string Uninstall = "ust";
+        public  const string StartApplication = "strApp";
+        public  const string StopApplication = "stApp";
+        public  const string Event = "ev";
+        public  const string CustomData = "ctD";
+        public  const string CustomDataRealTime = "ctDR";
+        public  const string Log = "lg";
+        public  const string Exception = "exC";
+        public  const string EventStart = "evS";
+        public  const string EventStop = "evST";
+        public  const string EventCancel = "evC";
+        public  const string EventValue = "evV";
+        public  const string EventPeriod = "evP";
+        public  const string Install = "ist";
+        public  const string Uninstall = "ust";
     }
 }

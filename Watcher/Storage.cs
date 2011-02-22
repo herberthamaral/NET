@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DeskMetrics
+namespace DeskMetricsNET.watcher
 {
-    internal class JSON
+    internal class Storage
     {
-
     }
 }

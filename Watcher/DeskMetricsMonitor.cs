@@ -756,9 +756,9 @@ namespace DeskMetrics
 
                                 #region "Start"
                                 GetOsInfo.GetFrameworkVersion();
-                                GetOsInfo.GetOSArchicteture();
-                                GetOsInfo.GetOSLanguage();
-                                GetOsInfo.GetOSVersion();
+                                GetOsInfo.GetArchicteture();
+                                GetOsInfo.GetLanguage();
+                                GetOsInfo.GetVersion();
                                 GetOsInfo.GetJavaVersion();
                                 GetHardwareInfo.GetProcessorData();
                                 GetHardwareInfo.GetMemoryData();
@@ -769,13 +769,13 @@ namespace DeskMetrics
                                 o["userID"] = _userGUID;
                                 o["session"] = _sessionGUID;
                                 o["timestamp"] = _timestamp;
-                                o["os_name"] = GetOsInfo.OSVersion;
-                                o["os_servicepack"] = GetOsInfo.OSServicePack;
-                                o["os_arch"] = GetOsInfo.OSArchicteture;
+                                o["os_name"] = GetOsInfo.Version;
+                                o["os_servicepack"] = GetOsInfo.ServicePack;
+                                o["os_arch"] = GetOsInfo.Archicteture;
                                 o["os_java"] = GetOsInfo.JavaVersion;
                                 o["os_dotnet"] = GetOsInfo.FrameworkVersion;
                                 o["os_dotnetsp"] = GetOsInfo.FrameworkServicePack;
-                                o["os_lang"] = GetOsInfo.OSLcid;
+                                o["os_lang"] = GetOsInfo.Lcid;
                                 o["os_screen"] = GetHardwareInfo.ScreenResolution;
                                 o["cpu_name"] = GetHardwareInfo.ProcessorName;
                                 o["cpu_brand"] = GetHardwareInfo.ProcessorBrand;

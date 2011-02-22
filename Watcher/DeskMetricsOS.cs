@@ -36,11 +36,11 @@ namespace DeskMetrics
         /// <summary>
         /// Field OS Archicteture - 32 or 64 bits
         /// </summary>
-        private int _osArchicteture;
+        private int _Archicteture;
         /// <summary>
         /// Field OS ApplicationVersion
         /// </summary>
-        private string _osName;
+        private string _Name;
         /// <summary>
         /// Field Framework Service Pack
         /// </summary>
@@ -48,11 +48,11 @@ namespace DeskMetrics
         /// <summary>
         /// Field OS LCID - Language Culture Id
         /// </summary>
-        private int _osLCID;
+        private int _LCID;
         /// <summary>
         /// Field OS Language
         /// </summary>
-        private string _osLanguage;
+        private string _language;
         /// <summary>
         /// Field JavaVersion
         /// </summary>
@@ -60,7 +60,7 @@ namespace DeskMetrics
         /// <summary>
         /// Field OS Service Pack
         /// </summary>
-        private string _osServicePack;
+        private string _servicePack;
 
         /// <summary>
         /// GetProcessorFrequency and Set Framework ApplicationVersion
@@ -80,45 +80,45 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency and Set OS Archicteture
         /// </summary>
-        public int OSArchicteture
+        public int Archicteture
         {
             get
             {
-                return _osArchicteture;
+                return _Archicteture;
             }
             set
             {
-                _osArchicteture = value;
+                _Archicteture = value;
             }
         }
 
         /// <summary>
         /// GetProcessorFrequency and Set OS Language
         /// </summary>
-        public string OSLanguage
+        public string Language
         {
             get
             {
-                return _osLanguage;
+                return _language;
             }
             set
             {
-                _osLanguage = value;
+                _language = value;
             }
         }
 
         /// <summary>
         /// GetProcessorFrequency and Set OS ApplicationVersion
         /// </summary>
-        public string OSVersion
+        public string Version
         {
             get
             {
-                return _osName;
+                return _Name;
             }
             set
             {
-                _osName = value;
+                _Name = value;
             }
         }
 
@@ -140,15 +140,15 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency and Set OS LCID - Language Culture Id
         /// </summary>
-        public int OSLcid
+        public int Lcid
         {
             get
             {
-                return _osLCID;
+                return _LCID;
             }
             set
             {
-                _osLCID = value;
+                _LCID = value;
             }
         }
 
@@ -170,15 +170,15 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency and Set OS Service Pack
         /// </summary>
-        public string OSServicePack
+        public string ServicePack
         {
             get
             {
-                return _osServicePack;
+                return _servicePack;
             }
             set
             {
-                _osServicePack = value;
+                _servicePack = value;
             }
         }
 
@@ -249,7 +249,7 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency OS Archicteture GetComponentName
         /// </summary>
-        public void GetOSArchicteture()
+        public void GetArchicteture()
         {
             try
             {
@@ -269,59 +269,59 @@ namespace DeskMetrics
                             if (PC.Value !=null)
                             {
                                 string value = PC.Value.ToString().Remove(2);
-                                OSArchicteture = int.Parse(value);
+                                Archicteture = int.Parse(value);
                             }
                         }
                     }
                 }
      
-                if (OSArchicteture <= 0)
+                if (Archicteture <= 0)
                 {
                     if (IntPtr.Size == 8)
                     {
-                        OSArchicteture = 64;
+                        Archicteture = 64;
                     }
                     else
                     {
                         if (IntPtr.Size == 4)
                         {
-                            OSArchicteture = 32;
+                            Archicteture = 32;
                         }
                     }
                 }
             }
             catch 
             {
-                OSArchicteture = -1;
+                Archicteture = -1;
             }
         }
 
         /// <summary>
         /// GetProcessorFrequency OS Language GetComponentName
         /// </summary>
-        public void GetOSLanguage()
+        public void GetLanguage()
         {
             try
             {
-                OSLanguage = Thread.CurrentThread.CurrentCulture.DisplayName;
-                OSLcid     = Thread.CurrentThread.CurrentCulture.LCID;
+                Language = Thread.CurrentThread.CurrentCulture.DisplayName;
+                Lcid     = Thread.CurrentThread.CurrentCulture.LCID;
             }
             catch
             {
-                OSLanguage = "null";
-                OSLcid = -1;
+                Language = "null";
+                Lcid = -1;
             }
         }
 
         /// <summary>
         /// GetProcessorFrequency OS ApplicationVersion GetComponentName
         /// </summary>
-        public void GetOSVersion()
+        public void GetVersion()
         {
             try
             {
-                OperatingSystem _osInfo = Environment.OSVersion;
-                _osServicePack = _osInfo.ServicePack;
+                System.OperatingSystem _osInfo = Environment.OSVersion;
+                _servicePack = _osInfo.ServicePack;
                 
                 switch (_osInfo.Platform)
                 {
@@ -333,27 +333,27 @@ namespace DeskMetrics
                         switch (_osInfo.Version.Major)
 	                    {
                             case 3:
-                                OSVersion = "Windows NT 3.51";
+                                Version = "Windows NT 3.51";
                                 break;
                             case 4:
-                                OSVersion = "Windows NT 4.0";
+                                Version = "Windows NT 4.0";
                                 break;
                             case 5:
                                 if (_osInfo.Version.Minor == 0)
                                 {
-                                    OSVersion = "Windows 2000";
+                                    Version = "Windows 2000";
                                 }
                                 else
                                 {
                                     if (_osInfo.Version.Minor == 1)
                                     {
-                                        OSVersion = "Windows XP";
+                                        Version = "Windows XP";
                                     }
                                     else
                                     {
                                         if (_osInfo.Version.Minor == 2)
                                         {
-                                            OSVersion = "Windows Server 2003";
+                                            Version = "Windows Server 2003";
                                         }
                                     }
                                 }
@@ -361,19 +361,19 @@ namespace DeskMetrics
                             case 6:
                                 if (_osInfo.Version.Minor == 0)
                                 {
-                                    OSVersion = "Windows Vista";
+                                    Version = "Windows Vista";
                                 }
                                 else
                                 {
                                     if (_osInfo.Version.Minor == 1)
                                     {
-                                        OSVersion = "Windows 7";
+                                        Version = "Windows 7";
                                     }
                                     else
                                     {
                                         if (_osInfo.Version.Minor == 3)
                                         {
-                                            OSVersion = "Windows Server 2008";
+                                            Version = "Windows Server 2008";
                                         }
                                     }
                                 }
@@ -402,7 +402,7 @@ namespace DeskMetrics
             }
             catch
             {
-                OSVersion = "null";    
+                Version = "null";    
             }
 
         }
