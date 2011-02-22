@@ -29,7 +29,6 @@ namespace DeskMetrics
 {
     public class Watcher : IDisposable
     {
-        Thread SendDataThread;
         Thread StartThread;
         Thread StopThread;
         Thread CustomDataThread;
@@ -120,8 +119,13 @@ namespace DeskMetrics
         private string _componentVersion;
 
         private int _flowglobalnumber = 0;
-        
+
         private bool _started = false;
+
+        public bool Started
+        {
+            get { return _started; }
+        }
         
         private int _bandwidth = Settings.MaxDailyNetwork;
         
@@ -189,7 +193,10 @@ namespace DeskMetrics
             {
                 return _error;
             }
-
+            set
+            {
+                _error = value;
+            }
         }
 
         public bool Enabled
@@ -261,6 +268,17 @@ namespace DeskMetrics
             }
         }
 
+        private Services _services;
+
+        internal Services Services
+        {
+            get {
+                if (_services == null)
+                    _services = new Services(this);
+                return _services; 
+            }
+            set { _services = value; }
+        }
 
         public bool PostWaitResponse
         {
@@ -384,7 +402,7 @@ namespace DeskMetrics
                         int ErrorID;
                         try
                         {
-                            PostData(out ErrorID, Settings.ApiEndpoint);
+                            Services.PostData(out ErrorID, Settings.ApiEndpoint);
                         }
                         catch (Exception)
                         {
@@ -461,7 +479,7 @@ namespace DeskMetrics
 
                             try
                             {
-                                PostData(out ErrorID, Settings.ApiEndpoint);
+                                Services.PostData(out ErrorID, Settings.ApiEndpoint);
                             }
                             finally
                             {
@@ -610,208 +628,7 @@ namespace DeskMetrics
             }
         }
 
-        private string PostData(out int ErrorID, string PostMode)
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    Hashtable o = new Hashtable();
-                    ErrorID = 0;
-
-                    if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                    {
-                        string url;
-
-                        if (_postport == 443)
-                        {
-                            System.Net.ServicePointManager.ServerCertificateValidationCallback +=
-                                delegate(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors sslError)
-                                {
-                                    bool validationResult = true;
-                                    return validationResult;
-                                };
-
-                            url = "https://" + this.ApplicationId + "." + Settings.DefaultServer + PostMode;
-                        }
-                        else
-                        {
-                            url = "http://" + this.ApplicationId + "." + Settings.DefaultServer + PostMode;
-                        }
-
-                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                        request.Timeout = Settings.Timeout;
-
-                        if (!string.IsNullOrEmpty(_proxyhost))
-                        {
-                            string uri;
-
-                            WebProxy myProxy = new WebProxy();
-
-                            if (_proxyport != 0)
-                            {
-                                uri = _proxyhost + ":" + _proxyport;
-                            }
-                            else
-                            {
-                                uri = _proxyhost;
-                            }
-
-                            Uri newUri = new Uri(uri);
-                            myProxy.Address = newUri;
-                            myProxy.Credentials = new NetworkCredential(_proxyusername, _proxypassword);
-                            request.Proxy = myProxy;
-                        }
-                        else
-                        {
-                            request.Proxy = WebRequest.DefaultWebProxy;
-                        }
-
-                        request.UserAgent = Settings.UserAgent;
-                        request.KeepAlive = false;
-                        request.ProtocolVersion = HttpVersion.Version10;
-                        request.Method = "POST";
-
-                        byte[] postBytes = null;
-
-                        postBytes = Encoding.UTF8.GetBytes("data=[" + this.JSON + "]");
-
-                        request.ContentType = "application/x-www-form-urlencoded";
-                        request.ContentLength = postBytes.Length;
-
-                        Stream requestStream = request.GetRequestStream();
-                        requestStream.Write(postBytes, 0, postBytes.Length);
-                        requestStream.Close();
-
-                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                        StreamReader streamreader = new StreamReader(response.GetResponseStream());
-                        string stream = streamreader.ReadToEnd();
-                        streamreader.Close();
-
-                        ErrorID = 0;
-                        return "";
-                    }
-                    else
-                    {
-                        _error = Settings.ErrorCodes["-11"].ToString();
-                        ErrorID = -11;
-                        return "";
-                    }
-                }
-                catch (WebException webException)
-                {
-                    _error = webException.ToString();
-                    ErrorID = -1;
-                    return "";
-                }
-                catch
-                {
-                    ErrorID = -1;
-                    return "";
-                }
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="Log">json message</param>
-        public bool SendData()
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    if (_started)
-                    {
-                        if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                        {
-                            int ErrorID;
-                            PostData(out ErrorID, Settings.ApiEndpoint);
-
-                            if (ErrorID == 0)
-                            {
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
-                            }
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-        }
-
-        public bool SendDataAsync()
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                    {
-                        if (SendDataThread == null)
-                        {
-                            SendDataThread = new Thread(_SendDataThreadFunc);
-                        }
-
-                        if ((SendDataThread != null) && (SendDataThread.IsAlive==false))
-                        {
-                            SendDataThread = new Thread(_SendDataThreadFunc);
-                            SendDataThread.Name = "SendDataSender";
-                            SendDataThread.Start();
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-        }
-
-        private void _SendDataThreadFunc()
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    int ErrorID;
-                    try
-                    {
-                        PostData(out ErrorID, Settings.ApiEndpoint);
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-                catch
-                {
-                }
-            }
-            
-        }
+        
 
         /// <summary>
         /// </summary>
@@ -879,7 +696,7 @@ namespace DeskMetrics
                         SetJSON();
 
                         int ErrorID;
-                        PostData(out ErrorID, Settings.ApiEndpoint);
+                        Services.PostData(out ErrorID, Settings.ApiEndpoint);
                     }
 
                 }
@@ -1326,7 +1143,7 @@ namespace DeskMetrics
                         SetJSON();
 
                         int ErrorID;
-                        PostData(out ErrorID, Settings.ApiEndpoint);
+                        Services.PostData(out ErrorID, Settings.ApiEndpoint);
                     }
                 }
                 catch
@@ -1356,7 +1173,7 @@ namespace DeskMetrics
                             {
                                 SetJSON();
                                 int ErrorID;
-                                PostData(out ErrorID, Settings.ApiEndpoint);
+                                Services.PostData(out ErrorID, Settings.ApiEndpoint);
 
                                 if (ErrorID == 0)
                                 {
@@ -1456,7 +1273,7 @@ namespace DeskMetrics
                         int ErrorID;
                         try
                         {
-                            PostData(out ErrorID, Settings.ApiEndpoint);
+                            Services.PostData(out ErrorID, Settings.ApiEndpoint);
                         }
                         catch
                         {
