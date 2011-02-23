@@ -37,5 +37,6 @@ namespace DeskMetrics
         public const string EventPeriod = "evP";
         public const string Install = "ist";
         public const string Uninstall = "ust";
+        public const string Rollback = "rst";
     }
 }
