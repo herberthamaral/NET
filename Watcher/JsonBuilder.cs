@@ -12,7 +12,10 @@ namespace DeskMetrics
         
         protected static string Session
         {
-            get;
+            get
+            {
+                return Session;
+            }
             set
             {
                 //ensure that Session will be filled only once
@@ -101,7 +104,7 @@ namespace DeskMetrics
 
     public class EventStartJson : EventJson
     {
-        public EventStartJson(string category, string name, string value, int flow)
+        public EventStartJson(string category, string name,  int flow)
             : base(category, name, flow)
         {
             Type = EventType.EventStart;
@@ -110,7 +113,7 @@ namespace DeskMetrics
 
     public class EventStopJson : EventJson
     {
-        public EventStopJson(string category, string name, string value, int flow)
+        public EventStopJson(string category, string name, int flow)
             : base(category, name, flow)
         {
             Type = EventType.EventStop;
@@ -119,7 +122,7 @@ namespace DeskMetrics
 
     public class EventCancelJson : EventJson
     {
-        public EventCancelJson(string category, string name, string value, int flow)
+        public EventCancelJson(string category, string name, int flow)
             : base(category, name, flow)
         {
             Type = EventType.EventCancel;
@@ -199,9 +202,9 @@ namespace DeskMetrics
         public override Hashtable GetJsonHashTable()
         {
             var json = base.GetJsonHashTable();
-            json.Add("msg", Exception.Message);
-            json.Add("stk", Exception.StackTrace);
-            json.Add("src", Exception.Source);
+            json.Add("msg", Exception.Message.Trim().Replace("\r\n", "").Replace("  ", " ").Replace("\n", "").Replace(@"\n", "").Replace("\r", "").Replace("&", "").Replace("|", "").Replace(">", "").Replace("<", "").Replace("\t", "").Replace(@"\", @"\\"));
+            json.Add("stk", Exception.StackTrace.Trim().Replace("\r\n", "").Replace("  ", " ").Replace("\n", "").Replace(@"\n", "").Replace("\r", "").Replace("&", "").Replace("|", "").Replace(">", "").Replace("<", "").Replace("\t", "").Replace(@"\", @"\\"));
+            json.Add("src", Exception.Source.Trim().Replace("\r\n", "").Replace("  ", " ").Replace("\n", "").Replace(@"\n", "").Replace("\r", "").Replace("&", "").Replace("|", "").Replace(">", "").Replace("<", "").Replace("\t", "").Replace(@"\", @"\\"));
             json.Add("tgs", Exception.TargetSite);
             return json;
         }
@@ -296,6 +299,23 @@ namespace DeskMetrics
             json.Add("mfr", GetHardwareInfo.MemoryFree);
             json.Add("dtt", GetHardwareInfo.DiskTotal);
             json.Add("dfr", GetHardwareInfo.DiskFree);
+            return json;
+        }
+    }
+
+    public class EventPeriodJson : EventStartJson
+    {
+        protected int Time;
+        public EventPeriodJson(string category, string name, int flow,int time)
+            : base(category, name, flow)
+        {
+            Time = time;
+        }
+
+        public override Hashtable GetJsonHashTable()
+        {
+            var json = base.GetJsonHashTable();
+            json.Add("tm", Time);
             return json;
         }
     }

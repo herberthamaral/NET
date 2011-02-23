@@ -57,7 +57,8 @@ namespace DeskMetrics
 
         public object SessionGUID
         {
-            internal get { return _sessionGUID; }
+            get { return _sessionGUID; }
+            //private set { _sessionGUID = value; }
         }
         /// <summary>
         /// Field Json
@@ -78,34 +79,8 @@ namespace DeskMetrics
         /// <summary>
         /// Field Type JSON
         /// </summary>
-        private string _type;
 
         private int _flownumber;
-        /// <summary>
-        /// Field Event Category
-        /// </summary>
-        private string _eventCategory;
-        /// <summary>
-        /// Field Event Name
-        /// </summary>
-        private string _eventName;
-        /// <summary>
-        /// Field EventValue Value
-        /// </summary>
-        private string _eventValue;
-        /// <summary>
-        /// Field Custom Name
-        /// </summary>
-        private int _eventTime;
-        
-        private string _exceptionMessage;
-        
-        private string _exceptionStackTrace;
-        
-        private string _exceptionSource;
-        
-        private string _exceptionTargetSite;
-
         private string _customDataName;
         /// <summary>
         /// Field Custom Data Value
@@ -358,18 +333,11 @@ namespace DeskMetrics
                 {
                     if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                     {
-                        _applicationId = ApplicationId;
-                        _applicationVersion = ApplicationVersion;
 
-                        _type = EventType.StartApplication;
-                        _timestamp = Util.GetTimeStamp();
-                        _userGUID = GetUserID();
-                        _sessionGUID = GetGUID();
-                        _realtime = RealTime;
+                        var startjson = new StartAppJson(this);
+                        JSON = JsonBuilder.GetJsonFromHashTable(startjson.GetJsonHashTable());
 
-                        SetJSON();
-
-                        if (_realtime == true)
+                        if (RealTime == true)
                         {
 
                             if (StartThread == null)
@@ -472,12 +440,9 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId))
                         {
-                            _type = EventType.StopApplication;
-                            _timestamp = Util.GetTimeStamp();
-
-                            SetJSON();
-
-                            string SingleJSON = this.JSON;
+                            var json = new StopAppJson();
+                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
+                            string SingleJSON = JSON;
 
                             string CacheData = GetCacheData();
                             if (!string.IsNullOrEmpty(CacheData))
@@ -531,14 +496,8 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = EventType.Event;
-                            _timestamp = Util.GetTimeStamp();
-                            _flownumber = GetFlowNumber();
-
-                            _eventCategory = EventCategory;
-                            _eventName = EventName;
-
-                            SetJSON();
+                            var json = new EventJson(EventCategory, EventName, GetFlowNumber());
+                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
                         }
                     }
                 }
@@ -562,14 +521,8 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = EventType.EventStart;
-                            _timestamp = Util.GetTimeStamp();
-                            _flownumber = GetFlowNumber();
-
-                            _eventCategory = EventCategory;
-                            _eventName = EventName;
-
-                            SetJSON();
+                            var json = new EventStartJson(EventCategory, EventName, GetFlowNumber());
+                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
                         }
                     }
                 }
@@ -593,14 +546,8 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = EventType.EventStop;
-                            _timestamp = Util.GetTimeStamp();
-                            _flownumber = GetFlowNumber();
-
-                            _eventCategory = EventCategory;
-                            _eventName = EventName;
-
-                            SetJSON();
+                            var json = new EventStopJson(EventCategory, EventName, GetFlowNumber());
+                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
                         }
                     }
                 }
@@ -620,15 +567,8 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = EventType.EventPeriod;
-                            _timestamp = Util.GetTimeStamp();
-                            _flownumber = GetFlowNumber();
-
-                            _eventCategory = EventCategory;
-                            _eventName = EventName;
-                            _eventTime = EventTime;
-
-                            SetJSON();
+                            var json = new EventPeriodJson(EventCategory, EventName, GetFlowNumber(), EventTime);
+                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
                         }
                     }
                 }
@@ -637,9 +577,7 @@ namespace DeskMetrics
                 }
             }
         }
-
         
-
         /// <summary>
         /// </summary>
         /// <param name="Enabled">Enabled param</param>
@@ -653,29 +591,8 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true) && (ApplicationException != null))
                         {
-                            _type = EventType.Exception;
-                            _timestamp = Util.GetTimeStamp();
-                            _flownumber = GetFlowNumber();
-
-                            _exceptionMessage = ApplicationException.Message.Trim().Replace("\r\n", "").Replace("  ", " ").Replace("\n", "").Replace(@"\n", "").Replace("\r", "").Replace("&", "").Replace("|", "").Replace(">", "").Replace("<", "").Replace("\t", "").Replace(@"\", @"\\");
-                            _exceptionSource = ApplicationException.Source.Trim().Replace("\r\n", "").Replace("  ", " ").Replace("\n", "").Replace(@"\n", "").Replace("\r", "").Replace("&", "").Replace("|", "").Replace(">", "").Replace("<", "").Replace("\t", "").Replace(@"\", @"\\");
-                            _exceptionStackTrace = ApplicationException.StackTrace.Trim().Replace("\r\n", "").Replace("  ", " ").Replace("\n", "").Replace(@"\n", "").Replace("\r", "").Replace("&", "").Replace("|", "").Replace(">", "").Replace("<", "").Replace("\t", "").Replace(@"\", @"\\");
-
-                            if ((_exceptionStackTrace.Contains("\n")) || (_exceptionStackTrace.Contains(@"\n")))
-                            {
-                                _exceptionStackTrace = "Unavailable";
-                            }
-
-                            if (ApplicationException.TargetSite != null)
-                            {
-                                _exceptionTargetSite = ApplicationException.TargetSite.ToString().Trim().Replace("\r\n", "").Replace("  ", " ").Replace("\n", "").Replace(@"\n", "").Replace("\r", "").Replace("&", "").Replace("|", "").Replace(">", "").Replace("<", "").Replace("\t", "").Replace(@"\", @"\\");
-                            }
-                            else
-                            {
-                                _exceptionTargetSite = "";
-                            }
-
-                            SetJSON();
+                            var json = new ExceptionJson(ApplicationException);
+                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
                         }
                     }
                 }
@@ -697,13 +614,8 @@ namespace DeskMetrics
                 {
                     if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                     {
-                        _applicationId = ApplicationId;
-                        _type = EventType.Uninstall;
-                        _timestamp = Util.GetTimeStamp();
-                        _sessionGUID = GetGUID();
-                        _applicationVersion = ApplicationVersion;
-
-                        SetJSON();
+                        var json = new UninstallJson(GetGUID(), ApplicationVersion, ApplicationId);
+                        JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
 
                         int ErrorID;
                         Services.PostData(out ErrorID, Settings.ApiEndpoint);
@@ -730,8 +642,6 @@ namespace DeskMetrics
             }
         }
 
-        
-
         protected int GetFlowNumber()
         {
             lock (ObjectLock)
@@ -750,263 +660,6 @@ namespace DeskMetrics
 
         /// <summary>
         /// </summary>
-        protected void SetJSON()
-        {
-                lock (ObjectLock)
-                {
-                    try
-                    {
-                        OperatingSystem GetOsInfo = new OperatingSystem();
-                        Hardware GetHardwareInfo = new Hardware();
-                        Hashtable o = new Hashtable();
-                        StringBuilder _str = new StringBuilder();
-                        switch (_type)
-                        {
-                            case EventType.StartApplication:
-
-                                #region "Start"
-                                GetOsInfo.GetFrameworkVersion();
-                                GetOsInfo.GetArchicteture();
-                                GetOsInfo.GetLanguage();
-                                GetOsInfo.GetVersion();
-                                GetOsInfo.GetJavaVersion();
-                                GetHardwareInfo.GetProcessorData();
-                                GetHardwareInfo.GetMemoryData();
-                                GetHardwareInfo.GetDiskData();
-                                GetHardwareInfo.GetScreenResolution();
-                                o["type"] = _type;
-                                o["appVersion"] = _applicationVersion;
-                                o["userID"] = _userGUID;
-                                o["session"] = _sessionGUID;
-                                o["timestamp"] = _timestamp;
-                                o["os_name"] = GetOsInfo.Version;
-                                o["os_servicepack"] = GetOsInfo.ServicePack;
-                                o["os_arch"] = GetOsInfo.Archicteture;
-                                o["os_java"] = GetOsInfo.JavaVersion;
-                                o["os_dotnet"] = GetOsInfo.FrameworkVersion;
-                                o["os_dotnetsp"] = GetOsInfo.FrameworkServicePack;
-                                o["os_lang"] = GetOsInfo.Lcid;
-                                o["os_screen"] = GetHardwareInfo.ScreenResolution;
-                                o["cpu_name"] = GetHardwareInfo.ProcessorName;
-                                o["cpu_brand"] = GetHardwareInfo.ProcessorBrand;
-                                o["cpu_freq"] = GetHardwareInfo.ProcessorFrequency;
-                                o["cpu_cores"] = GetHardwareInfo.ProcessorCores;
-                                o["cpu_arch"] = GetHardwareInfo.ProcessorArchicteture;
-                                o["mem_total"] = GetHardwareInfo.MemoryTotal;
-                                o["mem_free"] = GetHardwareInfo.MemoryFree;
-                                o["disk_total"] = GetHardwareInfo.DiskTotal;
-                                o["disk_free"] = GetHardwareInfo.DiskFree;
-
-                                _str.Append("{\"tp\":\"" + o["type"] + "\",");
-                                _str.Append("\"aver\":\"" + o["appVersion"] + "\",");
-                                _str.Append("\"ID\":\"" + _userGUID + "\",");
-                                _str.Append("\"ss\":\"" + _sessionGUID + "\",");
-                                _str.Append("\"ts\":" + _timestamp + ",");
-                                _str.Append("\"osv\":\"" + o["os_name"] + "\",");
-                                _str.Append("\"ossp\":\"" + o["os_servicepack"] + "\",");
-                                _str.Append("\"osar\":" + o["os_arch"] + ",");
-                                _str.Append("\"osjv\":\"" + o["os_java"] + "\",");
-                                _str.Append("\"osnet\":\"" + o["os_dotnet"] + "\",");
-                                _str.Append("\"osnsp\":\"" + o["os_dotnetsp"] + "\",");
-                                _str.Append("\"oslng\":" + o["os_lang"] + ",");
-                                _str.Append("\"osscn\":\"" + o["os_screen"] + "\",");
-                                _str.Append("\"cnm\":\"" + o["cpu_name"] + "\",");
-                                _str.Append("\"cbr\":\"" + o["cpu_brand"] + "\",");
-                                _str.Append("\"cfr\":" + o["cpu_freq"] + ",");
-                                _str.Append("\"ccr\":" + o["cpu_cores"] + ",");
-                                _str.Append("\"car\":" + o["cpu_arch"] + ",");
-                                _str.Append("\"mtt\":" + o["mem_total"] + ",");
-                                _str.Append("\"mfr\":" + o["mem_free"] + ",");
-                                _str.Append("\"dtt\":" + o["disk_total"] + ",");
-                                _str.Append("\"dfr\":" + o["disk_free"] + "}");
-                                #endregion
-
-                                break;
-                            case EventType.StopApplication:
-
-                                #region "Stop"
-                                _str.Append(this.JSON + ",");
-                                _str.Append("{\"tp\":\"" + _type + "\",");
-                                _str.Append("\"ts\":" + _timestamp + ",");
-                                _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
-                                #endregion
-
-                                break;
-                            case EventType.Event:
-
-                                #region "Events"
-                                _str.Append(this.JSON + ",");
-                                _str.Append("{\"tp\":\"" + _type + "\",");
-                                _str.Append("\"ca\":\"" + _eventCategory + "\",");
-                                _str.Append("\"nm\":\"" + _eventName + "\",");
-                                _str.Append("\"fl\":" + _flownumber + ",");
-                                _str.Append("\"ts\":" + _timestamp + ",");
-                                _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
-                                #endregion
-
-                                break;
-                            case EventType.CustomData:
-
-                                #region "Custom Data"
-                                _str.Append(this.JSON + ",");
-                                _str.Append("{\"tp\":\"" + _type + "\",");
-                                _str.Append("\"nm\":\"" + _customDataName + "\",");
-                                _str.Append("\"vl\":\"" + _customDataValue + "\",");
-                                _str.Append("\"fl\":" + _flownumber + ",");
-                                _str.Append("\"ts\":" + _timestamp + ",");
-                                _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
-                                #endregion
-
-                                break;
-                            case EventType.CustomDataR:
-
-                                #region "Custom Data R"
-                                _str.Append("{\"tp\":\"" + _type + "\",");
-                                _str.Append("\"nm\":\"" + _customDataName + "\",");
-                                _str.Append("\"vl\":\"" + _customDataValue + "\",");
-                                _str.Append("\"aver\":\"" + _applicationVersion + "\",");
-                                _str.Append("\"ID\":\"" + _userGUID + "\",");
-                                _str.Append("\"fl\":" + _flownumber + ",");
-                                _str.Append("\"ts\":" + _timestamp + ",");
-                                _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
-                                #endregion
-
-                                break;
-                            case EventType.Log:
-
-                                #region "Logs"
-                                _str.Append(this.JSON + ",");
-                                _str.Append("{\"tp\":\"" + _type + "\",");
-                                _str.Append("\"ms\":\"" + _log + "\",");
-                                _str.Append("\"fl\":" + _flownumber + ",");
-                                _str.Append("\"ts\":" + _timestamp + ",");
-                                _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
-                                #endregion
-
-                                break;
-                            case EventType.Exception:
-
-                                #region "Exceptions"
-                                _str.Append(this.JSON + ",");
-                                _str.Append("{\"tp\":\"" + _type + "\",");
-                                _str.Append("\"msg\":\"" + _exceptionMessage + "\",");
-                                _str.Append("\"stk\":\"" + _exceptionStackTrace + "\",");
-                                _str.Append("\"src\":\"" + _exceptionSource + "\",");
-                                _str.Append("\"tgs\":\"" + _exceptionTargetSite + "\",");
-                                _str.Append("\"fl\":" + _flownumber + ",");
-                                _str.Append("\"ts\":" + _timestamp + ",");
-                                _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
-                                #endregion
-
-                                break;
-                            case EventType.EventStart:
-
-                                #region "Event Start"
-                                _str.Append(this.JSON + ",");
-                                _str.Append("{\"tp\":\"" + _type + "\",");
-                                _str.Append("\"ca\":\"" + _eventCategory + "\",");
-                                _str.Append("\"nm\":\"" + _eventName + "\",");
-                                _str.Append("\"fl\":" + _flownumber + ",");
-                                _str.Append("\"ts\":" + _timestamp + ",");
-                                _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
-                                #endregion
-
-                                break;
-                            case EventType.EventStop:
-
-                                #region "Events Stop"
-                                _str.Append(this.JSON + ",");
-                                _str.Append("{\"tp\":\"" + _type + "\",");
-                                _str.Append("\"ca\":\"" + _eventCategory + "\",");
-                                _str.Append("\"nm\":\"" + _eventName + "\",");
-                                _str.Append("\"fl\":" + _flownumber + ",");
-                                _str.Append("\"ts\":" + _timestamp + ",");
-                                _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
-                                #endregion
-
-                                break;
-
-                            case EventType.EventCancel:
-                                #region "Events Cancel"
-                                _str.Append(this.JSON + ",");
-                                _str.Append("{\"tp\":\"" + _type + "\",");
-                                _str.Append("\"ca\":\"" + _eventCategory + "\",");
-                                _str.Append("\"nm\":\"" + _eventName + "\",");
-                                _str.Append("\"fl\":" + _flownumber + ",");
-                                _str.Append("\"ts\":" + _timestamp + ",");
-                                _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
-                                #endregion
-
-                                break;
-
-                            case EventType.EventValue:
-
-                                #region "Events Values"
-                                _str.Append(this.JSON + ",");
-                                _str.Append("{\"tp\":\"" + _type + "\",");
-                                _str.Append("\"ca\":\"" + _eventCategory + "\",");
-                                _str.Append("\"nm\":\"" + _eventName + "\",");
-                                _str.Append("\"vl\":\"" + _eventValue + "\",");
-                                _str.Append("\"fl\":" + _flownumber + ",");
-                                _str.Append("\"ts\":" + _timestamp + ",");
-                                _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
-                                #endregion
-
-                                break;
-
-                            case EventType.EventPeriod:
-                                #region "Events Period"
-                                _str.Append(this.JSON + ",");
-                                _str.Append("{\"tp\":\"" + _type + "\",");
-                                _str.Append("\"ca\":\"" + _eventCategory + "\",");
-                                _str.Append("\"nm\":\"" + _eventName + "\",");
-                                _str.Append("\"tm\":\"" + _eventTime + "\",");
-                                _str.Append("\"fl\":" + _flownumber + ",");
-                                _str.Append("\"ts\":" + _timestamp + ",");
-                                _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
-                                #endregion
-
-                                break;
-
-                            case EventType.Install:
-
-                                #region "Install"
-                                _str.Append("{\"tp\":\"" + _type + "\",");
-                                _str.Append("\"aver\":\"" + _applicationVersion + "\",");
-                                _str.Append("\"ID\":\"" + _userGUID + "\",");
-                                _str.Append("\"ts\":" + _timestamp + ",");
-                                _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
-                                #endregion
-
-                                break;
-                            case EventType.Uninstall:
-
-                                #region "Uninstall"
-                                _str.Append("{\"tp\":\"" + _type + "\",");
-                                _str.Append("\"aver\":\"" + _applicationVersion + "\",");
-                                _str.Append("\"ID\":\"" + _userGUID + "\",");
-                                _str.Append("\"ts\":" + _timestamp + ",");
-                                _str.Append("\"ss\":\"" + _sessionGUID + "\"}");
-                                #endregion
-
-                                break;
-                            default:
-                                break;
-                        }
-
-                        this.JSON = _str.ToString().Trim();
-                    }
-                    catch
-                    {
-                        _error = Settings.ErrorCodes["-9"].ToString();
-                    }
-          
-            }
-
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="EventCategory">Event Category param</param>
         /// <param name="EventName">Event Name param</param>
         /// <param name="EventValue">Event Value param</param>
@@ -1020,15 +673,8 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = EventType.EventValue;
-                            _timestamp = Util.GetTimeStamp();
-                            _flownumber = GetFlowNumber();
-
-                            _eventCategory = EventCategory.Trim();
-                            _eventName = EventName.Trim();
-                            _eventValue = EventValue.Trim();
-
-                            SetJSON();
+                            var json = new EventValueJson(EventCategory, EventName, EventValue, GetFlowNumber());
+                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
                         }
                     }
                 }
@@ -1052,14 +698,8 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = EventType.EventCancel;
-                            _timestamp = Util.GetTimeStamp();
-                            _flownumber = GetFlowNumber();
-
-                            _eventCategory = EventCategory.Trim();
-                            _eventName = EventName.Trim();
-
-                            SetJSON();
+                            var json = new EventCancelJson(EventCategory, EventName, GetFlowNumber());
+                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
                         }
                     }
                 }
@@ -1083,14 +723,8 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = EventType.CustomData;
-                            _timestamp = Util.GetTimeStamp();
-                            _flownumber = GetFlowNumber();
-
-                            _customDataName = CustomDataName.Trim();
-                            _customDataValue = CustomDataValue.Trim();
-
-                            SetJSON();
+                            var json = new CustomDataJson(CustomDataName, CustomDataValue, GetFlowNumber());
+                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
                         }
                     }
                 }
@@ -1118,8 +752,8 @@ namespace DeskMetrics
                             _flownumber = GetFlowNumber();
 
                             _log = Message.Trim();
-
-                            SetJSON();
+                            var json = new LogJson(Message);
+                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
                         }
                     }
                 }
@@ -1142,15 +776,8 @@ namespace DeskMetrics
                 {
                     if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                     {
-                        _applicationId = ApplicationId;
-                        _applicationVersion = ApplicationVersion;
-
-                        _type = EventType.Install;
-                        _timestamp = Util.GetTimeStamp();
-                        _sessionGUID = GetGUID();
-                        _test = Convert.ToInt32(TestMode);
-
-                        SetJSON();
+                        var json = new InstallJson(GetGUID(), ApplicationVersion, ApplicationId);
+                        JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
 
                         int ErrorID;
                         Services.PostData(out ErrorID, Settings.ApiEndpoint);
@@ -1162,7 +789,7 @@ namespace DeskMetrics
             }
         }
 
-        public bool TrackCustomDataRealTime(string CustomDataName, string CustomDataValue)
+        public bool TrackCustomDataR(string CustomDataName, string CustomDataValue)
         {
             lock (ObjectLock)
             {
@@ -1172,16 +799,12 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = EventType.CustomDataR;
-                            _timestamp = Util.GetTimeStamp();
-                            _customDataName = CustomDataName;
-                            _customDataValue = CustomDataValue;
-                            _flownumber = GetFlowNumber();
-
                             string temp = this.JSON;
                             try
                             {
-                                SetJSON();
+                                var json = new CustomDataRJson(CustomDataName, CustomDataValue, GetFlowNumber(), ApplicationId, ApplicationVersion);
+                                JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
+
                                 int ErrorID;
                                 Services.PostData(out ErrorID, Settings.ApiEndpoint);
 
@@ -1226,13 +849,9 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = EventType.CustomDataR;
-                            _timestamp = Util.GetTimeStamp();
-                            _customDataName = CustomDataName;
-                            _customDataValue = CustomDataValue;
-                            _flownumber = GetFlowNumber();
-
-
+                            var json = new CustomDataRJson(CustomDataName, CustomDataValue, GetFlowNumber(), ApplicationId, ApplicationVersion);
+                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
+                            
                             if (CustomDataThread == null)
                             {
                                 CustomDataThread = new Thread(_CustomDataRThread);
@@ -1276,8 +895,6 @@ namespace DeskMetrics
                 {
                     string temp = this.JSON;
 
-                    this.JSON = "";
-                    SetJSON();
                     try
                     {
                         int ErrorID;
