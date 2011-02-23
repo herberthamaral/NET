@@ -43,8 +43,8 @@ namespace DeskMetrics
 
     public class StopAppJson : BaseJson
     {
-        public StopAppJson(string session)
-            : base(EventType.StopApplication, session)
+        public StopAppJson()
+            : base(EventType.StopApplication, BaseJson.Session)
         { 
 
         }
@@ -61,8 +61,8 @@ namespace DeskMetrics
         protected string Name;
         protected int Flow;
 
-        public EventJson(string session, string category, string name, int flow)
-            : base(EventType.Event, session)
+        public EventJson(string category, string name, int flow)
+            : base(EventType.Event, BaseJson.Session)
         {
             Category = category;
             Name = name;
@@ -84,8 +84,8 @@ namespace DeskMetrics
     {
         protected string Value;
 
-        public EventValueJson(string session, string category, string name,string value, int flow)
-            : base(session, category, name, flow)
+        public EventValueJson(string category, string name,string value, int flow)
+            : base(category, name, flow)
         {
             Type = EventType.EventValue;
             Value = value;
@@ -101,8 +101,8 @@ namespace DeskMetrics
 
     public class EventStartJson : EventJson
     {
-        public EventStartJson(string session, string category, string name, string value, int flow)
-            : base(session, category, name, flow)
+        public EventStartJson(string category, string name, string value, int flow)
+            : base(category, name, flow)
         {
             Type = EventType.EventStart;
         }
@@ -110,8 +110,8 @@ namespace DeskMetrics
 
     public class EventStopJson : EventJson
     {
-        public EventStopJson(string session, string category, string name, string value, int flow)
-            : base(session, category, name, flow)
+        public EventStopJson(string category, string name, string value, int flow)
+            : base(category, name, flow)
         {
             Type = EventType.EventStop;
         }
@@ -119,8 +119,8 @@ namespace DeskMetrics
 
     public class EventCancelJson : EventJson
     {
-        public EventCancelJson(string session, string category, string name, string value, int flow)
-            : base(session, category, name, flow)
+        public EventCancelJson(string category, string name, string value, int flow)
+            : base(category, name, flow)
         {
             Type = EventType.EventCancel;
         }
@@ -129,8 +129,8 @@ namespace DeskMetrics
     public class LogJson : BaseJson
     {
         protected string Message;
-        public LogJson(string session, string msg)
-            : base(EventType.Log, session)
+        public LogJson(string msg)
+            : base(EventType.Log, BaseJson.Session)
         {
             Message = msg;
         }
@@ -149,8 +149,8 @@ namespace DeskMetrics
         protected string Value;
         protected int Flow;
 
-        public CustomDataJson(string session,string name,string value, int flow)
-            : base(EventType.CustomData, session)
+        public CustomDataJson(string name,string value, int flow)
+            : base(EventType.CustomData, BaseJson.Session)
         {
             Name = name;
             Value = value;
@@ -172,7 +172,7 @@ namespace DeskMetrics
     {
         protected string ID;
         protected string  AppVersion;
-        public CustomDataRJson(string session, string name, string value, int flow, string ID, string app_version):base(session,name,value,flow)
+        public CustomDataRJson(string name, string value, int flow, string ID, string app_version):base(name,value,flow)
         {
             this.ID = ID;
             AppVersion = app_version;
@@ -190,8 +190,8 @@ namespace DeskMetrics
     public class ExceptionJson : BaseJson
     {
         protected Exception Exception;
-        public ExceptionJson(string session, Exception e)
-            : base(EventType.Exception, session)
+        public ExceptionJson(Exception e)
+            : base(EventType.Exception, BaseJson.Session)
         {
             Exception = e;
         }
