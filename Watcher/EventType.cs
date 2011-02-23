@@ -27,7 +27,7 @@ namespace DeskMetrics
         public const string StopApplication = "stApp";
         public const string Event = "ev";
         public const string CustomData = "ctD";
-        public const string CustomDataRealTime = "ctDR";
+        public const string CustomDataR = "ctDR";
         public const string Log = "lg";
         public const string Exception = "exC";
         public const string EventStart = "evS";

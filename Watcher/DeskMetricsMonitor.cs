@@ -45,10 +45,20 @@ namespace DeskMetrics
         /// Field User GUID
         /// </summary>
         private object _userGUID;
+
+        public object UserGUID
+        {
+            get { return _userGUID; }
+        }
         /// <summary>
         /// Field Session Id
         /// </summary>
         private object _sessionGUID;
+
+        public object SessionGUID
+        {
+            internal get { return _sessionGUID; }
+        }
         /// <summary>
         /// Field Json
         /// </summary>
@@ -848,7 +858,7 @@ namespace DeskMetrics
                                 #endregion
 
                                 break;
-                            case EventType.CustomDataRealTime:
+                            case EventType.CustomDataR:
 
                                 #region "Custom Data R"
                                 _str.Append("{\"tp\":\"" + _type + "\",");
@@ -1162,7 +1172,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = EventType.CustomDataRealTime;
+                            _type = EventType.CustomDataR;
                             _timestamp = Util.GetTimeStamp();
                             _customDataName = CustomDataName;
                             _customDataValue = CustomDataValue;
@@ -1216,7 +1226,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = EventType.CustomDataRealTime;
+                            _type = EventType.CustomDataR;
                             _timestamp = Util.GetTimeStamp();
                             _customDataName = CustomDataName;
                             _customDataValue = CustomDataValue;
