@@ -331,5 +331,10 @@ namespace DeskMetrics
             var json = Json.JsonEncode(hash);
             return json;   
         }
+
+        public static string GetJsonFromList(List<string> list)
+        {
+            return string.Join(",", list.ToArray());
+        }
     }
 }

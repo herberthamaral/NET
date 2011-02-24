@@ -17,6 +17,7 @@
 using System;
 using System.Reflection;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Net;
@@ -69,7 +70,7 @@ namespace DeskMetrics
         /// <summary>
         /// Field Json
         /// </summary>
-        private string _json;
+        private List<string> _json;
         /// <summary>
         /// Field Application Id
         /// </summary>
@@ -82,11 +83,9 @@ namespace DeskMetrics
         /// Field Test mode
         /// </summary>
         private int _test;
-        /// <summary>
-        /// Field Type JSON
-        /// </summary>
 
         private int _flownumber;
+
         private string _customDataName;
         /// <summary>
         /// Field Custom Data Value
@@ -166,10 +165,12 @@ namespace DeskMetrics
             }
         }
 
-        public string JSON
+        public List<string> JSON
         {
             get
             {
+                if (_json == null)
+                    _json = new List<string>();
                 return _json;
             }
             set
@@ -261,7 +262,7 @@ namespace DeskMetrics
 
         private Services _services;
 
-        public Services Services
+        internal Services Services
         {
             get {
                 if (_services == null)
@@ -343,7 +344,7 @@ namespace DeskMetrics
                         this.ApplicationVersion = ApplicationVersion;
                         this._realtime = RealTime;
                         var startjson = new StartAppJson(this);
-                        JSON = JsonBuilder.GetJsonFromHashTable(startjson.GetJsonHashTable());
+                        JSON.Add(JsonBuilder.GetJsonFromHashTable(startjson.GetJsonHashTable()));
 
                         if (RealTime == true)
                         {
@@ -388,7 +389,8 @@ namespace DeskMetrics
                         int ErrorID;
                         try
                         {
-                            Services.PostData(out ErrorID, Settings.ApiEndpoint);
+                            Services.PostData(out ErrorID, Settings.ApiEndpoint,JsonBuilder.GetJsonFromList(JSON));
+                            JSON.Clear();
                         }
                         catch (Exception)
                         {
@@ -449,24 +451,26 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId))
                         {
                             var json = new StopAppJson();
-                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
-                            string SingleJSON = JSON;
+                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
+                            string SingleJSON = JsonBuilder.GetJsonFromList(JSON);
 
                             string CacheData = GetCacheData();
                             if (!string.IsNullOrEmpty(CacheData))
                             {
-                                this.JSON = this.JSON + "," + CacheData;
+                                SingleJSON = SingleJSON + "," + CacheData;
                             }
 
                             int ErrorID;
 
                             try
                             {
-                                Services.PostData(out ErrorID, Settings.ApiEndpoint);
+                                Services.PostData(out ErrorID, Settings.ApiEndpoint,JsonBuilder.GetJsonFromList(JSON));
+                                JSON.Clear();
                             }
                             finally
                             {
-                                this.JSON = SingleJSON;
+                                JSON.Clear();
+                                JSON.Add(SingleJSON);
                             }
 
                             if (ErrorID == 0)
@@ -505,7 +509,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             var json = new EventJson(EventCategory, EventName, GetFlowNumber());
-                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
+                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                         }
                     }
                 }
@@ -530,7 +534,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             var json = new EventStartJson(EventCategory, EventName, GetFlowNumber());
-                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
+                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                         }
                     }
                 }
@@ -555,7 +559,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             var json = new EventStopJson(EventCategory, EventName, GetFlowNumber());
-                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
+                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                         }
                     }
                 }
@@ -576,7 +580,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             var json = new EventPeriodJson(EventCategory, EventName, GetFlowNumber(), EventTime);
-                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
+                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                         }
                     }
                 }
@@ -600,7 +604,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true) && (ApplicationException != null))
                         {
                             var json = new ExceptionJson(ApplicationException);
-                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
+                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                         }
                     }
                 }
@@ -623,10 +627,11 @@ namespace DeskMetrics
                     if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                     {
                         var json = new UninstallJson(GetGUID(), ApplicationVersion, ApplicationId);
-                        JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
+                        JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
 
                         int ErrorID;
-                        Services.PostData(out ErrorID, Settings.ApiEndpoint);
+                        Services.PostData(out ErrorID, Settings.ApiEndpoint,JsonBuilder.GetJsonFromList(JSON));
+                        JSON.Clear();
                     }
 
                 }
@@ -682,7 +687,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             var json = new EventValueJson(EventCategory, EventName, EventValue, GetFlowNumber());
-                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
+                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                         }
                     }
                 }
@@ -707,7 +712,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             var json = new EventCancelJson(EventCategory, EventName, GetFlowNumber());
-                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
+                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                         }
                     }
                 }
@@ -732,7 +737,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             var json = new CustomDataJson(CustomDataName, CustomDataValue, GetFlowNumber());
-                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
+                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                         }
                     }
                 }
@@ -756,7 +761,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             var json = new LogJson(Message,GetFlowNumber());
-                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
+                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                         }
                     }
                 }
@@ -780,10 +785,11 @@ namespace DeskMetrics
                     if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                     {
                         var json = new InstallJson(GetGUID(), ApplicationVersion, ApplicationId);
-                        JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
+                        JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
 
                         int ErrorID;
-                        Services.PostData(out ErrorID, Settings.ApiEndpoint);
+                        Services.PostData(out ErrorID, Settings.ApiEndpoint,JsonBuilder.GetJsonFromList(JSON));
+                        JSON.Clear();
                     }
                 }
                 catch
@@ -800,16 +806,13 @@ namespace DeskMetrics
                 {
                     if (Started)
                     {
+                        var json = new CustomDataRJson(CustomDataName, CustomDataValue, GetFlowNumber(), ApplicationId, ApplicationVersion);
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            string temp = this.JSON;
                             try
                             {
-                                var json = new CustomDataRJson(CustomDataName, CustomDataValue, GetFlowNumber(), ApplicationId, ApplicationVersion);
-                                JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
-
                                 int ErrorID;
-                                Services.PostData(out ErrorID, Settings.ApiEndpoint);
+                                Services.PostData(out ErrorID, Settings.ApiEndpoint, JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
 
                                 if (ErrorID == 0)
                                 {
@@ -820,9 +823,11 @@ namespace DeskMetrics
                                     return false;
                                 }
                             }
-                            finally
+                            catch (Exception)
                             {
-                                this.JSON = temp;
+                                //saves to send later
+                                JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
+                                return false;
                             }
                         }
                         else
@@ -853,7 +858,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             var json = new CustomDataRJson(CustomDataName, CustomDataValue, GetFlowNumber(), ApplicationId, ApplicationVersion);
-                            JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
+                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                             
                             if (CustomDataThread == null)
                             {
@@ -894,25 +899,11 @@ namespace DeskMetrics
         {
             lock (ObjectLock)
             {
+                int ErrorID;
                 try
                 {
-                    string temp = this.JSON;
-
-                    try
-                    {
-                        int ErrorID;
-                        try
-                        {
-                            Services.PostData(out ErrorID, Settings.ApiEndpoint);
-                        }
-                        catch
-                        {
-                        }
-                    }
-                    finally
-                    {
-                        this.JSON = temp;
-                    }
+                    Services.PostData(out ErrorID, Settings.ApiEndpoint, JsonBuilder.GetJsonFromList(JSON));
+                    JSON.Clear();
                 }
                 catch
                 {
@@ -1141,7 +1132,7 @@ namespace DeskMetrics
                         FileStream FileS = new FileStream(@FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                         StreamWriter StreamFile = new StreamWriter(FileS);
 
-                        StreamFile.Write(Util.EncodeTo64(this.JSON));
+                        StreamFile.Write(Util.EncodeTo64(JsonBuilder.GetJsonFromList(JSON)));
                         StreamFile.Flush();
 
                         StreamFile.Close();
@@ -1155,7 +1146,7 @@ namespace DeskMetrics
                     {
                         StreamWriter OldFile = File.AppendText(FileName);
 
-                        OldFile.Write("," + Util.EncodeTo64(this.JSON));
+                        OldFile.Write("," + Util.EncodeTo64(JsonBuilder.GetJsonFromList(JSON)));
                         OldFile.Flush();
                         OldFile.Close();
 
@@ -1169,5 +1160,11 @@ namespace DeskMetrics
             }
         }
 
+
+        public void SendDataAsync()
+        {
+            Services.SendDataAsync(JsonBuilder.GetJsonFromList(JSON));
+            JSON.Clear();
+        }
     } 
 }

@@ -23,7 +23,7 @@ namespace DeskMetrics
 
         Thread SendDataThread;
 
-        public string PostData(out int ErrorID, string PostMode)
+        public string PostData(out int ErrorID, string PostMode,string json)
         {
             lock (ObjectLock)
             {
@@ -87,7 +87,7 @@ namespace DeskMetrics
 
                         byte[] postBytes = null;
 
-                        postBytes = Encoding.UTF8.GetBytes("data=[" + watcher.JSON + "]");
+                        postBytes = Encoding.UTF8.GetBytes("data=[" + json + "]");
 
                         request.ContentType = "application/x-www-form-urlencoded";
                         request.ContentLength = postBytes.Length;
@@ -128,7 +128,7 @@ namespace DeskMetrics
         /// <summary>
         /// </summary>
         /// <param name="Log">json message</param>
-        public bool SendData()
+        public bool SendData(string json)
         {
             lock (ObjectLock)
             {
@@ -139,7 +139,7 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(watcher.ApplicationId) && (watcher.Enabled == true))
                         {
                             int ErrorID;
-                            PostData(out ErrorID, Settings.ApiEndpoint);
+                            PostData(out ErrorID, Settings.ApiEndpoint,json);
                             return ErrorID == 0;
                         }
                         else
@@ -159,7 +159,8 @@ namespace DeskMetrics
             }
         }
 
-        public bool SendDataAsync()
+        private string _json;
+        public bool SendDataAsync(string json)
         {
             lock (ObjectLock)
             {
@@ -167,6 +168,7 @@ namespace DeskMetrics
                 {
                     if (!string.IsNullOrEmpty(watcher.ApplicationId) && (watcher.Enabled == true))
                     {
+                        _json = json;
                         if (SendDataThread == null)
                         {
                             SendDataThread = new Thread(_SendDataThreadFunc);
@@ -205,7 +207,7 @@ namespace DeskMetrics
                     int ErrorID;
                     try
                     {
-                        PostData(out ErrorID, Settings.ApiEndpoint);
+                        PostData(out ErrorID, Settings.ApiEndpoint,_json);
                     }
                     catch (Exception)
                     {
