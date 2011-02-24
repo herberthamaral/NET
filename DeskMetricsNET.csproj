@@ -47,11 +47,11 @@
     <Compile Include="watcher\Services.cs" />
     <Compile Include="watcher\Storage.cs" />
     <Compile Include="watcher\Util.cs" />
-    <Compile Include="watcher\DeskMetricsHardware.cs" />
-    <Compile Include="watcher\DeskMetricsJSON.cs" />
-    <Compile Include="watcher\DeskMetricsOS.cs" />
-    <Compile Include="watcher\DeskMetricsMonitor.cs" />
-    <Compile Include="watcher\DeskMetricsSettings.cs" />
+    <Compile Include="watcher\Hardware.cs" />
+    <Compile Include="watcher\Json.cs" />
+    <Compile Include="watcher\OperatingSystem.cs" />
+    <Compile Include="watcher\Watcher.cs" />
+    <Compile Include="watcher\Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DeskMetrics.cd" />
