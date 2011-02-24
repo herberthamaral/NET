@@ -57,7 +57,13 @@ namespace DeskMetrics
 
         public object SessionGUID
         {
-            get { return _sessionGUID; }
+            get {
+                if (_sessionGUID == null)
+                {
+                    _sessionGUID = GetGUID();
+                }
+                return _sessionGUID;
+            }
             //private set { _sessionGUID = value; }
         }
         /// <summary>
@@ -255,7 +261,7 @@ namespace DeskMetrics
 
         private Services _services;
 
-        internal Services Services
+        public Services Services
         {
             get {
                 if (_services == null)
@@ -333,7 +339,9 @@ namespace DeskMetrics
                 {
                     if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                     {
-
+                        this.ApplicationId = ApplicationId;
+                        this.ApplicationVersion = ApplicationVersion;
+                        this._realtime = RealTime;
                         var startjson = new StartAppJson(this);
                         JSON = JsonBuilder.GetJsonFromHashTable(startjson.GetJsonHashTable());
 
@@ -747,12 +755,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            _type = EventType.Log;
-                            _timestamp = Util.GetTimeStamp();
-                            _flownumber = GetFlowNumber();
-
-                            _log = Message.Trim();
-                            var json = new LogJson(Message);
+                            var json = new LogJson(Message,GetFlowNumber());
                             JSON = JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable());
                         }
                     }

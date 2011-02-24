@@ -12,23 +12,51 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NETDeskMetricsExample", "Application Example\componentNETapp\NETDeskMetricsExample.csproj", "{8EEE8F54-2BFD-419D-A506-7C25E5510A19}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = com.deskmetrics.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BD0BA67E-77A2-4B6B-A9B6-4FFAE1609224}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BD0BA67E-77A2-4B6B-A9B6-4FFAE1609224}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD0BA67E-77A2-4B6B-A9B6-4FFAE1609224}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BD0BA67E-77A2-4B6B-A9B6-4FFAE1609224}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BD0BA67E-77A2-4B6B-A9B6-4FFAE1609224}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{BD0BA67E-77A2-4B6B-A9B6-4FFAE1609224}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD0BA67E-77A2-4B6B-A9B6-4FFAE1609224}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD0BA67E-77A2-4B6B-A9B6-4FFAE1609224}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BD0BA67E-77A2-4B6B-A9B6-4FFAE1609224}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BD0BA67E-77A2-4B6B-A9B6-4FFAE1609224}.Release|x86.ActiveCfg = Release|Any CPU
 		{9B706AC5-DB60-4EA5-B0E1-FB32BFA5F7C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9B706AC5-DB60-4EA5-B0E1-FB32BFA5F7C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B706AC5-DB60-4EA5-B0E1-FB32BFA5F7C5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9B706AC5-DB60-4EA5-B0E1-FB32BFA5F7C5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9B706AC5-DB60-4EA5-B0E1-FB32BFA5F7C5}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{9B706AC5-DB60-4EA5-B0E1-FB32BFA5F7C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B706AC5-DB60-4EA5-B0E1-FB32BFA5F7C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B706AC5-DB60-4EA5-B0E1-FB32BFA5F7C5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9B706AC5-DB60-4EA5-B0E1-FB32BFA5F7C5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9B706AC5-DB60-4EA5-B0E1-FB32BFA5F7C5}.Release|x86.ActiveCfg = Release|Any CPU
+		{8EEE8F54-2BFD-419D-A506-7C25E5510A19}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{8EEE8F54-2BFD-419D-A506-7C25E5510A19}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{8EEE8F54-2BFD-419D-A506-7C25E5510A19}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{8EEE8F54-2BFD-419D-A506-7C25E5510A19}.Debug|x86.ActiveCfg = Debug|x86
+		{8EEE8F54-2BFD-419D-A506-7C25E5510A19}.Debug|x86.Build.0 = Debug|x86
+		{8EEE8F54-2BFD-419D-A506-7C25E5510A19}.Release|Any CPU.ActiveCfg = Release|x86
+		{8EEE8F54-2BFD-419D-A506-7C25E5510A19}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{8EEE8F54-2BFD-419D-A506-7C25E5510A19}.Release|Mixed Platforms.Build.0 = Release|x86
+		{8EEE8F54-2BFD-419D-A506-7C25E5510A19}.Release|x86.ActiveCfg = Release|x86
+		{8EEE8F54-2BFD-419D-A506-7C25E5510A19}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

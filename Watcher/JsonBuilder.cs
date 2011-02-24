@@ -9,18 +9,19 @@ namespace DeskMetrics
     public abstract class BaseJson
     {
         protected string Type;
-        
+
+        private static string _session;
         protected static string Session
         {
             get
             {
-                return Session;
+                return _session;
             }
             set
             {
                 //ensure that Session will be filled only once
-                if (string.IsNullOrEmpty(Session) && !string.IsNullOrEmpty(value))
-                    Session = value;
+                if (string.IsNullOrEmpty(_session) && !string.IsNullOrEmpty(value))
+                    _session = value;
             }
         }
 
@@ -132,16 +133,19 @@ namespace DeskMetrics
     public class LogJson : BaseJson
     {
         protected string Message;
-        public LogJson(string msg)
+        protected int Flow;
+        public LogJson(string msg,int flow)
             : base(EventType.Log, BaseJson.Session)
         {
             Message = msg;
+            Flow = flow;
         }
 
         public override Hashtable GetJsonHashTable()
         {
             var json = base.GetJsonHashTable();
             json.Add("ms", Message);
+            json.Add("fl", Flow);
             return json;
         }
     }

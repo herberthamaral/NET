@@ -43,7 +43,7 @@ namespace componentNETapp
 
             // Starts the DeskMetrics component (required)
             // IMPORTANT! Do not forget to set your application ID
-            DeskMetrics.Start("YOUR APPLICATION ID", "1.0", true);
+            DeskMetrics.Start("4d47c012d9340b116a000000", "1.0", true);
 
             InitializeComponent();
         }
@@ -177,7 +177,7 @@ namespace componentNETapp
 
         private void btnSyncNow_Click(object sender, EventArgs e)
         {
-            DeskMetrics.SendDataAsync();
+            DeskMetrics.Services.SendDataAsync();
         }
 
         private void btnEventPeriod_Click(object sender, EventArgs e)
