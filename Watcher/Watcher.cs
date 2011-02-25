@@ -742,7 +742,11 @@ namespace DeskMetrics
             {
                 try
                 {
-                    RegistryKey reg = Registry.CurrentUser.CreateSubKey("Software\\dskMetrics");
+                    RegistryKey reg = Registry.CurrentUser.OpenSubKey("Sofware\\dskMetrics");
+
+                    if (reg == null)
+                        reg = Registry.CurrentUser.CreateSubKey("Software\\dskMetrics");
+
                     reg.SetValue("ID", UserID);
                     reg.Close();
 
