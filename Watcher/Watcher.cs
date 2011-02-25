@@ -554,31 +554,6 @@ namespace DeskMetrics
 
         /// <summary>
         /// </summary>
-        /// <param name="EventCategory">Event Category param</param>
-        /// <param name="EventName">Event Name param</param>
-        public void TrackEventCancel(string EventCategory, string EventName)
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    if (Started)
-                    {
-                        if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                        {
-                            var json = new EventCancelJson(EventCategory, EventName, GetFlowNumber());
-                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-                        }
-                    }
-                }
-                catch
-                {
-                }
-            }
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="CustomDataName">Custom Data Name param</param>
         /// <param name="CustomDataValue">Custom Data Value param</param>
         public void TrackCustomData(string CustomDataName, string CustomDataValue)

@@ -118,16 +118,6 @@ namespace DeskMetrics
         }
     }
 
-
-    public class EventCancelJson : EventJson
-    {
-        public EventCancelJson(string category, string name, int flow)
-            : base(category, name, flow)
-        {
-            Type = EventType.EventCancel;
-        }
-    }
-
     public class LogJson : BaseJson
     {
         protected string Message;
@@ -213,7 +203,6 @@ namespace DeskMetrics
         
 
     }
-
 
     public class StartAppJson:BaseJson
     {
