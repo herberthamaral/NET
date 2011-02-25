@@ -30,7 +30,6 @@ namespace DeskMetrics
 {
     public class Watcher : IDisposable
     {
-        Thread StartThread;
         Thread StopThread;
         Thread CustomDataThread;
 
@@ -38,10 +37,7 @@ namespace DeskMetrics
         /// Thread Lock
         /// </summary>
         private System.Object ObjectLock = new System.Object();
-        /// <summary>
-        /// Field Timestamp
-        /// </summary>
-        private int _timestamp;
+
         /// <summary>
         /// Field User GUID
         /// </summary>
@@ -49,7 +45,11 @@ namespace DeskMetrics
 
         public object UserGUID
         {
-            get { return _userGUID; }
+            get {
+                if (_userGUID == null)
+                    _userGUID = GetUserID();
+                return _userGUID; 
+            }
         }
         /// <summary>
         /// Field Session Id
@@ -79,22 +79,7 @@ namespace DeskMetrics
         /// Field Error Message
         /// </summary>
         private string _error;
-        /// <summary>
-        /// Field Test mode
-        /// </summary>
-        private int _test;
 
-        private int _flownumber;
-
-        private string _customDataName;
-        /// <summary>
-        /// Field Custom Data Value
-        /// </summary>
-        private string _customDataValue;
-        /// <summary>
-        /// Field Custom Log
-        /// </summary>
-        private string _log;
         /// <summary>
         /// Field ApplicationVersion
         /// </summary>
@@ -128,8 +113,6 @@ namespace DeskMetrics
         private int _posttimeout = Settings.Timeout;
 
         private bool _postwaitresponse = false;
-
-        private bool _realtime;
 
         private string _proxyusername;
 
@@ -332,7 +315,7 @@ namespace DeskMetrics
             }
         }
 
-        public bool Start(string ApplicationId, string ApplicationVersion, bool RealTime)
+        public bool Start(string ApplicationId, string ApplicationVersion)
         {
             lock (ObjectLock)
             {
@@ -342,26 +325,8 @@ namespace DeskMetrics
                     {
                         this.ApplicationId = ApplicationId;
                         this.ApplicationVersion = ApplicationVersion;
-                        this._realtime = RealTime;
                         var startjson = new StartAppJson(this);
                         JSON.Add(JsonBuilder.GetJsonFromHashTable(startjson.GetJsonHashTable()));
-
-                        if (RealTime == true)
-                        {
-
-                            if (StartThread == null)
-                            {
-                                StartThread = new Thread(_StartThreadFunc);
-                            }
-
-                            if ((StartThread != null) && (StartThread.IsAlive == false))
-                            {
-                                StartThread = new Thread(_StartThreadFunc);
-                                StartThread.Name = "StartSender";
-                                StartThread.Start();
-                            }
-                        }
-
                         _started = true;
                         return _started;
                     }
@@ -378,30 +343,6 @@ namespace DeskMetrics
             }
         }
 
-        private void _StartThreadFunc()
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    lock (ObjectLock)
-                    {
-                        int ErrorID;
-                        try
-                        {
-                            Services.PostData(out ErrorID, Settings.ApiEndpoint,JsonBuilder.GetJsonFromList(JSON));
-                            JSON.Clear();
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-                catch
-                {
-                }
-            }
-        }
 
         /// <summary>
         /// </summary>
@@ -509,56 +450,6 @@ namespace DeskMetrics
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
                             var json = new EventJson(EventCategory, EventName, GetFlowNumber());
-                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-                        }
-                    }
-                }
-                catch
-                {
-                }
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="EventCategory">EventName Category Name</param>
-        /// <param name="EventName">EventName Name</param>
-        public void TrackEventStart(string EventCategory, string EventName)
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    if (Started)
-                    {
-                        if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                        {
-                            var json = new EventStartJson(EventCategory, EventName, GetFlowNumber());
-                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-                        }
-                    }
-                }
-                catch
-                {
-                }
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="EventCategory">EventName Category</param>
-        /// <param name="EventName">EventName Name</param>
-        public void TrackEventStop(string EventCategory, string EventName)
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    if (Started)
-                    {
-                        if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                        {
-                            var json = new EventStopJson(EventCategory, EventName, GetFlowNumber());
                             JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                         }
                     }
@@ -847,70 +738,6 @@ namespace DeskMetrics
             }
         }
 
-        public bool TrackCustomDataRASync(string CustomDataName, string CustomDataValue)
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    if (Started)
-                    {
-                        if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                        {
-                            var json = new CustomDataRJson(CustomDataName, CustomDataValue, GetFlowNumber(), ApplicationId, ApplicationVersion);
-                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-                            
-                            if (CustomDataThread == null)
-                            {
-                                CustomDataThread = new Thread(_CustomDataRThread);
-                            }
-
-                            if ((CustomDataThread != null) && (CustomDataThread.IsAlive == false))
-                            {
-                                CustomDataThread = new Thread(_CustomDataRThread);
-                                CustomDataThread.Name = "CustomDataRASyncSender";
-                                CustomDataThread.Start();
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
-                            }
-
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-        }
-
-        private void _CustomDataRThread()
-        {
-            lock (ObjectLock)
-            {
-                int ErrorID;
-                try
-                {
-                    Services.PostData(out ErrorID, Settings.ApiEndpoint, JsonBuilder.GetJsonFromList(JSON));
-                    JSON.Clear();
-                }
-                catch
-                {
-                }
-            }
-        }
-
         public bool SetUserID(string UserID)
         {
             lock (ObjectLock)
@@ -1159,7 +986,6 @@ namespace DeskMetrics
                 }
             }
         }
-
 
         public void SendDataAsync()
         {
