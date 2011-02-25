@@ -100,10 +100,6 @@ namespace DeskMetrics
             get { return _started; }
         }
         
-        private int _bandwidth = Settings.MaxDailyNetwork;
-        
-        private int _storage = Settings.MaxStorageData;
-
         private string _postserver = Settings.DefaultServer;
 
         private int _postport = Settings.DefaultPort;
@@ -418,10 +414,7 @@ namespace DeskMetrics
                             }
                             else
                             {
-                                if (GetCacheSize() < GetMaxStorageSizeInKB())
-                                {
-                                    SaveCacheFile();
-                                }
+                                SaveCacheFile();
                             }
 
                         }
@@ -502,33 +495,6 @@ namespace DeskMetrics
                 }
             }
         }        
-        /// <summary>
-        /// </summary>OB
-        /// <param name="ApplicationId">ApplicationId param</param>
-        /// <param name="ApplicationVersion">Application ApplicationVersion param</param>
-        /// <param name="TestMode">Test Mode param</param>
-        public void TrackUninstallation(string ApplicationId, string ApplicationVersion)
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                    {
-                        var json = new UninstallJson(GetGUID(), ApplicationVersion, ApplicationId);
-                        JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-
-                        int ErrorID;
-                        Services.PostData(out ErrorID, Settings.ApiEndpoint,JsonBuilder.GetJsonFromList(JSON));
-                        JSON.Clear();
-                    }
-
-                }
-                catch
-                {
-                }
-            }
-        }
 
         /// <summary>
         /// </summary>
@@ -660,32 +626,6 @@ namespace DeskMetrics
             }
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="ApplicationId">ApplicationId param</param>
-        /// <param name="ApplicationVersion">Application ApplicationVersion param</param>
-        /// <param name="TestMode">Test Mode param</param>
-        public void TrackInstallation(string ApplicationId, string ApplicationVersion, bool TestMode)
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                    {
-                        var json = new InstallJson(GetGUID(), ApplicationVersion, ApplicationId);
-                        JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-
-                        int ErrorID;
-                        Services.PostData(out ErrorID, Settings.ApiEndpoint,JsonBuilder.GetJsonFromList(JSON));
-                        JSON.Clear();
-                    }
-                }
-                catch
-                {
-                }
-            }
-        }
 
         public bool TrackCustomDataR(string CustomDataName, string CustomDataValue)
         {
@@ -755,64 +695,6 @@ namespace DeskMetrics
                 catch
                 {
                     return false;
-                }
-            }
-        }
-
-        public int GetDailyNetworkUtilizationInKB()
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    return _bandwidth;
-                }
-                catch
-                {
-                    return Settings.MaxDailyNetwork;
-                }
-            }
-        }
-
-        public void SetDailyNetworkUtilizationInKB(int FDataSize)
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    _bandwidth = FDataSize;
-                }
-                catch
-                {
-                }
-            }
-        }
-
-        public int GetMaxStorageSizeInKB()
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    return _storage;
-                }
-                catch
-                {
-                    return Settings.MaxStorageData;
-                }
-            }
-        }
-
-        public void SetMaxStorageSizeInKB(int FDataSize)
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    _storage = FDataSize;
-                }
-                catch
-                {
                 }
             }
         }

@@ -214,49 +214,6 @@ namespace DeskMetrics
 
     }
 
-    public class InstallJson : BaseJson
-    {
-        public string AppVersion;
-        public string ID;
-        public InstallJson(string session, string app_version, string ID):base(EventType.Install,session)
-        {
-            AppVersion = app_version;
-            this.ID = ID;
-        }
-
-        public override Hashtable GetJsonHashTable()
-        {
-            var json = base.GetJsonHashTable();
-            json.Add("aver", AppVersion);
-            json.Add("ID", ID);
-            return json;
-        }
-    }
-
-    public class UninstallJson : InstallJson
-    {
-                public UninstallJson(string session, string app_version, string ID):base(session,app_version,ID)
-        {
-            Type = EventType.Uninstall;
-        }
-
-        public override Hashtable GetJsonHashTable()
-        {
-            return base.GetJsonHashTable();
-        }
-    }
-    public class RollbackJson : InstallJson
-    {
-                public RollbackJson(string session, string app_version, string ID):base(session,app_version,ID)
-        {
-            Type = EventType.Rollback;
-        }
-
-        public override Hashtable GetJsonHashTable()
-        {
-            return base.GetJsonHashTable();
-        }
-    }
 
     public class StartAppJson:BaseJson
     {
