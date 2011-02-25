@@ -28,7 +28,7 @@ Here is an example:
 
             public Form1()
             {
-                DeskMetrics.Start("YOUR APPLICATION ID", "1.0", true);
+                DeskMetrics.Start("YOUR APPLICATION ID", "1.0");
                 InitializeComponent();
             }
 
