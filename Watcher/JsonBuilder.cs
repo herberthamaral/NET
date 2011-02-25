@@ -118,23 +118,6 @@ namespace DeskMetrics
         }
     }
 
-    public class EventStartJson : EventJson
-    {
-        public EventStartJson(string category, string name,  int flow)
-            : base(category, name, flow)
-        {
-            Type = EventType.EventStart;
-        }
-    }
-
-    public class EventStopJson : EventJson
-    {
-        public EventStopJson(string category, string name, int flow)
-            : base(category, name, flow)
-        {
-            Type = EventType.EventStop;
-        }
-    }
 
     public class EventCancelJson : EventJson
     {
@@ -322,19 +305,23 @@ namespace DeskMetrics
         }
     }
 
-    public class EventPeriodJson : EventStartJson
+    public class EventPeriodJson : EventJson
     {
         protected int Time;
-        public EventPeriodJson(string category, string name, int flow,int time)
+        protected bool Completed;
+
+        public EventPeriodJson(string category, string name, int flow,int time,bool completed)
             : base(category, name, flow)
         {
             Time = time;
+            Completed = completed;
         }
 
         public override Hashtable GetJsonHashTable()
         {
             var json = base.GetJsonHashTable();
             json.Add("tm", Time);
+            json.Add("ec", Completed?1:0);
             return json;
         }
     }

@@ -183,7 +183,7 @@ namespace componentNETapp
         private void btnEventPeriod_Click(object sender, EventArgs e)
         {
             // Tracks a period
-            DeskMetrics.TrackEventPeriod("EventsPeriod", "MyEvent", 50);
+            DeskMetrics.TrackEventPeriod("EventsPeriod", "MyEvent", 50, true);
             // 50 == 50 seconds
         }
 

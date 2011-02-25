@@ -31,8 +31,6 @@ namespace DeskMetrics
     public class Watcher : IDisposable
     {
         Thread StopThread;
-        Thread CustomDataThread;
-
         /// <summary>
         /// Thread Lock
         /// </summary>
@@ -460,7 +458,7 @@ namespace DeskMetrics
             }
         }
 
-        public void TrackEventPeriod(string EventCategory, string EventName, int EventTime)
+        public void TrackEventPeriod(string EventCategory, string EventName, int EventTime,bool Completed)
         {
             lock (ObjectLock)
             {
@@ -470,7 +468,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                         {
-                            var json = new EventPeriodJson(EventCategory, EventName, GetFlowNumber(), EventTime);
+                            var json = new EventPeriodJson(EventCategory, EventName, GetFlowNumber(), EventTime,Completed);
                             JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                         }
                     }
