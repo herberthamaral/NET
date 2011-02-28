@@ -31,9 +31,6 @@ namespace DeskMetrics
 
         public const int DefaultPort = 443;
         public const int Timeout = 25000; // 20 seconds
-        public const int MaxStorageData = 51200; // 50 KB
-        public const int MaxDailyNetwork = -1;
-
 
         public static readonly Dictionary<string, string> ErrorCodes = new Dictionary<string, string> 
         { 
