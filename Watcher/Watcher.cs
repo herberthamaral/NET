@@ -485,7 +485,7 @@ namespace DeskMetrics
                     {
                         if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true) && (ApplicationException != null))
                         {
-                            var json = new ExceptionJson(ApplicationException);
+                            var json = new ExceptionJson(ApplicationException,GetFlowNumber());
                             JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                         }
                     }
