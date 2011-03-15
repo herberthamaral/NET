@@ -44,7 +44,6 @@ namespace DeskMetrics
             {
                 try
                 {
-                    Hashtable o = new Hashtable();
                     ErrorID = 0;
 
                     if (!string.IsNullOrEmpty(watcher.ApplicationId) && (watcher.Enabled == true))
@@ -113,7 +112,7 @@ namespace DeskMetrics
 
                         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                         StreamReader streamreader = new StreamReader(response.GetResponseStream());
-                        string stream = streamreader.ReadToEnd();
+                        streamreader.ReadToEnd();
                         streamreader.Close();
 
                         ErrorID = 0;
