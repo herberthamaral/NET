@@ -23,6 +23,7 @@ using System.Management;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace DeskMetrics
 {
@@ -331,8 +332,13 @@ namespace DeskMetrics
             }
             catch
             {
-                MemoryFree = -1;
-                MemoryTotal = -1;
+				string[] free = OperatingSystem.GetCommandExecutionOutput("free","-m").Split('\n');
+				string memoryinfo = free[1];
+				Regex regex = new Regex(@"\d+");
+				MatchCollection matches = regex.Matches(memoryinfo);
+				double mega = 1024*1024;
+                MemoryFree = Int32.Parse(matches[2].ToString())*mega;
+                MemoryTotal = Int32.Parse(matches[0].ToString())*mega;
             }
 
         }

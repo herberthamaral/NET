@@ -248,8 +248,8 @@ namespace DeskMetrics
             json.Add("car", GetHardwareInfo.ProcessorArchicteture);
             json.Add("mtt", GetHardwareInfo.MemoryTotal);
             json.Add("mfr", GetHardwareInfo.MemoryFree);
-            json.Add("dtt", GetHardwareInfo.DiskTotal);
-            json.Add("dfr", GetHardwareInfo.DiskFree);
+            json.Add("dtt", "null");
+            json.Add("dfr", "null");
             return json;
         }
     }

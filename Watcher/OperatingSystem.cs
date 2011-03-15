@@ -22,6 +22,7 @@ using System.Text;
 using System.Management;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 
 
@@ -241,7 +242,8 @@ namespace DeskMetrics
             }
             catch 
             {    
-                FrameworkVersion = "null";
+				string[] f = GetCommandExecutionOutput("mono","--version").Split('\n');
+                FrameworkVersion = f[0];
                 FrameworkServicePack = "";
             }
         }
@@ -326,9 +328,9 @@ namespace DeskMetrics
                 switch (_osInfo.Platform)
                 {
                     case PlatformID.MacOSX:
-                        break;
                     case PlatformID.Unix:
-                        break;
+                        Version = GetCommandExecutionOutput("uname","-rs");
+						break;
                     case PlatformID.Win32NT:
                         switch (_osInfo.Version.Major)
 	                    {
@@ -402,7 +404,7 @@ namespace DeskMetrics
             }
             catch
             {
-                Version = "null";    
+                Version = GetCommandExecutionOutput("uname","-v");    
             }
 
         }
@@ -424,8 +426,20 @@ namespace DeskMetrics
             }
             catch
             {
-                JavaVersion = "null";
+				string[] j = GetCommandExecutionOutput("java","-version 2>&1").Split('\n');
+                JavaVersion = j[0];
             }
         }
+		
+		internal static string GetCommandExecutionOutput(string command,string arguments)
+		{
+			var process = new Process();
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.FileName = command;
+			process.StartInfo.Arguments = arguments;
+			process.Start();
+			return process.StandardOutput.ReadToEnd();
+		}
     }
 }
