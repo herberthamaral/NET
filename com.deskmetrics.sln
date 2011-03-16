@@ -7,7 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NETDeskMetricsExample", "Application Example\componentNETapp\NETDeskMetricsExample.csproj", "{8EEE8F54-2BFD-419D-A506-7C25E5510A19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeskMetricsConsole", "DeskMetricsConsole\DeskMetricsConsole.csproj", "{62692EC4-2971-4849-B68C-C107B7DEE13F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeskMetricsTestConsole", "DeskMetricsConsole\DeskMetricsTestConsole.csproj", "{62692EC4-2971-4849-B68C-C107B7DEE13F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesMetricsConsole", "DesMetricsConsole\DesMetricsConsole.csproj", "{38892C9A-C75A-4296-A8B5-2A106651BF13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +21,18 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38892C9A-C75A-4296-A8B5-2A106651BF13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38892C9A-C75A-4296-A8B5-2A106651BF13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38892C9A-C75A-4296-A8B5-2A106651BF13}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{38892C9A-C75A-4296-A8B5-2A106651BF13}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{38892C9A-C75A-4296-A8B5-2A106651BF13}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{38892C9A-C75A-4296-A8B5-2A106651BF13}.Debug|x86.Build.0 = Debug|Any CPU
+		{38892C9A-C75A-4296-A8B5-2A106651BF13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38892C9A-C75A-4296-A8B5-2A106651BF13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38892C9A-C75A-4296-A8B5-2A106651BF13}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{38892C9A-C75A-4296-A8B5-2A106651BF13}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{38892C9A-C75A-4296-A8B5-2A106651BF13}.Release|x86.ActiveCfg = Release|Any CPU
+		{38892C9A-C75A-4296-A8B5-2A106651BF13}.Release|x86.Build.0 = Release|Any CPU
 		{62692EC4-2971-4849-B68C-C107B7DEE13F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{62692EC4-2971-4849-B68C-C107B7DEE13F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62692EC4-2971-4849-B68C-C107B7DEE13F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -55,7 +69,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = DeskMetricsConsole\DeskMetricsConsole.csproj
+		StartupItem = DesMetricsConsole\DesMetricsConsole.csproj
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = com.deskmetrics.vsmdi

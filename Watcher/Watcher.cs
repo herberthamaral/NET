@@ -471,6 +471,40 @@ namespace DeskMetrics
                 }
             }
         }
+		
+		public void TrackInstall(string version,string appid)
+		{
+			lock (ObjectLock)
+            {
+                try
+                {
+
+                    var json = new InstallJson(version);
+					ApplicationId = appid;
+					Services.SendData(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
+	            }
+                catch
+                {
+                }
+            }
+		}
+		
+		public void TrackUninstall(string version,string appid)
+		{
+			lock (ObjectLock)
+            {
+                try
+                {
+
+                    var json = new UninstallJson(version);
+					ApplicationId = appid;
+					Services.SendData(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
+	            }
+                catch
+                {
+                }
+            }
+		}
         
         /// <summary>
         /// </summary>

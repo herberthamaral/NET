@@ -59,6 +59,48 @@ namespace DeskMetrics
             return json;
         }
     }
+	
+	public class InstallJson: BaseJson
+	{
+		public string ID;
+		public string Version;
+		
+		public InstallJson(string version)
+			:base("ist",BaseJson.Session)
+		{
+			ID = System.Guid.NewGuid().ToString().Replace("-", "").ToUpper();
+			Version = version;
+		}
+		
+		public override Hashtable GetJsonHashTable ()
+		{
+			var json = base.GetJsonHashTable();
+			json.Add("ID",ID);
+			json.Add("aver",Version);
+			return json;
+		}
+	}
+	
+	public class UninstallJson: BaseJson
+	{
+		public string ID;
+		public string Version;
+		
+		public UninstallJson(string version)
+			:base("ust",BaseJson.Session)
+		{
+			ID = System.Guid.NewGuid().ToString().Replace("-", "").ToUpper();
+			Version = version;
+		}
+		
+		public override Hashtable GetJsonHashTable ()
+		{
+			var json = base.GetJsonHashTable();
+			json.Add("ID",ID);
+			json.Add("aver",Version);
+			return json;
+		}
+	}
 
     public class StopAppJson : BaseJson
     {

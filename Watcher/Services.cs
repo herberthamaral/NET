@@ -112,7 +112,7 @@ namespace DeskMetrics
 
                         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                         StreamReader streamreader = new StreamReader(response.GetResponseStream());
-                        streamreader.ReadToEnd();
+                        Console.WriteLine(streamreader.ReadToEnd());
                         streamreader.Close();
 
                         ErrorID = 0;
