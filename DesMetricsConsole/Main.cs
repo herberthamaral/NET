@@ -5,11 +5,10 @@ namespace DesMetricsConsole
 {
 	class MainClass
 	{
-		public static void Main (string[] args[5])
+		public static void Main (string[] args)
 		{
-			args[0] = "Install";
-			args[1] = "4d47c012d9340b116a000000";
-			args[2] = "0.1";
+            //string[] fakeargs = new string[] {"Uninstall","4d47c012d9340b116a000000","0.1" };
+
 				
 			if (args.Length != 3)
 			{
@@ -21,12 +20,12 @@ namespace DesMetricsConsole
 			var watcher = new Watcher();
 			if (args[0] == "Install")
 			{
-				watcher.TrackInstall(args[1],args[2]);
+				watcher.TrackInstall(args[2],args[1]);
 			}
 			
 			if (args[0] == "Uninstall")
 			{
-				watcher.TrackUninstall(args[1],args[2]);
+				watcher.TrackUninstall(args[2],args[1]);
 			}
 		}
 		

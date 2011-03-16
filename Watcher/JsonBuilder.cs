@@ -70,6 +70,10 @@ namespace DeskMetrics
 		{
 			ID = System.Guid.NewGuid().ToString().Replace("-", "").ToUpper();
 			Version = version;
+            if (BaseJson.Session == null)
+            {
+                BaseJson.Session = System.Guid.NewGuid().ToString().Replace("-", "").ToUpper();
+            }
 		}
 		
 		public override Hashtable GetJsonHashTable ()
@@ -91,6 +95,10 @@ namespace DeskMetrics
 		{
 			ID = System.Guid.NewGuid().ToString().Replace("-", "").ToUpper();
 			Version = version;
+            if (BaseJson.Session == null)
+            {
+                BaseJson.Session = System.Guid.NewGuid().ToString().Replace("-", "").ToUpper();
+            }
 		}
 		
 		public override Hashtable GetJsonHashTable ()

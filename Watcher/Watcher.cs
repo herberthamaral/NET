@@ -481,6 +481,7 @@ namespace DeskMetrics
 
                     var json = new InstallJson(version);
 					ApplicationId = appid;
+                    _started = true;
 					Services.SendData(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
 	            }
                 catch
@@ -498,6 +499,7 @@ namespace DeskMetrics
 
                     var json = new UninstallJson(version);
 					ApplicationId = appid;
+                    _started = true;
 					Services.SendData(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
 	            }
                 catch
