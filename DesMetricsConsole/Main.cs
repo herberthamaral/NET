@@ -6,10 +6,7 @@ namespace DesMetricsConsole
 	class MainClass
 	{
 		public static void Main (string[] args)
-		{
-            //string[] fakeargs = new string[] {"Uninstall","4d47c012d9340b116a000000","0.1" };
-
-				
+		{		
 			if (args.Length != 3)
 			{
 				PrintUsage();
