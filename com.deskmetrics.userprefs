@@ -2,7 +2,7 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ctype="Workspace" />
   <MonoDevelop.Ide.Workbench ActiveDocument="DesMetricsConsole/Main.cs" ctype="Workbench">
     <Files>
-      <File FileName="DesMetricsConsole/Main.cs" Line="8" Column="45" />
+      <File FileName="DesMetricsConsole/Main.cs" Line="17" Column="3" />
       <File FileName="Watcher/Util.cs" Line="1" Column="1" />
       <File FileName="Watcher/JsonBuilder.cs" Line="90" Column="14" />
       <File FileName="Watcher/Watcher.cs" Line="500" Column="18" />
@@ -12,7 +12,6 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/media/OS/Users/Herberth/NET/Watcher/Watcher.cs" line="484" />
-      <Breakpoint file="/media/OS/Users/Herberth/NET/DesMetricsConsole/Main.cs" line="24" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches ctype="PinnedWatchStore" />
