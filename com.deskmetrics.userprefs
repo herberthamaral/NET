@@ -1,12 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ctype="Workspace" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="DesMetricsConsole/Main.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Watcher/JsonBuilder.cs" ctype="Workbench">
     <Files>
       <File FileName="DesMetricsConsole/Main.cs" Line="17" Column="3" />
       <File FileName="Watcher/Util.cs" Line="1" Column="1" />
-      <File FileName="Watcher/JsonBuilder.cs" Line="90" Column="14" />
-      <File FileName="Watcher/Watcher.cs" Line="500" Column="18" />
+      <File FileName="Watcher/JsonBuilder.cs" Line="243" Column="25" />
+      <File FileName="Watcher/Watcher.cs" Line="464" Column="55" />
       <File FileName="Watcher/Services.cs" Line="114" Column="36" />
+      <File FileName="Watcher/EventType.cs" Line="32" Column="38" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
