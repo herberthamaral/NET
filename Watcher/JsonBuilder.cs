@@ -59,6 +59,56 @@ namespace DeskMetrics
             return json;
         }
     }
+	
+	public class InstallJson: BaseJson
+	{
+		public string ID;
+		public string Version;
+		
+		public InstallJson(string version)
+			:base("ist",BaseJson.Session)
+		{
+			ID = System.Guid.NewGuid().ToString().Replace("-", "").ToUpper();
+			Version = version;
+            if (BaseJson.Session == null)
+            {
+                BaseJson.Session = System.Guid.NewGuid().ToString().Replace("-", "").ToUpper();
+            }
+		}
+		
+		public override Hashtable GetJsonHashTable ()
+		{
+			var json = base.GetJsonHashTable();
+			json.Add("ID",ID);
+			json.Add("aver",Version);
+			return json;
+		}
+	}
+	
+	public class UninstallJson: BaseJson
+	{
+		public string ID;
+		public string Version;
+		
+		public UninstallJson(string version)
+			:base("ust",BaseJson.Session)
+		{
+			ID = System.Guid.NewGuid().ToString().Replace("-", "").ToUpper();
+			Version = version;
+            if (BaseJson.Session == null)
+            {
+                BaseJson.Session = System.Guid.NewGuid().ToString().Replace("-", "").ToUpper();
+            }
+		}
+		
+		public override Hashtable GetJsonHashTable ()
+		{
+			var json = base.GetJsonHashTable();
+			json.Add("ID",ID);
+			json.Add("aver",Version);
+			return json;
+		}
+	}
 
     public class StopAppJson : BaseJson
     {
@@ -248,8 +298,8 @@ namespace DeskMetrics
             json.Add("car", GetHardwareInfo.ProcessorArchicteture);
             json.Add("mtt", GetHardwareInfo.MemoryTotal);
             json.Add("mfr", GetHardwareInfo.MemoryFree);
-            json.Add("dtt", GetHardwareInfo.DiskTotal);
-            json.Add("dfr", GetHardwareInfo.DiskFree);
+            json.Add("dtt", "null");
+            json.Add("dfr", "null");
             return json;
         }
     }

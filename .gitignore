@@ -1,3 +1,4 @@
+*.pidb
 *.suo
 *.sln
 *.dll
