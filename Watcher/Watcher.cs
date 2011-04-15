@@ -313,8 +313,8 @@ namespace DeskMetrics
         {
             lock (ObjectLock)
             {
-                try
-                {
+                //try
+                //{
                     if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                     {
                         this.ApplicationId = ApplicationId;
@@ -328,12 +328,12 @@ namespace DeskMetrics
                     {
                         return false;
                     }
-                }
-                catch
+                //}
+                /*catch
                 {
                     _error = Settings.ErrorCodes["-1"].ToString();
                     return false;
-                }
+                }*/
             }
         }
 

@@ -332,13 +332,21 @@ namespace DeskMetrics
             }
             catch
             {
-				string[] free = OperatingSystem.GetCommandExecutionOutput("free","-m").Split('\n');
-				string memoryinfo = free[1];
-				Regex regex = new Regex(@"\d+");
-				MatchCollection matches = regex.Matches(memoryinfo);
-				double mega = 1024*1024;
-                MemoryFree = Int32.Parse(matches[2].ToString())*mega;
-                MemoryTotal = Int32.Parse(matches[0].ToString())*mega;
+				try
+				{
+					string[] free = OperatingSystem.GetCommandExecutionOutput("free","-m").Split('\n');
+					string memoryinfo = free[1];
+					Regex regex = new Regex(@"\d+");
+					MatchCollection matches = regex.Matches(memoryinfo);
+					double mega = 1024*1024;
+	                MemoryFree = Int32.Parse(matches[2].ToString())*mega;
+	                MemoryTotal = Int32.Parse(matches[0].ToString())*mega;
+				}
+				catch
+				{
+					MemoryFree = 0;
+					MemoryTotal = 0;
+				}
             }
 
         }

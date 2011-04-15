@@ -329,7 +329,7 @@ namespace DeskMetrics
                 {
                     case PlatformID.MacOSX:
                     case PlatformID.Unix:
-                        Version = GetCommandExecutionOutput("uname","-rs");
+	                	Version = GetCommandExecutionOutput("uname","-rs");
 						break;
                     case PlatformID.Win32NT:
                         switch (_osInfo.Version.Major)
@@ -404,7 +404,7 @@ namespace DeskMetrics
             }
             catch
             {
-                Version = GetCommandExecutionOutput("uname","-v");    
+                Version = "Unix";
             }
 
         }
@@ -426,8 +426,15 @@ namespace DeskMetrics
             }
             catch
             {
-				string[] j = GetCommandExecutionOutput("java","-version 2>&1").Split('\n');
-                JavaVersion = j[0];
+				try
+				{
+					string[] j = GetCommandExecutionOutput("java","-version 2>&1").Split('\n');
+	                JavaVersion = j[0];
+				}
+				catch
+				{
+					JavaVersion = "none";
+				}
             }
         }
 		
