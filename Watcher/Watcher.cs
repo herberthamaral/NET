@@ -313,27 +313,19 @@ namespace DeskMetrics
         {
             lock (ObjectLock)
             {
-                //try
-                //{
-                    if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                    {
-                        this.ApplicationId = ApplicationId;
-                        this.ApplicationVersion = ApplicationVersion;
-                        var startjson = new StartAppJson(this);
-                        JSON.Add(JsonBuilder.GetJsonFromHashTable(startjson.GetJsonHashTable()));
-                        _started = true;
-                        return _started;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                //}
-                /*catch
+                if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                 {
-                    _error = Settings.ErrorCodes["-1"].ToString();
+                    this.ApplicationId = ApplicationId;
+                    this.ApplicationVersion = ApplicationVersion;
+                    var startjson = new StartAppJson(this);
+                    JSON.Add(JsonBuilder.GetJsonFromHashTable(startjson.GetJsonHashTable()));
+                    _started = true;
+                    return _started;
+                }
+                else
+                {
                     return false;
-                }*/
+                }
             }
         }
 
