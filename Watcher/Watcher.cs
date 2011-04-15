@@ -30,6 +30,7 @@ namespace DeskMetrics
 {
     public class Watcher : IDisposable
     {
+		#region attributes
         Thread StopThread;
         /// <summary>
         /// Thread Lock
@@ -308,12 +309,25 @@ namespace DeskMetrics
                 _proxyport = value;
             }
         }
-
+		
+		#endregion
+		/// <summary>
+		/// Starts the application tracking.
+		/// </summary>
+		/// <param name="ApplicationId">
+		/// Your app ID. You can get it at http://analytics.deskmetrics.com/
+		/// </param>
+		/// <param name="ApplicationVersion">
+		/// Your app version.
+		/// </param>
         public bool Start(string ApplicationId, string ApplicationVersion)
         {
+			if (string.IsNullOrEmpty(ApplicationId.Trim()))
+				throw new Exception("You must specify an non-empty application ID");
+			
             lock (ObjectLock)
             {
-                if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
+                if (Enabled)
                 {
                     this.ApplicationId = ApplicationId;
                     this.ApplicationVersion = ApplicationVersion;
@@ -322,15 +336,13 @@ namespace DeskMetrics
                     _started = true;
                     return _started;
                 }
-                else
-                {
-                    return false;
-                }
+               return false;
             }
         }
 
 
         /// <summary>
+        /// Stops the application tracking and send the collected data to DeskMetrics
         /// </summary>
         public bool Stop()
         {
@@ -373,43 +385,41 @@ namespace DeskMetrics
             {
                 try
                 {
-                    if (Started)
+
+                    if (!string.IsNullOrEmpty(ApplicationId))
                     {
-                        if (!string.IsNullOrEmpty(ApplicationId))
+                        var json = new StopAppJson();
+                        JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
+                        string SingleJSON = JsonBuilder.GetJsonFromList(JSON);
+
+                        string CacheData = GetCacheData();
+                        if (!string.IsNullOrEmpty(CacheData))
                         {
-                            var json = new StopAppJson();
-                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-                            string SingleJSON = JsonBuilder.GetJsonFromList(JSON);
-
-                            string CacheData = GetCacheData();
-                            if (!string.IsNullOrEmpty(CacheData))
-                            {
-                                SingleJSON = SingleJSON + "," + CacheData;
-                            }
-
-                            int ErrorID;
-
-                            try
-                            {
-                                Services.PostData(out ErrorID, Settings.ApiEndpoint,JsonBuilder.GetJsonFromList(JSON));
-                                JSON.Clear();
-                            }
-                            finally
-                            {
-                                JSON.Clear();
-                                JSON.Add(SingleJSON);
-                            }
-
-                            if (ErrorID == 0)
-                            {
-                                DeleteCacheFile();
-                            }
-                            else
-                            {
-                                SaveCacheFile();
-                            }
-
+                            SingleJSON = SingleJSON + "," + CacheData;
                         }
+
+                        int ErrorID;
+
+                        try
+                        {
+                            Services.PostData(out ErrorID, Settings.ApiEndpoint,JsonBuilder.GetJsonFromList(JSON));
+                            JSON.Clear();
+                        }
+                        finally
+                        {
+                            JSON.Clear();
+                            JSON.Add(SingleJSON);
+                        }
+
+                        if (ErrorID == 0)
+                        {
+                            DeleteCacheFile();
+                        }
+                        else
+                        {
+                            SaveCacheFile();
+                        }
+
                     }
                 }
                 catch
@@ -419,6 +429,7 @@ namespace DeskMetrics
         }
 
         /// <summary>
+        /// Register an event occurence
         /// </summary>
         /// <param name="EventCategory">EventCategory Category</param>
         /// <param name="eventName">EventCategory Name</param>
@@ -443,6 +454,21 @@ namespace DeskMetrics
             }
         }
 
+		/// <summary>
+		/// Tracks an event related to time and intervals
+		/// </summary>
+		/// <param name="EventCategory">
+		/// The event category
+		/// </param>
+		/// <param name="EventName">
+		/// The event name
+		/// </param>
+		/// <param name="EventTime">
+		/// The event duration 
+		/// </param>
+		/// <param name="Completed">
+		/// True if the event was completed.
+		/// </param>
         public void TrackEventPeriod(string EventCategory, string EventName, int EventTime,bool Completed)
         {
             lock (ObjectLock)
@@ -464,6 +490,15 @@ namespace DeskMetrics
             }
         }
 		
+		/// <summary>
+		/// Tracks an installation
+		/// </summary>
+		/// <param name="version">
+		/// Your app version
+		/// </param>
+		/// <param name="appid">
+		/// Your app ID. You can get it at http://analytics.deskmetrics.com/
+		/// </param>
 		public void TrackInstall(string version,string appid)
 		{
 			lock (ObjectLock)
@@ -481,7 +516,15 @@ namespace DeskMetrics
                 }
             }
 		}
-		
+		/// <summary>
+		/// Tracks an uninstall
+		/// </summary>
+		/// <param name="version">
+		/// Your app version
+		/// </param>
+		/// <param name="appid">
+		/// Your app ID. You can get it at http://analytics.deskmetrics.com/
+		/// </param>
 		public void TrackUninstall(string version,string appid)
 		{
 			lock (ObjectLock)
@@ -501,8 +544,11 @@ namespace DeskMetrics
 		}
         
         /// <summary>
+        /// Tracks an exception
         /// </summary>
-        /// <param name="Enabled">Enabled param</param>
+        /// <param name="ApplicationException">
+        /// The exception object to be tracked
+        /// </param>
         public void TrackException(Exception ApplicationException)
         {
             lock (ObjectLock)
@@ -555,10 +601,17 @@ namespace DeskMetrics
         }
 
         /// <summary>
+        /// Tracks an event with custom value
         /// </summary>
-        /// <param name="EventCategory">Event Category param</param>
-        /// <param name="EventName">Event Name param</param>
-        /// <param name="EventValue">Event Value param</param>
+        /// <param name="EventCategory">
+        /// The event category
+        /// </param>
+        /// <param name="EventName">
+        /// The event name
+        /// </param>
+        /// <param name="EventValue">
+        /// The custom value
+        /// </param>
         public void TrackEventValue(string EventCategory, string EventName, string EventValue)
         {
             lock (ObjectLock)
@@ -581,9 +634,14 @@ namespace DeskMetrics
         }
 
         /// <summary>
+        /// Tracks custom data
         /// </summary>
-        /// <param name="CustomDataName">Custom Data Name param</param>
-        /// <param name="CustomDataValue">Custom Data Value param</param>
+        /// <param name="CustomDataName">
+        /// The custom data name
+        /// </param>
+        /// <param name="CustomDataValue">
+        /// The custom data value
+        /// </param>
         public void TrackCustomData(string CustomDataName, string CustomDataValue)
         {
             lock (ObjectLock)
@@ -606,8 +664,11 @@ namespace DeskMetrics
         }
 
         /// <summary>
+        /// Tracks a log
         /// </summary>
-        /// <param name="Message">Custom Message param</param>
+        /// <param name="Message">
+        /// The log message
+        /// </param>
         public void TrackLog(string Message)
         {
             lock (ObjectLock)
@@ -657,6 +718,18 @@ namespace DeskMetrics
 			return false;
 		}
 
+		/// <summary>
+		/// Tracks a custom data without cache support
+		/// </summary>
+		/// <param name="CustomDataName">
+		/// Self-explanatory ;)
+		/// </param>
+		/// <param name="CustomDataValue">
+		/// Self-explanatory ;)
+		/// </param>
+		/// <returns>
+		/// 
+		/// </returns>
         public bool TrackCustomDataR(string CustomDataName, string CustomDataValue)
         {
             lock (ObjectLock)
