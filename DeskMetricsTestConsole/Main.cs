@@ -22,14 +22,15 @@ namespace DeskMetricsConsole
 			Console.WriteLine("[ok]");
 			
 			Console.Write("Adding event timed...");
-			watcher.TrackEventPeriod("DeskMetricsConsole","EventValue",10,true);
+			watcher.TrackEventPeriod("DeskMetricsConsole","EventValue",100,true);
+			watcher.TrackEventPeriod("DeskMetricsConsole","EventValue",30,false);
 			Console.WriteLine("[ok]");
 			
 			Console.Write("Adding custom data...");
 			watcher.TrackCustomData("DeskMetricsConsole","CustomData");
 			Console.WriteLine("[ok]");
 			
-			Console.Write("Adding custom data in real time...");
+			Console.Write("Adding custom data in real time (with cache support)...");
 			watcher.TrackCustomDataR("DeskMetricsConsole","MyCustomDataInRealTime");
 			Console.WriteLine("[ok]");
 			
