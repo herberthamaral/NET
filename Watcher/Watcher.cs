@@ -629,50 +629,53 @@ namespace DeskMetrics
             }
         }
 
+		
+		/// <summary>
+		/// Try to track real time customized data and caches it to send later if any network error occurs.
+		/// </summary>
+		/// <param name="CustomDataName">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <param name="CustomDataValue">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/>
+		/// </returns>
+		public bool TrackCachedCustomDataR(string CustomDataName, string CustomDataValue)
+		{
+			try
+			{
+				TrackCustomDataR(CustomDataName,CustomDataValue);
+			}
+			catch (Exception)
+            {
+				var json = new CustomDataRJson(CustomDataName, CustomDataValue, GetFlowNumber(), ApplicationId, ApplicationVersion);
+            	JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
+				return true;
+            }
+			return false;
+		}
 
         public bool TrackCustomDataR(string CustomDataName, string CustomDataValue)
         {
             lock (ObjectLock)
             {
-                try
+                if (Started)
                 {
-                    if (Started)
+                    var json = new CustomDataRJson(CustomDataName, CustomDataValue, GetFlowNumber(), ApplicationId, ApplicationVersion);
+                    if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
                     {
-                        var json = new CustomDataRJson(CustomDataName, CustomDataValue, GetFlowNumber(), ApplicationId, ApplicationVersion);
-                        if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                        {
-                            try
-                            {
-                                int ErrorID;
-                                Services.PostData(out ErrorID, Settings.ApiEndpoint, JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-
-                                if (ErrorID == 0)
-                                {
-                                    return true;
-                                }
-                                else
-                                {
-                                    return false;
-                                }
-                            }
-                            catch (Exception)
-                            {
-                                //saves to send later
-                                JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-                                return false;
-                            }
-                        }
-                        else
-                        {
-                            return false;
-                        }
+                        int ErrorID;
+                        Services.PostData(out ErrorID, Settings.ApiEndpoint, JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
+						return ErrorID == 0;
                     }
                     else
                     {
                         return false;
                     }
                 }
-                catch 
+                else
                 {
                     return false;
                 }
