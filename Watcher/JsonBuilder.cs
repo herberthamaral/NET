@@ -314,6 +314,7 @@ namespace DeskMetrics
         {
             Time = time;
             Completed = completed;
+			Type = EventType.EventPeriod;
         }
 
         public override Hashtable GetJsonHashTable()
