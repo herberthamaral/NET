@@ -242,9 +242,17 @@ namespace DeskMetrics
             }
             catch 
             {    
-				string[] f = GetCommandExecutionOutput("mono","--version").Split('\n');
-                FrameworkVersion = f[0];
-                FrameworkServicePack = "";
+				try
+				{
+					string[] f = GetCommandExecutionOutput("mono","--version").Split('\n');
+	                FrameworkVersion = f[0];
+				}
+				catch
+				{
+					FrameworkVersion = "none";
+				}
+				
+				FrameworkServicePack = "";
             }
         }
       
