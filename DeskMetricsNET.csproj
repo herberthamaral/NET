@@ -52,6 +52,7 @@
     <Compile Include="Watcher\OperatingSystem.cs" />
     <Compile Include="Watcher\Watcher.cs" />
     <Compile Include="Watcher\Settings.cs" />
+    <Compile Include="Watcher\Cache.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DeskMetrics.cd" />

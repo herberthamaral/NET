@@ -19,7 +19,7 @@ using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using System.IO;
+
 using System.Net;
 using System.Net.Security;
 using System.Threading;
@@ -128,6 +128,7 @@ namespace DeskMetrics
             set
             {
                 _applicationId = value;
+				Cache.ApplicationId = ApplicationId;
             }
         }
 
@@ -310,6 +311,17 @@ namespace DeskMetrics
             }
         }
 		
+		private Cache _cache;
+		internal Cache Cache
+		{
+			get
+			{
+				if (_cache == null)
+					_cache = new Cache();
+				return Cache;
+			}
+		}
+		
 		internal void CheckApplicationCorrectness()
 		{
 			if (string.IsNullOrEmpty(ApplicationId.Trim()))
@@ -333,6 +345,7 @@ namespace DeskMetrics
 			CheckApplicationCorrectness();
 			this.ApplicationId = ApplicationId;
             this.ApplicationVersion = ApplicationVersion;
+			
 			lock (ObjectLock)
                 if (Enabled)
             		StartAppJson();
@@ -387,7 +400,7 @@ namespace DeskMetrics
 		
 		private string AppendCacheDataToJson(string json)
 		{
-			string CacheData = GetCacheData();
+			string CacheData = Cache.GetCacheData();
             if (!string.IsNullOrEmpty(CacheData))
                 json = json + "," + CacheData;
 			return json;
@@ -403,11 +416,11 @@ namespace DeskMetrics
 				{
                 	Services.PostData(Settings.ApiEndpoint,JsonBuilder.GetJsonFromList(JSON));
 					JSON.Clear();
-					DeleteCacheFile();
+					Cache.Delete();
 				}
                 catch (Exception e)
 				{
-					SaveCacheFile();
+					Cache.Save(JSON);
 					throw e;
 				}
             }
@@ -714,81 +727,6 @@ namespace DeskMetrics
                     return _UserID;
                 }
                 return CreateUserID(reg);
-            }
-        }
-
-        private bool DeleteCacheFile()
-        {
-            lock (ObjectLock)
-            {
-                string FileName = Path.GetTempPath() + _applicationId + ".dsmk";
-                if (File.Exists(FileName))
-                {
-                    File.Delete(FileName);
-                    return true;
-                }
-				return false;
-            }
-        }
-
-		private string GetCacheFileName()
-		{
-			return Path.GetTempPath() + _applicationId + ".dsmk";
-		}
-		
-		private string GetFileContents(string FileName)
-		{
-			string FileContents = "";
-			FileStream FileS = new FileStream(@FileName, FileMode.Open, FileAccess.Read);
-            StreamReader Stream = new StreamReader(FileS);
-            try
-            {
-                FileContents =  Util.DecodeFrom64(Stream.ReadToEnd());
-            }
-            finally
-            {
-                Stream.Close();
-                FileS.Close();
-            }
-			return FileContents;
-		}
-		
-        private string GetCacheData()
-        {
-            lock (ObjectLock)
-            {
-                string FileName = GetCacheFileName();
-                if (File.Exists(FileName))
-                	return GetFileContents(FileName);
-                return "";
-            }
-        }
-
-        private Int64 GetCacheSize()
-        {
-			return GetCacheData().Length;
-        }
-
-		private FileStream GetOrCreateCacheFile(string FileName)
-		{
-			FileStream FileS = new FileStream(@FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-			File.SetAttributes(FileName, FileAttributes.Hidden);
-			return FileS;
-		}
-		
-        private void SaveCacheFile() 
-        {
-            lock (ObjectLock)
-            {
-                string FileName = GetCacheFileName();
-				FileStream FileS = GetOrCreateCacheFile(FileName);
-				StreamWriter StreamFile = new StreamWriter(FileS);
-                if (FileS.Length == 0)
-                    StreamFile.Write(Util.EncodeTo64(JsonBuilder.GetJsonFromList(JSON)));
-                else
-                    StreamFile.Write(","+Util.EncodeTo64(JsonBuilder.GetJsonFromList(JSON)),FileS.Length);
-				StreamFile.Close();
-				FileS.Close();
             }
         }
 
