@@ -470,17 +470,10 @@ namespace DeskMetrics
 		{
 			lock (ObjectLock)
             {
-                try
-                {
-
-                    var json = new InstallJson(version);
-					ApplicationId = appid;
-                    _started = true;
-					Services.SendData(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-	            }
-                catch
-                {
-                }
+                var json = new InstallJson(version);
+				ApplicationId = appid;
+                _started = true;
+				Services.SendData(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
             }
 		}
 		/// <summary>
@@ -496,17 +489,10 @@ namespace DeskMetrics
 		{
 			lock (ObjectLock)
             {
-                try
-                {
-
-                    var json = new UninstallJson(version);
-					ApplicationId = appid;
-                    _started = true;
-					Services.SendData(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-	            }
-                catch
-                {
-                }
+                var json = new UninstallJson(version);
+				ApplicationId = appid;
+                _started = true;
+				Services.SendData(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
             }
 		}
         
@@ -519,22 +505,12 @@ namespace DeskMetrics
         public void TrackException(Exception ApplicationException)
         {
             lock (ObjectLock)
-            {
-                try
+                if (Started && ApplicationException != null)
                 {
-                    if (Started)
-                    {
-                        if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true) && (ApplicationException != null))
-                        {
-                            var json = new ExceptionJson(ApplicationException,GetFlowNumber());
-                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-                        }
-                    }
+					CheckApplicationCorrectness();
+                    var json = new ExceptionJson(ApplicationException,GetFlowNumber());
+                    JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                 }
-                catch
-                {
-                }
-            }
         }        
 
         /// <summary>
