@@ -310,6 +310,14 @@ namespace DeskMetrics
             }
         }
 		
+		private void CheckApplicationCorrectness()
+		{
+			if (string.IsNullOrEmpty(ApplicationId.Trim()))
+				throw new Exception("You must specify an non-empty application ID");
+			else if (!Enabled)
+				throw new InvalidOperationException("The application is stopped");
+		}
+		
 		#endregion
 		/// <summary>
 		/// Starts the application tracking.
@@ -320,54 +328,55 @@ namespace DeskMetrics
 		/// <param name="ApplicationVersion">
 		/// Your app version.
 		/// </param>
-        public bool Start(string ApplicationId, string ApplicationVersion)
+        public void Start(string ApplicationId, string ApplicationVersion)
         {
-			if (string.IsNullOrEmpty(ApplicationId.Trim()))
-				throw new Exception("You must specify an non-empty application ID");
-			
-            lock (ObjectLock)
-            {
+			CheckApplicationCorrectness();
+			this.ApplicationId = ApplicationId;
+            this.ApplicationVersion = ApplicationVersion;
+			lock (ObjectLock)
                 if (Enabled)
-                {
-                    this.ApplicationId = ApplicationId;
-                    this.ApplicationVersion = ApplicationVersion;
-                    var startjson = new StartAppJson(this);
-                    JSON.Add(JsonBuilder.GetJsonFromHashTable(startjson.GetJsonHashTable()));
-                    _started = true;
-                    return _started;
-                }
-               return false;
-            }
+            		StartAppJson();
+			_started = true;
         }
+		
+		private void StartAppJson()
+		{
+			var startjson = new StartAppJson(this);
+			JSON.Add(JsonBuilder.GetJsonFromHashTable(startjson.GetJsonHashTable()));
+		}
 
+		private void TryInitializeStop()
+		{
+			if (StopThread == null)
+				StopThread = new Thread(_StopThreadFunc);
+		}
+		
+		private bool IsStopThreadInitialized()
+		{
+			return StopThread != null && !StopThread.IsAlive;
+		}
 
+		private void RunStopThread()
+		{
+			StopThread = new Thread(_StopThreadFunc);
+            StopThread.Name = "StopSender";
+            StopThread.Start();
+		}
         /// <summary>
         /// Stops the application tracking and send the collected data to DeskMetrics
         /// </summary>
         public bool Stop()
         {
+			CheckApplicationCorrectness();
             lock (ObjectLock)
             {
                 try
                 {
-                    if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                    {
-                        if (StopThread == null)
-                        {
-                            StopThread = new Thread(_StopThreadFunc);
-                        }
-
-                        if ((StopThread != null) && (StopThread.IsAlive == false))
-                        {
-                            StopThread = new Thread(_StopThreadFunc);
-                            StopThread.Name = "StopSender";
-                            StopThread.Start();
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
+                	TryInitializeStop();    
+                    if (IsStopThreadInitialized())
+						RunStopThread();
+                    else
+                        return false;
                     return true;
                 }
                 catch
