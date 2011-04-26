@@ -731,36 +731,36 @@ namespace DeskMetrics
             }
         }
 
+		private string GetCacheFileName()
+		{
+			return Path.GetTempPath() + _applicationId + ".dsmk";
+		}
+		
+		private string GetFileContents(string FileName)
+		{
+			string FileContents = "";
+			FileStream FileS = new FileStream(@FileName, FileMode.Open, FileAccess.Read);
+            StreamReader Stream = new StreamReader(FileS);
+            try
+            {
+                FileContents =  Util.DecodeFrom64(Stream.ReadToEnd());
+            }
+            finally
+            {
+                Stream.Close();
+                FileS.Close();
+            }
+			return FileContents;
+		}
+		
         private string GetCacheData()
         {
             lock (ObjectLock)
             {
-                try
-                {
-                    string FileName = Path.GetTempPath() + _applicationId + ".dsmk";
-                    if (File.Exists(FileName))
-                    {
-                        FileStream FileS = new FileStream(@FileName, FileMode.Open, FileAccess.Read);
-                        StreamReader Stream = new StreamReader(FileS);
-                        try
-                        {
-                            return Util.DecodeFrom64(Stream.ReadToEnd());
-                        }
-                        finally
-                        {
-                            Stream.Close();
-                            FileS.Close();
-                        }
-                    }
-                    else
-                    {
-                        return "";
-                    }
-                }
-                catch
-                {
-                    return "";
-                }
+                string FileName = GetCacheFileName();
+                if (File.Exists(FileName))
+                	return GetFileContents(FileName);
+                return "";
             }
         }
 
