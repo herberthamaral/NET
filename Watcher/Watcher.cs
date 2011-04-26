@@ -558,22 +558,12 @@ namespace DeskMetrics
         public void TrackEventValue(string EventCategory, string EventName, string EventValue)
         {
             lock (ObjectLock)
-            {
-                try
+                if (Started)
                 {
-                    if (Started)
-                    {
-                        if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                        {
-                            var json = new EventValueJson(EventCategory, EventName, EventValue, GetFlowNumber());
-                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-                        }
-                    }
+					CheckApplicationCorrectness();
+                    var json = new EventValueJson(EventCategory, EventName, EventValue, GetFlowNumber());
+                    JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                 }
-                catch
-                {
-                }
-            }
         }
 
         /// <summary>
@@ -588,22 +578,12 @@ namespace DeskMetrics
         public void TrackCustomData(string CustomDataName, string CustomDataValue)
         {
             lock (ObjectLock)
-            {
-                try
+                if (Started)
                 {
-                    if (Started)
-                    {
-                        if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                        {
-                            var json = new CustomDataJson(CustomDataName, CustomDataValue, GetFlowNumber());
-                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-                        }
-                    }
+					CheckApplicationCorrectness();
+                    var json = new CustomDataJson(CustomDataName, CustomDataValue, GetFlowNumber());
+                    JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                 }
-                catch
-                {
-                }
-            }
         }
 
         /// <summary>
@@ -616,19 +596,11 @@ namespace DeskMetrics
         {
             lock (ObjectLock)
             {
-                try
+                if (Started)
                 {
-                    if (Started)
-                    {
-                        if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                        {
-                            var json = new LogJson(Message,GetFlowNumber());
-                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-                        }
-                    }
-                }
-                catch
-                {
+                    CheckApplicationCorrectness();
+                    var json = new LogJson(Message,GetFlowNumber());
+                    JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                 }
             }
         }
@@ -644,7 +616,7 @@ namespace DeskMetrics
 		/// A <see cref="System.String"/>
 		/// </param>
 		/// <returns>
-		/// A <see cref="System.Boolean"/>
+		/// True if it was sended in real time, false otherwise
 		/// </returns>
 		public bool TrackCachedCustomDataR(string CustomDataName, string CustomDataValue)
 		{
@@ -656,9 +628,9 @@ namespace DeskMetrics
             {
 				var json = new CustomDataRJson(CustomDataName, CustomDataValue, GetFlowNumber(), ApplicationId, ApplicationVersion);
             	JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-				return true;
+				return false;
             }
-			return false;
+			return true;
 		}
 
 		/// <summary>
@@ -686,26 +658,21 @@ namespace DeskMetrics
             }
         }
 
-        public bool SetUserID(string UserID)
+		private RegistryKey GetOrCreateDeskMetricsSubKey()
+		{
+			RegistryKey reg = Registry.CurrentUser.OpenSubKey("Sofware\\dskMetrics");
+            if (reg == null)
+                reg = Registry.CurrentUser.CreateSubKey("Software\\dskMetrics");
+			return reg;
+		}
+		
+        public void SetUserID(string UserID)
         {
             lock (ObjectLock)
             {
-                try
-                {
-                    RegistryKey reg = Registry.CurrentUser.OpenSubKey("Sofware\\dskMetrics");
-
-                    if (reg == null)
-                        reg = Registry.CurrentUser.CreateSubKey("Software\\dskMetrics");
-
-                    reg.SetValue("ID", UserID);
-                    reg.Close();
-
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
+                RegistryKey reg = GetOrCreateDeskMetricsSubKey();
+                reg.SetValue("ID", UserID);
+                reg.Close();
             }
         }
 
@@ -741,9 +708,7 @@ namespace DeskMetrics
                     {
                         string UserID = reg.GetValue("ID").ToString();
                         if (!string.IsNullOrEmpty(UserID))
-                        {
                             return UserID;
-                        }
                         else
                         {
                             UserID = GetGUID();
