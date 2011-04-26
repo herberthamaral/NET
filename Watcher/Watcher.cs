@@ -691,36 +691,29 @@ namespace DeskMetrics
             }
         }
 
+		protected string CreateUserID(RegistryKey reg)
+		{
+			string UserID = reg.GetValue("ID").ToString();
+            if (!string.IsNullOrEmpty(UserID))
+                return UserID;
+
+			UserID = GetGUID();
+            SetUserID(UserID);
+            return UserID;
+		}
+		
         protected string GetUserID()
         {
             lock (ObjectLock)
             {
-                try
+                RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software\\dskMetrics", true);
+                if (reg == null)
                 {
-                    RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software\\dskMetrics", true);
-                    if (reg == null)
-                    {
-                        string _UserID = GetGUID();
-                        SetUserID(_UserID);
-                        return _UserID;
-                    }
-                    else
-                    {
-                        string UserID = reg.GetValue("ID").ToString();
-                        if (!string.IsNullOrEmpty(UserID))
-                            return UserID;
-                        else
-                        {
-                            UserID = GetGUID();
-                            SetUserID(UserID);
-                            return UserID;
-                        }
-                    }
+                    string _UserID = GetGUID();
+                    SetUserID(_UserID);
+                    return _UserID;
                 }
-                catch
-                {
-                    return "";
-                }
+                return CreateUserID(reg);
             }
         }
 
@@ -728,23 +721,13 @@ namespace DeskMetrics
         {
             lock (ObjectLock)
             {
-                try
+                string FileName = Path.GetTempPath() + _applicationId + ".dsmk";
+                if (File.Exists(FileName))
                 {
-                    string FileName = Path.GetTempPath() + _applicationId + ".dsmk";
-                    if (File.Exists(FileName))
-                    {
-                        File.Delete(FileName);
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    File.Delete(FileName);
+                    return true;
                 }
-                catch
-                {
-                    return false;
-                }
+				return false;
             }
         }
 
