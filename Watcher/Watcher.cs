@@ -766,26 +766,7 @@ namespace DeskMetrics
 
         private Int64 GetCacheSize()
         {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    string FileName = Path.GetTempPath() + _applicationId + ".dsmk";
-                    if (File.Exists(FileName))
-                    {
-                        FileInfo F = new FileInfo(FileName);
-                        return F.Length;
-                    }
-                    else
-                    {
-                        return -1;
-                    }
-                }
-                catch
-                {
-                    return -1;
-                }
-            }
+			return GetCacheData().Length;
         }
 
         private bool SaveCacheFile() 
@@ -794,8 +775,7 @@ namespace DeskMetrics
             {
                 try
                 {
-                    string FileName = Path.GetTempPath() + _applicationId + ".dsmk";
-
+                    string FileName = GetCacheFileName();
                     if (!File.Exists(FileName))
                     {
                         FileStream FileS = new FileStream(@FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
