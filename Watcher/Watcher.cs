@@ -362,28 +362,18 @@ namespace DeskMetrics
             StopThread.Name = "StopSender";
             StopThread.Start();
 		}
+		
         /// <summary>
         /// Stops the application tracking and send the collected data to DeskMetrics
         /// </summary>
-        public bool Stop()
+        public void Stop()
         {
 			CheckApplicationCorrectness();
             lock (ObjectLock)
             {
-                try
-                {
-                	TryInitializeStop();    
-                    if (IsStopThreadInitialized())
-						RunStopThread();
-                    else
-                        return false;
-                    return true;
-                }
-                catch
-                {
-                    _error = Settings.ErrorCodes["-1"].ToString();
-                    return false;
-                }
+            	TryInitializeStop();    
+                if (IsStopThreadInitialized())
+					RunStopThread();
             }
         }
 
