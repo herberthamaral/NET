@@ -45,7 +45,6 @@
     <Compile Include="Watcher\EventType.cs" />
     <Compile Include="Watcher\JsonBuilder.cs" />
     <Compile Include="Watcher\Services.cs" />
-    <Compile Include="Watcher\Storage.cs" />
     <Compile Include="Watcher\Util.cs" />
     <Compile Include="Watcher\Hardware.cs" />
     <Compile Include="Watcher\Json.cs" />
