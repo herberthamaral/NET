@@ -769,43 +769,26 @@ namespace DeskMetrics
 			return GetCacheData().Length;
         }
 
-        private bool SaveCacheFile() 
+		private FileStream GetOrCreateCacheFile(string FileName)
+		{
+			FileStream FileS = new FileStream(@FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+			File.SetAttributes(FileName, FileAttributes.Hidden);
+			return FileS;
+		}
+		
+        private void SaveCacheFile() 
         {
             lock (ObjectLock)
             {
-                try
-                {
-                    string FileName = GetCacheFileName();
-                    if (!File.Exists(FileName))
-                    {
-                        FileStream FileS = new FileStream(@FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                        StreamWriter StreamFile = new StreamWriter(FileS);
-
-                        StreamFile.Write(Util.EncodeTo64(JsonBuilder.GetJsonFromList(JSON)));
-                        StreamFile.Flush();
-
-                        StreamFile.Close();
-                        FileS.Close();
-
-                        File.SetAttributes(FileName, FileAttributes.Hidden);
-
-                        return true;
-                    }
-                    else
-                    {
-                        StreamWriter OldFile = File.AppendText(FileName);
-
-                        OldFile.Write("," + Util.EncodeTo64(JsonBuilder.GetJsonFromList(JSON)));
-                        OldFile.Flush();
-                        OldFile.Close();
-
-                        return true;
-                    }
-                }
-                catch
-                {
-                    return false;
-                }
+                string FileName = GetCacheFileName();
+				FileStream FileS = GetOrCreateCacheFile(FileName);
+				StreamWriter StreamFile = new StreamWriter(FileS);
+                if (FileS.Length == 0)
+                    StreamFile.Write(Util.EncodeTo64(JsonBuilder.GetJsonFromList(JSON)));
+                else
+                    StreamFile.Write(","+Util.EncodeTo64(JsonBuilder.GetJsonFromList(JSON)),FileS.Length);
+				StreamFile.Close();
+				FileS.Close();
             }
         }
 
