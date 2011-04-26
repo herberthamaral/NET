@@ -9,8 +9,7 @@ namespace DeskMetricsConsole
 		{
 			var watcher = new DeskMetrics.Watcher();
 			Console.Write("Starting...");
-			if (!watcher.Start("4d47c012d9340b116a000000","0.1"))
-				throw new Exception("Sorry, cant be started");
+			watcher.Start("4d47c012d9340b116a000000","0.1");
 			Console.WriteLine("[ok]");
 			
 			Console.Write("Adding event...");

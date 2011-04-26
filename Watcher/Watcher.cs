@@ -310,7 +310,7 @@ namespace DeskMetrics
             }
         }
 		
-		private void CheckApplicationCorrectness()
+		internal void CheckApplicationCorrectness()
 		{
 			if (string.IsNullOrEmpty(ApplicationId.Trim()))
 				throw new Exception("You must specify an non-empty application ID");
@@ -376,54 +376,40 @@ namespace DeskMetrics
 					RunStopThread();
             }
         }
+		
+		private string GenerateStopJson()
+		{
+			var json = new StopAppJson();
+            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
+            string SingleJSON = JsonBuilder.GetJsonFromList(JSON);
+			return SingleJSON;
+		}
+		
+		private string AppendCacheDataToJson(string json)
+		{
+			string CacheData = GetCacheData();
+            if (!string.IsNullOrEmpty(CacheData))
+                json = json + "," + CacheData;
+			return json;
+		}
 
         private void _StopThreadFunc()
         {
-
             lock (ObjectLock)
             {
-                try
-                {
-
-                    if (!string.IsNullOrEmpty(ApplicationId))
-                    {
-                        var json = new StopAppJson();
-                        JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-                        string SingleJSON = JsonBuilder.GetJsonFromList(JSON);
-
-                        string CacheData = GetCacheData();
-                        if (!string.IsNullOrEmpty(CacheData))
-                        {
-                            SingleJSON = SingleJSON + "," + CacheData;
-                        }
-
-                        int ErrorID;
-
-                        try
-                        {
-                            Services.PostData(out ErrorID, Settings.ApiEndpoint,JsonBuilder.GetJsonFromList(JSON));
-                            JSON.Clear();
-                        }
-                        finally
-                        {
-                            JSON.Clear();
-                            JSON.Add(SingleJSON);
-                        }
-
-                        if (ErrorID == 0)
-                        {
-                            DeleteCacheFile();
-                        }
-                        else
-                        {
-                            SaveCacheFile();
-                        }
-
-                    }
-                }
-                catch
-                {
-                }
+				CheckApplicationCorrectness();
+                JSON.Add(AppendCacheDataToJson(GenerateStopJson()));
+				try
+				{
+                	string response = Services.PostData(Settings.ApiEndpoint,JsonBuilder.GetJsonFromList(JSON));
+					JSON.Clear();
+					DeleteCacheFile();
+				}
+                catch (Exception e)
+				{
+					SaveCacheFile();
+					throw e;
+				}
             }
         }
 
@@ -729,27 +715,15 @@ namespace DeskMetrics
 		/// <returns>
 		/// 
 		/// </returns>
-        public bool TrackCustomDataR(string CustomDataName, string CustomDataValue)
+        public void TrackCustomDataR(string CustomDataName, string CustomDataValue)
         {
             lock (ObjectLock)
             {
                 if (Started)
                 {
+					CheckApplicationCorrectness();
                     var json = new CustomDataRJson(CustomDataName, CustomDataValue, GetFlowNumber(), ApplicationId, ApplicationVersion);
-                    if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                    {
-                        int ErrorID;
-                        Services.PostData(out ErrorID, Settings.ApiEndpoint, JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-						return ErrorID == 0;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
+                    Services.PostData(Settings.ApiEndpoint, JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                 }
             }
         }
