@@ -448,19 +448,11 @@ namespace DeskMetrics
         {
             lock (ObjectLock)
             {
-                try
+                if (Started)
                 {
-                    if (Started)
-                    {
-                        if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                        {
-                            var json = new EventPeriodJson(EventCategory, EventName, GetFlowNumber(), EventTime,Completed);
-                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-                        }
-                    }
-                }
-                catch
-                {
+					CheckApplicationCorrectness();
+                    var json = new EventPeriodJson(EventCategory, EventName, GetFlowNumber(), EventTime,Completed);
+                    JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                 }
             }
         }
