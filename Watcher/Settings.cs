@@ -1,6 +1,6 @@
 ﻿// **********************************************************************//
 //                                                                       //
-//     DeskMetrics NET - DeskMetricsSettings.cs                          //
+//     DeskMetrics NET - Settings.cs                                     //
 //     Copyright (c) 2010-2011 DeskMetrics Limited                       //
 //                                                                       //
 //     http://deskmetrics.com                                            //

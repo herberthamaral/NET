@@ -1,6 +1,6 @@
 ﻿// **********************************************************************//
 //                                                                       //
-//     DeskMetrics NET - DeskMetricsMonitor.cs                           //
+//     DeskMetrics NET - Watcher.cs                                      //
 //     Copyright (c) 2010-2011 DeskMetrics Limited                       //
 //                                                                       //
 //     http://deskmetrics.com                                            //
