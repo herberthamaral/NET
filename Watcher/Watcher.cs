@@ -401,7 +401,7 @@ namespace DeskMetrics
                 JSON.Add(AppendCacheDataToJson(GenerateStopJson()));
 				try
 				{
-                	string response = Services.PostData(Settings.ApiEndpoint,JsonBuilder.GetJsonFromList(JSON));
+                	Services.PostData(Settings.ApiEndpoint,JsonBuilder.GetJsonFromList(JSON));
 					JSON.Clear();
 					DeleteCacheFile();
 				}
@@ -421,22 +421,12 @@ namespace DeskMetrics
         public void TrackEvent(string EventCategory, string EventName)
         {
             lock (ObjectLock)
-            {
-                try
+                if (Started)
                 {
-                    if (Started)
-                    {
-                        if (!string.IsNullOrEmpty(ApplicationId) && (Enabled == true))
-                        {
-                            var json = new EventJson(EventCategory, EventName, GetFlowNumber());
-                            JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
-                        }
-                    }
+					CheckApplicationCorrectness();
+                    var json = new EventJson(EventCategory, EventName, GetFlowNumber());
+                    JSON.Add(JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                 }
-                catch
-                {
-                }
-            }
         }
 
 		/// <summary>
