@@ -1,4 +1,4 @@
-﻿// **********************************************************************//
+// **********************************************************************//
 //                                                                       //
 //     DeskMetrics NET - OperatingSystem.cs                              //
 //     Copyright (c) 2010-2011 DeskMetrics Limited                       //
@@ -28,7 +28,7 @@ using System.Diagnostics;
 
 namespace DeskMetrics
 {
-    internal class OperatingSystem:IOperatingSystem
+    internal class WindowsOperatingSystem:IOperatingSystem
     {
         /// <summary>
         /// Field Framework ApplicationVersion
@@ -66,7 +66,7 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency and Set Framework ApplicationVersion
         /// </summary>
-        public string FrameworkVersion
+        public override string FrameworkVersion
         {
             get
             {
@@ -81,7 +81,7 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency and Set OS Archicteture
         /// </summary>
-        public int Architecture
+        public override int Architecture
         {
             get
             {
@@ -96,7 +96,7 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency and Set OS Language
         /// </summary>
-        public string Language
+        public override string Language
         {
             get
             {
@@ -111,7 +111,7 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency and Set OS ApplicationVersion
         /// </summary>
-        public string Version
+        public override string Version
         {
             get
             {
@@ -126,7 +126,7 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency and Set Frameworl Service Pack
         /// </summary>
-        public string FrameworkServicePack
+        public override string FrameworkServicePack
         {
             get
             {
@@ -141,7 +141,7 @@ namespace DeskMetrics
         /// <summary>
         /// OS LCID - Language Culture Id
         /// </summary>
-        public int Lcid
+        public override int Lcid
         {
             get
             {
@@ -156,7 +156,7 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency and Set Java ApplicationVersion
         /// </summary>
-        public string JavaVersion
+        public override string JavaVersion
         {
             get
             {
@@ -171,7 +171,7 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency and Set OS Service Pack
         /// </summary>
-        public string ServicePack
+        public override string ServicePack
         {
             get
             {
@@ -183,7 +183,7 @@ namespace DeskMetrics
             }
         }
 		
-		public OperatingSystem()
+		public WindowsOperatingSystem()
 		{
 			GetFrameworkVersion();
             GetArchicteture();
@@ -461,19 +461,6 @@ namespace DeskMetrics
 				}
 		}
 		
-		internal static string GetCommandExecutionOutput(string command,string arguments)
-		{
-			var process = new Process();
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-			process.StartInfo.FileName = command;
-			process.StartInfo.Arguments = arguments;
-			process.Start();
-            string output = process.StandardOutput.ReadToEnd();
-            if (String.IsNullOrEmpty(output))
-                output = process.StandardError.ReadToEnd();
-			return output;
-		}
+		
     }
 }

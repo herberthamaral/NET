@@ -372,7 +372,7 @@ namespace DeskMetrics
             {
 				try
 				{
-					string[] free = OperatingSystem.GetCommandExecutionOutput("free","-m").Split('\n');
+					string[] free = IOperatingSystem.GetCommandExecutionOutput("free","-m").Split('\n');
 					string memoryinfo = free[1];
 					Regex regex = new Regex(@"\d+");
 					MatchCollection matches = regex.Matches(memoryinfo);
