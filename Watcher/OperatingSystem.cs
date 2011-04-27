@@ -437,7 +437,8 @@ namespace DeskMetrics
 				try
 				{
 					string[] j = GetCommandExecutionOutput("java","-version 2>&1").Split('\n');
-	                JavaVersion = j[0];
+					j = j[0].Split('"');
+	                JavaVersion = j[1];
 				}
 				catch
 				{
@@ -458,7 +459,7 @@ namespace DeskMetrics
             string output = process.StandardOutput.ReadToEnd();
             if (String.IsNullOrEmpty(output))
                 output = process.StandardError.ReadToEnd();
-			return process.StandardOutput.ReadToEnd();
+			return output;
 		}
     }
 }
