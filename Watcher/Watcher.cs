@@ -318,7 +318,7 @@ namespace DeskMetrics
 			{
 				if (_cache == null)
 					_cache = new Cache();
-				return Cache;
+				return _cache;
 			}
 		}
 		
