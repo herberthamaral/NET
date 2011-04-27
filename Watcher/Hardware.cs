@@ -244,77 +244,100 @@ namespace DeskMetrics
             {
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher("select * from Win32_Processor");
                 foreach (ManagementObject sysItem in searcher.Get())
-                {
-
-                    try
-                    {
-                        string valuename = sysItem["Name"].ToString();
-
-                        if (valuename != "")
-                        {
-                            valuename = valuename.Replace("(TM)", "");
-                            valuename = valuename.Replace("(R)", "");
-                            valuename = valuename.Replace("  ", "");
-
-                            ProcessorName = valuename;
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        ProcessorName = "null";
-                    }
-
-                    try
-                    {
-                        ProcessorBrand = sysItem["Manufacturer"].ToString();
-                    }
-                    catch 
-                    {
-                        ProcessorBrand = "null";
-                    }
-
-                    try
-                    {
-                        
-                        // Relying on Architecture because AddressWidth is based on operating system
-                        // not on real processor architecture
-                        int valuearch = Arch[int.Parse(sysItem["Architecture"].ToString())];
-                        ProcessorArchicteture = valuearch;
-                    }
-                    catch 
-                    {
-                        ProcessorArchicteture = -1;
-                    }
-
-                    try
-                    {
-                        string valuecores = sysItem["NumberOfLogicalProcessors"].ToString();
-                        ProcessorCores = int.Parse(valuecores);
-
-                        if ((ProcessorCores <= 0) || (ProcessorCores == 1))
-                        {
-                            ProcessorCores = Environment.ProcessorCount;
-                        }
-                    }
-                    catch
-                    {
-                        ProcessorCores = -1;
-                    }
-
-                    try
-                    {
-                        string valuefreq = sysItem["CurrentClockSpeed"].ToString();
-                        ProcessorFrequency = int.Parse(valuefreq);
-                    }
-                    catch
-                    {
-                        ProcessorFrequency = -1;
-                    }
-                }
-
+                    GetProcessorDataFromManagementObject(sysItem);
             }
             catch 
             {
+                //Probably Unix
+            }
+        }
+
+        private void GetProcessorDataFromManagementObject(ManagementObject sysItem)
+        {
+            GetProcessorName(sysItem);
+            GetProcessorBrand(sysItem);
+            GetProcessorArchitecture(sysItem);
+            GetNumberOfProcessorCores(sysItem);
+            GetProcessorFrequency(sysItem);
+        }
+
+        private void GetProcessorFrequency(ManagementObject sysItem)
+        {
+            try
+            {
+                string valuefreq = sysItem["CurrentClockSpeed"].ToString();
+                ProcessorFrequency = int.Parse(valuefreq);
+            }
+            catch
+            {
+                ProcessorFrequency = -1;
+            }
+        }
+
+        private void GetNumberOfProcessorCores(ManagementObject sysItem)
+        {
+            try
+            {
+                string valuecores = sysItem["NumberOfLogicalProcessors"].ToString();
+                ProcessorCores = int.Parse(valuecores);
+
+                if ((ProcessorCores <= 0) || (ProcessorCores == 1))
+                {
+                    ProcessorCores = Environment.ProcessorCount;
+                }
+            }
+            catch
+            {
+                ProcessorCores = -1;
+            }
+        }
+
+        private void GetProcessorArchitecture(ManagementObject sysItem)
+        {
+            try
+            {
+
+                // Relying on Architecture because AddressWidth is based on operating system
+                // not on real processor architecture
+                int valuearch = Arch[int.Parse(sysItem["Architecture"].ToString())];
+                ProcessorArchicteture = valuearch;
+            }
+            catch
+            {
+                ProcessorArchicteture = -1;
+            }
+        }
+
+        private void GetProcessorBrand(ManagementObject sysItem)
+        {
+            try
+            {
+                ProcessorBrand = sysItem["Manufacturer"].ToString();
+            }
+            catch
+            {
+                ProcessorBrand = "null";
+            }
+        }
+
+        private void GetProcessorName(ManagementObject sysItem)
+        {
+            try
+            {
+                string valuename = sysItem["Name"].ToString();
+
+                if (valuename != "")
+                {
+                    valuename = valuename.Replace("(TM)", "");
+                    valuename = valuename.Replace("(R)", "");
+                    valuename = valuename.Replace("  ", "");
+
+                    ProcessorName = valuename;
+                }
+            }
+            catch (Exception)
+            {
+                ProcessorName = "null";
             }
         }
 
