@@ -443,6 +443,12 @@ namespace DeskMetrics
             }
             catch
             {
+				GetUnixJavaVersion();
+            }
+        }
+		
+		void GetUnixJavaVersion()
+		{
 				try
 				{
 					string[] j = GetCommandExecutionOutput("java","-version 2>&1").Split('\n');
@@ -453,8 +459,7 @@ namespace DeskMetrics
 				{
 					JavaVersion = "none";
 				}
-            }
-        }
+		}
 		
 		internal static string GetCommandExecutionOutput(string command,string arguments)
 		{
