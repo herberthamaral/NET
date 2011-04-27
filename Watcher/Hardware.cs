@@ -220,6 +220,21 @@ namespace DeskMetrics
             }
         }
 
+        Dictionary<int, int> arch = new Dictionary<int, int>
+        {
+            {0,32}, //x86
+            {1,32}, //MIPS
+            {2,32}, //Alpha
+            {3,32}, //PowerPC
+            {6,32}, //Itanium
+            {9,64} //x64
+        };
+
+        public Dictionary<int, int> Arch
+        {
+            get { return arch; }
+        }
+
         /// <summary>
         /// GetProcessorFrequency Processor Archicteture GetComponentName
         /// </summary>
@@ -251,18 +266,7 @@ namespace DeskMetrics
 
                     try
                     {
-                        string valuename = ProcessorName.ToLower();
-                        if ((valuename.IndexOf("intel") != 0) || (valuename.IndexOf("pentium") != 0) || (valuename.IndexOf("celeron") != 0) || (valuename.IndexOf("genuineintel") != 0))
-                        {
-                            ProcessorBrand = "Intel";
-                        }
-                        else
-                        {
-                            if ((valuename.IndexOf("amd") != 0) || (valuename.IndexOf("athlon") != 0) || (valuename.IndexOf("sempron") != 0))
-                            {
-                                ProcessorBrand = "AMD";
-                            }
-                        }
+                        ProcessorBrand = sysItem["Manufacturer"].ToString();
                     }
                     catch 
                     {
@@ -271,8 +275,11 @@ namespace DeskMetrics
 
                     try
                     {
-                        string valuearch = sysItem["AddressWidth"].ToString();
-                        ProcessorArchicteture = int.Parse(valuearch);
+                        
+                        // Relying on Architecture because AddressWidth is based on operating system
+                        // not on real processor architecture
+                        int valuearch = Arch[int.Parse(sysItem["Architecture"].ToString())];
+                        ProcessorArchicteture = valuearch;
                     }
                     catch 
                     {
