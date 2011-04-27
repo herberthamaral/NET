@@ -342,9 +342,9 @@ namespace DeskMetrics
 		/// </param>
         public void Start(string ApplicationId, string ApplicationVersion)
         {
-			CheckApplicationCorrectness();
 			this.ApplicationId = ApplicationId;
             this.ApplicationVersion = ApplicationVersion;
+			CheckApplicationCorrectness();
 			
 			lock (ObjectLock)
                 if (Enabled)
