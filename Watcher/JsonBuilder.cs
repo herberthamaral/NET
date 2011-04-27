@@ -321,7 +321,7 @@ namespace DeskMetrics
         {
             var json = base.GetJsonHashTable();
             json.Add("tm", Time);
-            json.Add("ec", Completed?1:0);
+            json.Add("ec", Completed?"1":"0");
             return json;
         }
     }
