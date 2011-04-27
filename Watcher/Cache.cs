@@ -42,12 +42,11 @@ namespace DeskMetrics
             }
         }
 		
-		private string FileName()
+		private string GetCacheFileName()
 		{
 			return Path.GetTempPath() + ApplicationId + ".dsmk";
 		}
-		
-		private string GetContents(string FileName)
+		private string GetFileContents(string FileName)
 		{
 			string FileContents = "";
 			FileStream FileS = new FileStream(@FileName, FileMode.Open, FileAccess.Read);
@@ -68,9 +67,9 @@ namespace DeskMetrics
         {
             lock (ObjectLock)
             {
-                string FileName = FileName();
+                string FileName = GetCacheFileName();
                 if (File.Exists(FileName))
-                	return GetContents(FileName);
+                	return GetFileContents(FileName);
                 return "";
             }
         }
@@ -90,7 +89,7 @@ namespace DeskMetrics
         {
             lock (ObjectLock)
             {
-                string FileName = FileName();
+                string FileName = GetCacheFileName();
 				FileStream FileS = GetOrCreateCacheFile(FileName);
 				StreamWriter StreamFile = new StreamWriter(FileS);
                 if (FileS.Length == 0)

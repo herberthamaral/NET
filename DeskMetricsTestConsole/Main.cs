@@ -33,6 +33,10 @@ namespace DeskMetricsConsole
 			watcher.TrackCustomDataR("DeskMetricsConsole","MyCustomDataInRealTime");
 			Console.WriteLine("[ok]");
 			
+			Console.Write("Adding log");
+			watcher.TrackLog("This is my log, babe");
+			Console.Write("[ok]");
+			
 			Console.Write("Finishing app and sending data to DeskMetrics");
 			watcher.Stop();
 			Console.ReadLine();
