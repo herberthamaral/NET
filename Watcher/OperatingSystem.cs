@@ -182,11 +182,20 @@ namespace DeskMetrics
                 _servicePack = value;
             }
         }
+		
+		public OperatingSystem()
+		{
+			GetFrameworkVersion();
+            GetArchicteture();
+            GetLanguage();
+            GetVersion();
+            GetJavaVersion();
+		}
 
         /// <summary>
         /// GetProcessorFrequency Framework ApplicationVersion GetComponentName
         /// </summary>
-        public void GetFrameworkVersion()
+        void GetFrameworkVersion()
         {
             try
             {
@@ -259,7 +268,7 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency OS Archicteture GetComponentName
         /// </summary>
-        public void GetArchicteture()
+        void GetArchicteture()
         {
             try
             {
@@ -309,7 +318,7 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency OS Language GetComponentName
         /// </summary>
-        public void GetLanguage()
+        void GetLanguage()
         {
             try
             {
@@ -326,7 +335,7 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency OS ApplicationVersion GetComponentName
         /// </summary>
-        public void GetVersion()
+        void GetVersion()
         {
             try
             {
@@ -420,7 +429,7 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency Java version GetComponentName
         /// </summary>
-        public void GetJavaVersion()
+        void GetJavaVersion()
         {
             try
             {

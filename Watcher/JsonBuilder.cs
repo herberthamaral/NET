@@ -270,13 +270,7 @@ namespace DeskMetrics
             OperatingSystem GetOsInfo = new OperatingSystem();
             Hardware GetHardwareInfo = new Hardware();
             var json = base.GetJsonHashTable();
-            
-            GetOsInfo.GetFrameworkVersion();
-            GetOsInfo.GetArchicteture();
-            GetOsInfo.GetLanguage();
-            GetOsInfo.GetVersion();
-            GetOsInfo.GetJavaVersion();
-
+			
             json.Add("aver",Watcher.ApplicationVersion);
             json.Add("ID", Watcher.UserGUID);
             json.Add("osv", GetOsInfo.Version);
