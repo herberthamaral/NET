@@ -276,10 +276,6 @@ namespace DeskMetrics
             GetOsInfo.GetLanguage();
             GetOsInfo.GetVersion();
             GetOsInfo.GetJavaVersion();
-            GetHardwareInfo.GetProcessorData();
-            GetHardwareInfo.GetMemoryData();
-            GetHardwareInfo.GetDiskData();
-            GetHardwareInfo.GetScreenResolution();
 
             json.Add("aver",Watcher.ApplicationVersion);
             json.Add("ID", Watcher.UserGUID);

@@ -451,9 +451,13 @@ namespace DeskMetrics
 			var process = new Process();
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
 			process.StartInfo.FileName = command;
 			process.StartInfo.Arguments = arguments;
 			process.Start();
+            string output = process.StandardOutput.ReadToEnd();
+            if (String.IsNullOrEmpty(output))
+                output = process.StandardError.ReadToEnd();
 			return process.StandardOutput.ReadToEnd();
 		}
     }

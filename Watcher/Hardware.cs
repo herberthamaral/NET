@@ -230,15 +230,23 @@ namespace DeskMetrics
             {9,64} //x64
         };
 
-        public Dictionary<int, int> Arch
+        private Dictionary<int, int> Arch
         {
             get { return arch; }
+        }
+
+        public Hardware()
+        {
+            GetProcessorData();
+            GetMemoryData();
+            GetScreenResolution();
+            GetDiskData();
         }
 
         /// <summary>
         /// GetProcessorFrequency Processor Archicteture GetComponentName
         /// </summary>
-        public void GetProcessorData()
+        void GetProcessorData()
         {
             try
             {
@@ -252,7 +260,7 @@ namespace DeskMetrics
             }
         }
 
-        private void GetProcessorDataFromManagementObject(ManagementObject sysItem)
+        void GetProcessorDataFromManagementObject(ManagementObject sysItem)
         {
             GetProcessorName(sysItem);
             GetProcessorBrand(sysItem);
@@ -261,7 +269,7 @@ namespace DeskMetrics
             GetProcessorFrequency(sysItem);
         }
 
-        private void GetProcessorFrequency(ManagementObject sysItem)
+        void GetProcessorFrequency(ManagementObject sysItem)
         {
             try
             {
@@ -274,7 +282,7 @@ namespace DeskMetrics
             }
         }
 
-        private void GetNumberOfProcessorCores(ManagementObject sysItem)
+        void GetNumberOfProcessorCores(ManagementObject sysItem)
         {
             try
             {
@@ -292,7 +300,7 @@ namespace DeskMetrics
             }
         }
 
-        private void GetProcessorArchitecture(ManagementObject sysItem)
+        void GetProcessorArchitecture(ManagementObject sysItem)
         {
             try
             {
@@ -308,7 +316,7 @@ namespace DeskMetrics
             }
         }
 
-        private void GetProcessorBrand(ManagementObject sysItem)
+        void GetProcessorBrand(ManagementObject sysItem)
         {
             try
             {
@@ -320,7 +328,7 @@ namespace DeskMetrics
             }
         }
 
-        private void GetProcessorName(ManagementObject sysItem)
+        void GetProcessorName(ManagementObject sysItem)
         {
             try
             {
@@ -344,7 +352,7 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency  Physical Memory  GetComponentName
         /// </summary>
-        public void GetMemoryData()
+        void GetMemoryData()
         {
 
             try
@@ -385,7 +393,7 @@ namespace DeskMetrics
         /// GetProcessorFrequency Disk Size  GetComponentName
         /// </summary>
 
-        public void GetDiskData()
+        void GetDiskData()
         {
             try
             {
@@ -410,7 +418,7 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency Screen resolution GetComponentName
         /// </summary>
-        public void GetScreenResolution()
+        void GetScreenResolution()
         {
             try
             {
