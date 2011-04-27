@@ -27,7 +27,7 @@ using System.Text.RegularExpressions;
 
 namespace DeskMetrics
 {
-    internal class Hardware
+    internal class Hardware:IHardware
     {
         /// <summary>
         /// Field Processor Name

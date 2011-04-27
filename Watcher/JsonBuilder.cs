@@ -285,7 +285,7 @@ namespace DeskMetrics
             json.Add("ID", Watcher.UserGUID);
             json.Add("osv", GetOsInfo.Version);
             json.Add("ossp", GetOsInfo.ServicePack);
-            json.Add("osar", GetOsInfo.Archicteture);
+            json.Add("osar", GetOsInfo.Architecture);
             json.Add("osjv", GetOsInfo.JavaVersion);
             json.Add("osnet", GetOsInfo.FrameworkVersion);
             json.Add("osnsp", GetOsInfo.FrameworkServicePack);

@@ -100,7 +100,7 @@ namespace componentNETapp
                 //Result = DeskMetrics.TrackCustomDataR("Username", edtCDEmail.Text);
 
                 // Sends a custom data (async) to server
-                 Result = DeskMetrics.TrackCustomDataR("Username", edtCDEmail.Text);
+                 DeskMetrics.TrackCustomDataR("Username", edtCDEmail.Text);
             }
             finally
             {
@@ -108,16 +108,6 @@ namespace componentNETapp
             }
 
             
-            if (Result) 
-            {
-                // Data stored successfully
-                MessageBox.Show("OK!");
-            }
-            else
-            {
-                // An error occurred
-                MessageBox.Show("Sorry! Try again later.");
-            }
         }
 
         private void btnTrackEvent_Click(object sender, EventArgs e)

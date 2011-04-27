@@ -68,7 +68,7 @@ namespace DeskMetrics
         {
             lock (ObjectLock)
             {
-                string FileName = FileName();
+                string FileName = this.FileName();
                 if (File.Exists(FileName))
                 	return GetContents(FileName);
                 return "";
@@ -90,7 +90,7 @@ namespace DeskMetrics
         {
             lock (ObjectLock)
             {
-                string FileName = FileName();
+                string FileName = this.FileName();
 				FileStream FileS = GetOrCreateCacheFile(FileName);
 				StreamWriter StreamFile = new StreamWriter(FileS);
                 if (FileS.Length == 0)

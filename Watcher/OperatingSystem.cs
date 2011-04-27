@@ -28,7 +28,7 @@ using System.Diagnostics;
 
 namespace DeskMetrics
 {
-    internal class OperatingSystem
+    internal class OperatingSystem:IOperatingSystem
     {
         /// <summary>
         /// Field Framework ApplicationVersion
@@ -37,7 +37,7 @@ namespace DeskMetrics
         /// <summary>
         /// Field OS Archicteture - 32 or 64 bits
         /// </summary>
-        private int _Archicteture;
+        private int _Architecture;
         /// <summary>
         /// Field OS ApplicationVersion
         /// </summary>
@@ -81,15 +81,15 @@ namespace DeskMetrics
         /// <summary>
         /// GetProcessorFrequency and Set OS Archicteture
         /// </summary>
-        public int Archicteture
+        public int Architecture
         {
             get
             {
-                return _Archicteture;
+                return _Architecture;
             }
             set
             {
-                _Archicteture = value;
+                _Architecture = value;
             }
         }
 
@@ -139,7 +139,7 @@ namespace DeskMetrics
         }
 
         /// <summary>
-        /// GetProcessorFrequency and Set OS LCID - Language Culture Id
+        /// OS LCID - Language Culture Id
         /// </summary>
         public int Lcid
         {
@@ -279,30 +279,30 @@ namespace DeskMetrics
                             if (PC.Value !=null)
                             {
                                 string value = PC.Value.ToString().Remove(2);
-                                Archicteture = int.Parse(value);
+                                Architecture = int.Parse(value);
                             }
                         }
                     }
                 }
      
-                if (Archicteture <= 0)
+                if (Architecture <= 0)
                 {
                     if (IntPtr.Size == 8)
                     {
-                        Archicteture = 64;
+                        Architecture = 64;
                     }
                     else
                     {
                         if (IntPtr.Size == 4)
                         {
-                            Archicteture = 32;
+                            Architecture = 32;
                         }
                     }
                 }
             }
             catch 
             {
-                Archicteture = -1;
+                Architecture = -1;
             }
         }
 
