@@ -42,7 +42,7 @@ namespace DeskMetrics
             }
         }
 
-        private string GetCacheFileName()
+        private string FileName()
         {
             return Path.GetTempPath() + ApplicationId + ".dsmk";
         }
