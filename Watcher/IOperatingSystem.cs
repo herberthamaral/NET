@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using System.Threading;
 
 namespace DeskMetrics
 {
@@ -12,10 +13,31 @@ namespace DeskMetrics
         abstract public int Architecture { get; set; }
 		abstract public string Version {get;set;}
 		abstract public string FrameworkServicePack {get;set;}
-        abstract public string Language { get; set; }
-        abstract public int Lcid { get; set; }
+        
         abstract public string JavaVersion { get; set; }
         abstract public string ServicePack { get; set; }
+		
+		
+		string _language;
+		public string Language { 
+			get 
+			{
+				if (_language == null)
+					_language = GetLanguage();
+				return _language;
+			}
+		}
+		
+		int _lcid = 0;
+        public int Lcid { 
+			get
+			{
+				if (_lcid == 0)
+					_lcid = GetLcid();
+				
+				return _lcid;
+			}
+		}
 		
 		internal static string GetCommandExecutionOutput(string command,string arguments)
 		{
@@ -30,6 +52,33 @@ namespace DeskMetrics
             if (String.IsNullOrEmpty(output))
                 output = process.StandardError.ReadToEnd();
 			return output;
+		}
+		
+		string GetLanguage()
+        {
+            try
+            {
+                return Thread.CurrentThread.CurrentCulture.DisplayName;
+                
+            }
+            catch
+            {
+                return  "null";
+                
+            }
+        }
+		
+		int GetLcid()
+		{
+			try
+			{
+				return Thread.CurrentThread.CurrentCulture.LCID;
+			}
+			catch
+			{
+				return -1;
+			}
+				
 		}
     }
 }

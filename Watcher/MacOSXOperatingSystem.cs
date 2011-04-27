@@ -26,24 +26,7 @@ namespace DeskMetrics
 			}
 		}
 
-		public override string Language {
-			get {
-				throw new NotImplementedException ();
-			}
-			set {
-				throw new NotImplementedException ();
-			}
-		}
-
-		public override int Lcid {
-			get {
-				throw new NotImplementedException ();
-			}
-			set {
-				throw new NotImplementedException ();
-			}
-		}
-
+		
 		public override string JavaVersion {
 			get {
 				throw new NotImplementedException ();

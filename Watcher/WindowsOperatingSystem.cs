@@ -47,14 +47,6 @@ namespace DeskMetrics
         /// </summary>
         private string _frameworkServicePack;
         /// <summary>
-        /// Field OS LCID - Language Culture Id
-        /// </summary>
-        private int _LCID;
-        /// <summary>
-        /// Field OS Language
-        /// </summary>
-        private string _language;
-        /// <summary>
         /// Field JavaVersion
         /// </summary>
         private string _javaVersion;
@@ -94,21 +86,6 @@ namespace DeskMetrics
         }
 
         /// <summary>
-        /// GetProcessorFrequency and Set OS Language
-        /// </summary>
-        public override string Language
-        {
-            get
-            {
-                return _language;
-            }
-            set
-            {
-                _language = value;
-            }
-        }
-
-        /// <summary>
         /// GetProcessorFrequency and Set OS ApplicationVersion
         /// </summary>
         public override string Version
@@ -136,22 +113,7 @@ namespace DeskMetrics
             {
                 _frameworkServicePack = value;
             }
-        }
-
-        /// <summary>
-        /// OS LCID - Language Culture Id
-        /// </summary>
-        public override int Lcid
-        {
-            get
-            {
-                return _LCID;
-            }
-            set
-            {
-                _LCID = value;
-            }
-        }
+		}
 
         /// <summary>
         /// GetProcessorFrequency and Set Java ApplicationVersion
@@ -187,7 +149,6 @@ namespace DeskMetrics
 		{
 			GetFrameworkVersion();
             GetArchicteture();
-            GetLanguage();
             GetVersion();
             GetJavaVersion();
 		}
@@ -251,17 +212,7 @@ namespace DeskMetrics
             }
             catch 
             {    
-				try
-				{
-					string[] f = GetCommandExecutionOutput("mono","--version").Split('\n');
-	                FrameworkVersion = f[0];
-				}
-				catch
-				{
-					FrameworkVersion = "none";
-				}
 				
-				FrameworkServicePack = "";
             }
         }
       
@@ -314,115 +265,66 @@ namespace DeskMetrics
                 Architecture = -1;
             }
         }
-
-        /// <summary>
-        /// GetProcessorFrequency OS Language GetComponentName
-        /// </summary>
-        void GetLanguage()
-        {
-            try
-            {
-                Language = Thread.CurrentThread.CurrentCulture.DisplayName;
-                Lcid     = Thread.CurrentThread.CurrentCulture.LCID;
-            }
-            catch
-            {
-                Language = "null";
-                Lcid = -1;
-            }
-        }
-
+		
         /// <summary>
         /// GetProcessorFrequency OS ApplicationVersion GetComponentName
         /// </summary>
         void GetVersion()
         {
-            try
-            {
                 System.OperatingSystem _osInfo = Environment.OSVersion;
                 _servicePack = _osInfo.ServicePack;
                 
-                switch (_osInfo.Platform)
+                switch (_osInfo.Version.Major)
                 {
-                    case PlatformID.MacOSX:
-                    case PlatformID.Unix:
-	                	Version = GetCommandExecutionOutput("uname","-rs");
-						break;
-                    case PlatformID.Win32NT:
-                        switch (_osInfo.Version.Major)
-	                    {
-                            case 3:
-                                Version = "Windows NT 3.51";
-                                break;
-                            case 4:
-                                Version = "Windows NT 4.0";
-                                break;
-                            case 5:
-                                if (_osInfo.Version.Minor == 0)
-                                {
-                                    Version = "Windows 2000";
-                                }
-                                else
-                                {
-                                    if (_osInfo.Version.Minor == 1)
-                                    {
-                                        Version = "Windows XP";
-                                    }
-                                    else
-                                    {
-                                        if (_osInfo.Version.Minor == 2)
-                                        {
-                                            Version = "Windows Server 2003";
-                                        }
-                                    }
-                                }
-                                break;
-                            case 6:
-                                if (_osInfo.Version.Minor == 0)
-                                {
-                                    Version = "Windows Vista";
-                                }
-                                else
-                                {
-                                    if (_osInfo.Version.Minor == 1)
-                                    {
-                                        Version = "Windows 7";
-                                    }
-                                    else
-                                    {
-                                        if (_osInfo.Version.Minor == 3)
-                                        {
-                                            Version = "Windows Server 2008";
-                                        }
-                                    }
-                                }
-                                break;
-                            default:
-                                break;
-	                    }
+                    case 3:
+                        Version = "Windows NT 3.51";
                         break;
-                    case PlatformID.Win32S:
+                    case 4:
+                        Version = "Windows NT 4.0";
                         break;
-                    case PlatformID.Win32Windows:
-                        switch (_osInfo.Version.Minor)
-	                    {   
-		                    default:
-                                break;
-	                    }
+                    case 5:
+                        if (_osInfo.Version.Minor == 0)
+                        {
+                            Version = "Windows 2000";
+                        }
+                        else
+                        {
+                            if (_osInfo.Version.Minor == 1)
+                            {
+                                Version = "Windows XP";
+                            }
+                            else
+                            {
+                                if (_osInfo.Version.Minor == 2)
+                                {
+                                    Version = "Windows Server 2003";
+                                }
+                            }
+                        }
                         break;
-                    case PlatformID.WinCE:
-                        break;
-                    case PlatformID.Xbox:
+                    case 6:
+                        if (_osInfo.Version.Minor == 0)
+                        {
+                            Version = "Windows Vista";
+                        }
+                        else
+                        {
+                            if (_osInfo.Version.Minor == 1)
+                            {
+                                Version = "Windows 7";
+                            }
+                            else
+                            {
+                                if (_osInfo.Version.Minor == 3)
+                                {
+                                    Version = "Windows Server 2008";
+                                }
+                            }
+                        }
                         break;
                     default:
                         break;
                 }
-
-            }
-            catch
-            {
-                Version = "Unix";
-            }
 
         }
 
@@ -443,23 +345,11 @@ namespace DeskMetrics
             }
             catch
             {
-				GetUnixJavaVersion();
+				JavaVersion = "none";
             }
         }
 		
-		void GetUnixJavaVersion()
-		{
-				try
-				{
-					string[] j = GetCommandExecutionOutput("java","-version 2>&1").Split('\n');
-					j = j[0].Split('"');
-	                JavaVersion = j[1];
-				}
-				catch
-				{
-					JavaVersion = "none";
-				}
-		}
+		
 		
 		
     }
