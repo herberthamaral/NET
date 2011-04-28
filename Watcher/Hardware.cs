@@ -24,6 +24,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using DeskMetrics.OperatingSystem;
 
 namespace DeskMetrics
 {

@@ -1,5 +1,5 @@
 using System;
-namespace DeskMetrics
+namespace DeskMetrics.OperatingSystem
 {
 	internal class UnixOperatingSystem:IOperatingSystem
 	{

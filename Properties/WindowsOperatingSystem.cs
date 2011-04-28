@@ -26,7 +26,7 @@ using System.Diagnostics;
 
 
 
-namespace DeskMetrics
+namespace DeskMetrics.OperatingSystem
 {
     internal class WindowsOperatingSystem:IOperatingSystem
     {

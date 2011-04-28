@@ -5,7 +5,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Threading;
 
-namespace DeskMetrics
+namespace DeskMetrics.OperatingSystem
 {
     internal abstract class IOperatingSystem
     {

@@ -62,11 +62,11 @@
     <Compile Include="Watcher\Json.cs" />
     <Compile Include="Watcher\Watcher.cs" />
     <Compile Include="Watcher\Settings.cs" />
-    <Compile Include="Watcher\OperatingSystemFactory.cs" />
-    <Compile Include="Watcher\UnixOperatingSystem.cs" />
-    <Compile Include="Watcher\WindowsOperatingSystem.cs" />
-    <Compile Include="Watcher\MacOSXOperatingSystem.cs" />
     <Compile Include="Watcher\CurrentUser.cs" />
+    <Compile Include="Properties\MacOSXOperatingSystem.cs" />
+    <Compile Include="Properties\OperatingSystemFactory.cs" />
+    <Compile Include="Properties\UnixOperatingSystem.cs" />
+    <Compile Include="Properties\WindowsOperatingSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DeskMetrics.snk" />
@@ -81,4 +81,11 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="OperatingSystem\" />
+    <Folder Include="Watcher\" />
+    <Folder Include="Watcher\" />
+    <Folder Include="Watcher\" />
+    <Folder Include="Watcher\" />
+  </ItemGroup>
 </Project>
