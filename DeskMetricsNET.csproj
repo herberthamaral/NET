@@ -66,6 +66,7 @@
     <Compile Include="Watcher\UnixOperatingSystem.cs" />
     <Compile Include="Watcher\WindowsOperatingSystem.cs" />
     <Compile Include="Watcher\MacOSXOperatingSystem.cs" />
+    <Compile Include="Watcher\CurrentUser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DeskMetrics.snk" />

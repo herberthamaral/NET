@@ -24,7 +24,7 @@ using System.Net;
 using System.Net.Security;
 using System.Threading;
 using System.Security.Cryptography.X509Certificates;
-using Microsoft.Win32;
+
 
 namespace DeskMetrics
 {
@@ -46,7 +46,7 @@ namespace DeskMetrics
         {
             get {
                 if (_userGUID == null)
-                    _userGUID = GetUserID();
+                    _userGUID = User.GetID();
                 return _userGUID; 
             }
         }
@@ -60,7 +60,7 @@ namespace DeskMetrics
             get {
                 if (_sessionGUID == null)
                 {
-                    _sessionGUID = GetGUID();
+                    _sessionGUID = User.GetSessionID();
                 }
                 return _sessionGUID;
             }
@@ -321,6 +321,17 @@ namespace DeskMetrics
 				return _cache;
 			}
 		}
+		
+		private CurrentUser _user;
+		
+		public CurrentUser User {
+			get {
+				if (_user==null)
+					_user = new CurrentUser();
+				return _user;
+			}
+		}
+
 		
 		internal void CheckApplicationCorrectness()
 		{
@@ -668,65 +679,6 @@ namespace DeskMetrics
                     var json = new CustomDataRJson(CustomDataName, CustomDataValue, GetFlowNumber(), ApplicationId, ApplicationVersion);
                     Services.PostData(Settings.ApiEndpoint, JsonBuilder.GetJsonFromHashTable(json.GetJsonHashTable()));
                 }
-            }
-        }
-
-		private RegistryKey GetOrCreateDeskMetricsSubKey()
-		{
-			RegistryKey reg = Registry.CurrentUser.OpenSubKey("Sofware\\dskMetrics");
-            if (reg == null)
-                reg = Registry.CurrentUser.CreateSubKey("Software\\dskMetrics");
-			return reg;
-		}
-		
-        public void SetUserID(string UserID)
-        {
-            lock (ObjectLock)
-            {
-                RegistryKey reg = GetOrCreateDeskMetricsSubKey();
-                reg.SetValue("ID", UserID);
-                reg.Close();
-            }
-        }
-
-        protected string GetGUID()
-        {
-            lock (ObjectLock)
-            {
-                try
-                {
-                    return System.Guid.NewGuid().ToString().Replace("-", "").ToUpper();
-                }
-                catch
-                {
-                    return "";
-                }
-            }
-        }
-
-		protected string CreateUserID(RegistryKey reg)
-		{
-			string UserID = reg.GetValue("ID").ToString();
-            if (!string.IsNullOrEmpty(UserID))
-                return UserID;
-
-			UserID = GetGUID();
-            SetUserID(UserID);
-            return UserID;
-		}
-		
-        protected string GetUserID()
-        {
-            lock (ObjectLock)
-            {
-                RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software\\dskMetrics", true);
-                if (reg == null)
-                {
-                    string _UserID = GetGUID();
-                    SetUserID(_UserID);
-                    return _UserID;
-                }
-                return CreateUserID(reg);
             }
         }
 
