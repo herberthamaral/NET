@@ -28,6 +28,115 @@ namespace DeskMetrics
 {
     public class Services
     {
+		
+		private bool _postwaitresponse = false;
+
+        private string _proxyusername;
+
+        private string _proxypassword;
+
+        private string _proxyhost;
+
+        private Int32 _proxyport;
+		
+		public bool PostWaitResponse
+        {
+            get
+            {
+                return _postwaitresponse;
+            }
+            set
+            {
+                _postwaitresponse = value;
+            }
+        }
+
+        public string ProxyHost
+        {
+            get
+            {
+                return _proxyhost;
+            }
+            set
+            {
+                _proxyhost = value;
+            }
+        }
+
+        public string ProxyUserName
+        {
+            get
+            {
+                return _proxyusername;
+            }
+            set
+            {
+                _proxyusername = value;
+            }
+        }
+
+        public string ProxyPassword
+        {
+            get
+            {
+                return _proxypassword;
+            }
+            set
+            {
+                _proxypassword = value;
+            }
+        }
+ 
+        public Int32 ProxyPort
+        {
+            get
+            {
+                return _proxyport;
+            }
+            set
+            {
+                _proxyport = value;
+            }
+        }
+		
+		string _postserver = Settings.DefaultServer;
+		public string PostServer
+        {
+            get
+            {
+                return _postserver;
+            }
+            set
+            {
+                _postserver = value;
+            }
+        }
+		
+		int _postport = Settings.DefaultPort;
+        public int PostPort
+        {
+            get
+            {
+                return _postport;
+            }
+            set
+            {
+                _postport = value;
+            }
+        }
+
+		int _posttimeout = Settings.Timeout;
+        public int PostTimeOut{
+            get
+            {
+                return _posttimeout;
+            }
+            set 
+            {
+                _posttimeout = value;
+            }
+        }
+		
         private Watcher watcher;
         public Services(Watcher watcher)
         {
@@ -45,7 +154,7 @@ namespace DeskMetrics
 				watcher.CheckApplicationCorrectness();
                 string url;
 
-                if (watcher.PostPort == 443)
+                if (PostPort == 443)
                 {
                     System.Net.ServicePointManager.ServerCertificateValidationCallback +=
                         delegate(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors sslError)
@@ -64,24 +173,24 @@ namespace DeskMetrics
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 request.Timeout = Settings.Timeout;
 
-                if (!string.IsNullOrEmpty(watcher.ProxyHost))
+                if (!string.IsNullOrEmpty(ProxyHost))
                 {
                     string uri;
 
                     WebProxy myProxy = new WebProxy();
 
-                    if (watcher.ProxyPort != 0)
+                    if (ProxyPort != 0)
                     {
-                        uri = watcher.ProxyHost + ":" + watcher.ProxyPort ;
+                        uri = ProxyHost + ":" + ProxyPort ;
                     }
                     else
                     {
-                        uri = watcher.ProxyHost;
+                        uri = ProxyHost;
                     }
 
                     Uri newUri = new Uri(uri);
                     myProxy.Address = newUri;
-                    myProxy.Credentials = new NetworkCredential(watcher.ProxyUserName, watcher.ProxyPassword);
+                    myProxy.Credentials = new NetworkCredential(ProxyUserName, ProxyPassword);
                     request.Proxy = myProxy;
                 }
                 else

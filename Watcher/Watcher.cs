@@ -100,22 +100,8 @@ namespace DeskMetrics
         {
             get { return _started; }
         }
+
         
-        private string _postserver = Settings.DefaultServer;
-
-        private int _postport = Settings.DefaultPort;
-
-        private int _posttimeout = Settings.Timeout;
-
-        private bool _postwaitresponse = false;
-
-        private string _proxyusername;
-
-        private string _proxypassword;
-
-        private string _proxyhost;
-
-        private Int32 _proxyport;
 
         private bool _enabled = true;
 
@@ -204,40 +190,7 @@ namespace DeskMetrics
 
         }
 
-        public string PostServer
-        {
-            get
-            {
-                return _postserver;
-            }
-            set
-            {
-                _postserver = value;
-            }
-        }
-
-        public int PostPort
-        {
-            get
-            {
-                return _postport;
-            }
-            set
-            {
-                _postport = value;
-            }
-        }
-
-        public int PostTimeOut{
-            get
-            {
-                return _posttimeout;
-            }
-            set 
-            {
-                _posttimeout = value;
-            }
-        }
+        
 
         private Services _services;
 
@@ -251,65 +204,7 @@ namespace DeskMetrics
             set { _services = value; }
         }
 
-        public bool PostWaitResponse
-        {
-            get
-            {
-                return _postwaitresponse;
-            }
-            set
-            {
-                _postwaitresponse = value;
-            }
-        }
-
-        public string ProxyHost
-        {
-            get
-            {
-                return _proxyhost;
-            }
-            set
-            {
-                _proxyhost = value;
-            }
-        }
-
-        public string ProxyUserName
-        {
-            get
-            {
-                return _proxyusername;
-            }
-            set
-            {
-                _proxyusername = value;
-            }
-        }
-
-        public string ProxyPassword
-        {
-            get
-            {
-                return _proxypassword;
-            }
-            set
-            {
-                _proxypassword = value;
-            }
-        }
- 
-        public Int32 ProxyPort
-        {
-            get
-            {
-                return _proxyport;
-            }
-            set
-            {
-                _proxyport = value;
-            }
-        }
+        
 		
 		private Cache _cache;
 		internal Cache Cache
