@@ -16,7 +16,7 @@ namespace DeskMetrics.Json
         public override Hashtable GetJsonHashTable()
         {
             IOperatingSystem GetOsInfo = OperatingSystemFactory.GetOperatingSystem();
-            Hardware GetHardwareInfo = new Hardware();
+            IHardware GetHardwareInfo = GetOsInfo.Hardware;
             var json = base.GetJsonHashTable();
 			
             json.Add("aver",Watcher.ApplicationVersion);

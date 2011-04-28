@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Threading;
+using DeskMetrics.OperatingSystem.Hardware;
 
 namespace DeskMetrics.OperatingSystem
 {
@@ -13,6 +14,7 @@ namespace DeskMetrics.OperatingSystem
         abstract public int Architecture { get; set; }
 		abstract public string Version {get;set;}
 		abstract public string FrameworkServicePack {get;set;}
+		abstract public IHardware Hardware {get;set;}
         
         abstract public string JavaVersion { get; set; }
         abstract public string ServicePack { get; set; }

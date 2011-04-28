@@ -10,6 +10,15 @@ namespace DeskMetrics.OperatingSystem
 
 		#region IOperatingSystem implementation
 		
+		public override Hardware.IHardware Hardware {
+			get {
+				throw new System.NotImplementedException();
+			}
+			set {
+				throw new System.NotImplementedException();
+			}
+		}
+		
 		string _frameworkVersion;
 		public override string FrameworkVersion {
 			get {

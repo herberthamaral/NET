@@ -74,7 +74,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
         /// <summary>
         /// GetProcessorFrequency and Set Processor Name
         /// </summary>
-        public string ProcessorName
+        public override string ProcessorName
         {
             get
             {
@@ -89,7 +89,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
         /// <summary>
         /// GetProcessorFrequency and Set Processor Archicteture
         /// </summary>
-        public int ProcessorArchicteture
+        public override  int ProcessorArchicteture
         {
             get
             {
@@ -104,7 +104,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
         /// <summary>
         /// GetProcessorFrequency and Set Processor Cores
         /// </summary>
-        public int ProcessorCores
+        public override int ProcessorCores
         {
             get
             {
@@ -119,7 +119,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
         /// <summary>
         /// GetProcessorFrequency and Set Memory total
         /// </summary>
-        public double MemoryTotal
+        public override double MemoryTotal
         {
             get
             {
@@ -134,7 +134,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
         /// <summary>
         /// GetProcessorFrequency and Set Memory free
         /// </summary>
-        public double MemoryFree
+        public override double MemoryFree
         {
             get
             {
@@ -149,7 +149,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
         /// <summary>
         /// GetProcessorFrequency and Set Disk space total
         /// </summary>
-        public long DiskTotal
+        public override long DiskTotal
         {
             get
             {
@@ -164,7 +164,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
         /// <summary>
         /// GetProcessorFrequency and Set Disk space free
         /// </summary>
-        public long DiskFree
+        public override long DiskFree
         {
             get
             {
@@ -179,7 +179,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
         /// <summary>
         /// GetProcessorFrequency and Set Screen Resolution
         /// </summary>
-        public String ScreenResolution
+        public override String ScreenResolution
         {
             get
             {
@@ -194,7 +194,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
         /// <summary>
         /// GetProcessorFrequency and Set Processor Brand
         /// </summary>
-        public string ProcessorBrand
+        public override string ProcessorBrand
         {
             get
             {
@@ -209,7 +209,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
         /// <summary>
         /// GetProcessorFrequency and Set Processor Frequency
         /// </summary>
-        public int ProcessorFrequency
+        public override int ProcessorFrequency
         {
             get
             {

@@ -79,6 +79,9 @@
     <Compile Include="OperatingSystem\IOperatingSystem.cs" />
     <Compile Include="OperatingSystem\Hardware\Hardware.cs" />
     <Compile Include="OperatingSystem\Hardware\IHardware.cs" />
+    <Compile Include="OperatingSystem\Hardware\WindowsHardware.cs" />
+    <Compile Include="OperatingSystem\Hardware\UnixHardware.cs" />
+    <Compile Include="OperatingSystem\Hardware\MacOSXHadware.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DeskMetrics.snk" />

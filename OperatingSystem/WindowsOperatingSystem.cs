@@ -145,6 +145,15 @@ namespace DeskMetrics.OperatingSystem
             }
         }
 		
+		public override Hardware.IHardware Hardware {
+        	get {
+        		throw new System.NotImplementedException();
+        	}
+        	set {
+        		throw new System.NotImplementedException();
+        	}
+        }
+		
 		public WindowsOperatingSystem()
 		{
 			GetFrameworkVersion();
@@ -347,9 +356,6 @@ namespace DeskMetrics.OperatingSystem
 				JavaVersion = "none";
             }
         }
-		
-		
-		
 		
     }
 }
