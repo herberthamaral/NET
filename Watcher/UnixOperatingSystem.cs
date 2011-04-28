@@ -10,22 +10,24 @@ namespace DeskMetrics
 
 		#region IOperatingSystem implementation
 		
+		string _frameworkVersion;
 		public override string FrameworkVersion {
 			get {
-				throw new NotImplementedException ();
+				if (_frameworkVersion == null)
+					_frameworkVersion = GetFrameworkVersion();
+				return _frameworkVersion;
 			}
-			set {
-				throw new NotImplementedException ();
-			}
+			set {}
 		}
 
+		int _architecture = 0;
 		public override int Architecture {
 			get {
-				throw new NotImplementedException ();
+				if (_architecture == 0)
+					_architecture = GetArchitecture();
+				return _architecture;
 			}
-			set {
-				throw new NotImplementedException ();
-			}
+			set {}
 		}
 
 		string _javaVersion;
@@ -97,6 +99,18 @@ namespace DeskMetrics
 			{
 				return "none";
 			}
+		}
+		
+		int GetArchitecture()
+		{
+			try{
+				string arch = GetCommandExecutionOutput("uname","-m");
+				if (arch.Contains("64"))
+					return 64;
+			}
+			catch{}
+			
+			return 32;
 		}
 	}
 }

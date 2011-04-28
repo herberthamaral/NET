@@ -335,7 +335,6 @@ namespace DeskMetrics
         {
             try
             {
-                JavaVersion = "none";
                 RegistryKey registry = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment");
                 if (registry != null)
                 {
