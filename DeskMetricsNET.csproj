@@ -53,7 +53,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Watcher\Cache.cs" />
     <Compile Include="Watcher\EventType.cs" />
-    <Compile Include="Watcher\IOperatingSystem.cs" />
     <Compile Include="Watcher\Services.cs" />
     <Compile Include="Watcher\Util.cs" />
     <Compile Include="Watcher\Watcher.cs" />
@@ -79,6 +78,7 @@
     <Compile Include="Json\ExceptionJson.cs" />
     <Compile Include="Json\StartAppJson.cs" />
     <Compile Include="Json\EventPeriodJson.cs" />
+    <Compile Include="OperatingSystem\IOperatingSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DeskMetrics.snk" />
@@ -107,6 +107,7 @@
     <Folder Include="Watcher\" />
     <Folder Include="Watcher\" />
     <Folder Include="Json\" />
+    <Folder Include="Watcher\" />
     <Folder Include="Watcher\" />
     <Folder Include="Watcher\" />
   </ItemGroup>

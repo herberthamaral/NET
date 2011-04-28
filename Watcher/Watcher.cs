@@ -101,8 +101,6 @@ namespace DeskMetrics
             get { return _started; }
         }
 
-        
-
         private bool _enabled = true;
 
         public string ApplicationId
