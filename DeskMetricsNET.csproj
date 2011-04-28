@@ -63,10 +63,10 @@
     <Compile Include="Watcher\Watcher.cs" />
     <Compile Include="Watcher\Settings.cs" />
     <Compile Include="Watcher\CurrentUser.cs" />
-    <Compile Include="Properties\MacOSXOperatingSystem.cs" />
-    <Compile Include="Properties\OperatingSystemFactory.cs" />
-    <Compile Include="Properties\UnixOperatingSystem.cs" />
-    <Compile Include="Properties\WindowsOperatingSystem.cs" />
+    <Compile Include="OperatingSystem\MacOSXOperatingSystem.cs" />
+    <Compile Include="OperatingSystem\OperatingSystemFactory.cs" />
+    <Compile Include="OperatingSystem\UnixOperatingSystem.cs" />
+    <Compile Include="OperatingSystem\WindowsOperatingSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DeskMetrics.snk" />
@@ -87,5 +87,9 @@
     <Folder Include="Watcher\" />
     <Folder Include="Watcher\" />
     <Folder Include="Watcher\" />
+    <Folder Include="Properties\" />
+    <Folder Include="Properties\" />
+    <Folder Include="Properties\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>
