@@ -16,6 +16,8 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using DeskMetrics.Json;
+
 namespace DeskMetrics
 {
     public class Cache

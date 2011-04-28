@@ -53,13 +53,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Watcher\Cache.cs" />
     <Compile Include="Watcher\EventType.cs" />
-    <Compile Include="Watcher\IHardware.cs" />
     <Compile Include="Watcher\IOperatingSystem.cs" />
-    <Compile Include="Watcher\JsonBuilder.cs" />
     <Compile Include="Watcher\Services.cs" />
     <Compile Include="Watcher\Util.cs" />
-    <Compile Include="Watcher\Hardware.cs" />
-    <Compile Include="Watcher\Json.cs" />
     <Compile Include="Watcher\Watcher.cs" />
     <Compile Include="Watcher\Settings.cs" />
     <Compile Include="Watcher\CurrentUser.cs" />
@@ -67,6 +63,22 @@
     <Compile Include="OperatingSystem\OperatingSystemFactory.cs" />
     <Compile Include="OperatingSystem\UnixOperatingSystem.cs" />
     <Compile Include="OperatingSystem\WindowsOperatingSystem.cs" />
+    <Compile Include="Hardware\Hardware.cs" />
+    <Compile Include="Hardware\IHardware.cs" />
+    <Compile Include="Json\Json.cs" />
+    <Compile Include="Json\JsonBuilder.cs" />
+    <Compile Include="Json\BaseJson.cs" />
+    <Compile Include="Json\InstallJson.cs" />
+    <Compile Include="Json\UninstallJson.cs" />
+    <Compile Include="Json\StopAppJson.cs" />
+    <Compile Include="Json\EventJson.cs" />
+    <Compile Include="Json\EventValueJson.cs" />
+    <Compile Include="Json\LogJson.cs" />
+    <Compile Include="Json\CustomDataJson.cs" />
+    <Compile Include="Json\CustomDataR.cs" />
+    <Compile Include="Json\ExceptionJson.cs" />
+    <Compile Include="Json\StartAppJson.cs" />
+    <Compile Include="Json\EventPeriodJson.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DeskMetrics.snk" />
@@ -91,5 +103,11 @@
     <Folder Include="Properties\" />
     <Folder Include="Properties\" />
     <Folder Include="Properties\" />
+    <Folder Include="Hardware\" />
+    <Folder Include="Watcher\" />
+    <Folder Include="Watcher\" />
+    <Folder Include="Json\" />
+    <Folder Include="Watcher\" />
+    <Folder Include="Watcher\" />
   </ItemGroup>
 </Project>

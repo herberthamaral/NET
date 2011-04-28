@@ -20,7 +20,7 @@ using System.Collections;
 using System.Globalization;
 using System.Text;
 
-namespace DeskMetrics
+namespace DeskMetrics.Json
 {
     /// <summary>
     /// This class encodes and decodes Json strings.
