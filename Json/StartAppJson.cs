@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using DeskMetrics.OperatingSystem;
+using DeskMetrics.OperatingSystem.Hardware;
 
 namespace DeskMetrics.Json
 {

@@ -26,7 +26,7 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using DeskMetrics.OperatingSystem;
 
-namespace DeskMetrics
+namespace DeskMetrics.OperatingSystem.Hardware
 {
     internal class Hardware:IHardware
     {
