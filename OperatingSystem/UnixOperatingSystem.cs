@@ -25,10 +25,12 @@ namespace DeskMetrics.OperatingSystem
 	
 
 		#region IOperatingSystem implementation
-		
+		Hardware.IHardware _hardware;
 		public override Hardware.IHardware Hardware {
 			get {
-				throw new System.NotImplementedException();
+				if (_hardware == null)
+					_hardware = new DeskMetrics.OperatingSystem.Hardware.UnixHardware();
+				return _hardware;
 			}
 			set {
 				throw new System.NotImplementedException();

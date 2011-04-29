@@ -340,7 +340,6 @@ namespace DeskMetrics.OperatingSystem.Hardware
                         DiskFree  = _drive.TotalFreeSpace;
                     }
                 }
-
             }
             catch
             {

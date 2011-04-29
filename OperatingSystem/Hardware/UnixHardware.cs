@@ -15,6 +15,8 @@
 // **********************************************************************//
 
 using System;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 namespace DeskMetrics.OperatingSystem.Hardware
 {
 	public class UnixHardware:IHardware
@@ -27,94 +29,214 @@ namespace DeskMetrics.OperatingSystem.Hardware
 		#region IHardware implementation
 		public override  string ProcessorName {
 			get {
-				throw new NotImplementedException ();
+				return GetProcessorName();
 			}
-			set {
-				throw new NotImplementedException ();
-			}
+			set {}
 		}
 
 		public override int ProcessorArchicteture {
 			get {
-				throw new NotImplementedException ();
+				return GetArchitecture();
 			}
-			set {
-				throw new NotImplementedException ();
-			}
+			set {}
 		}
 
 		public override int ProcessorCores {
 			get {
-				throw new NotImplementedException ();
+				return GetNumberOfCores();
 			}
-			set {
-				throw new NotImplementedException ();
-			}
+			set {}
 		}
 
 		public override double MemoryTotal {
 			get {
-				throw new NotImplementedException ();
+				return GetTotalMemory();
 			}
-			set {
-				throw new NotImplementedException ();
-			}
+			set {}
 		}
 
 		public override double MemoryFree {
 			get {
-				throw new NotImplementedException ();
+				return GetFreeMemory();
 			}
-			set {
-				throw new NotImplementedException ();
-			}
+			set {}
 		}
 
 		public override long DiskTotal {
 			get {
-				throw new NotImplementedException ();
+				return GetTotalDisk();
 			}
-			set {
-				throw new NotImplementedException ();
-			}
+			set {}
 		}
 
 		public override long DiskFree {
 			get {
-				throw new NotImplementedException ();
+				return GetFreeDisk();
 			}
-			set {
-				throw new NotImplementedException ();
-			}
+			set {}
 		}
 
 		public override string ScreenResolution {
 			get {
-				throw new NotImplementedException ();
+				return GetScreenResolution();
 			}
-			set {
-				throw new NotImplementedException ();
-			}
+			set {}
 		}
 
 		public override string ProcessorBrand {
 			get {
-				throw new NotImplementedException ();
+				return GetProcessorBrand();
 			}
-			set {
-				throw new NotImplementedException ();
-			}
+			set {}
 		}
 
 		public override int ProcessorFrequency {
 			get {
-				throw new NotImplementedException ();
+				return GetProcessorFrequency();
 			}
-			set {
-				throw new NotImplementedException ();
-			}
+			set {}
 		}
 		#endregion
+		
+		string GetProcessorBrand()
+		{
+			try
+			{
+				string output = IOperatingSystem.GetCommandExecutionOutput("cat","/proc/cpuinfo");
+				Regex regex = new Regex(@"(?:vendor_id\s+:\s*)(?<vendor>\w*)");
+				MatchCollection matches = regex.Matches(output);
+				return matches[0].Groups[1].Value;
+			}
+			catch {}
+			return "none";
+		}
+		
+		string GetProcessorName()
+		{
+			try
+			{
+				string output = IOperatingSystem.GetCommandExecutionOutput("cat","/proc/cpuinfo");
+				Regex regex = new Regex(@"(?:model name\s+:\s*)(?<ModelName>[\w \(\)@\.]*)");
+				MatchCollection matches = regex.Matches(output);
+				return matches[0].Groups["ModelName"].Value;
+			}
+			catch {}
+			return "none";
+		}
+		
+		int GetProcessorFrequency()
+		{
+			try
+			{
+				string output = IOperatingSystem.GetCommandExecutionOutput("cat","/proc/cpuinfo");
+				Regex regex = new Regex(@"(?:bogomips\s+:\s*)(?<bogomips>\w*)");
+				MatchCollection matches = regex.Matches(output);
+				int bogomips = int.Parse(matches[0].Groups[1].Value);
+				return bogomips/GetNumberOfCores();
+			}
+			catch {}
+			return 0;
+		}
+		
+		int GetNumberOfCores()
+		{
+			try
+			{
+				string output = IOperatingSystem.GetCommandExecutionOutput("cat","/proc/cpuinfo");
+				Regex regex = new Regex(@"(?:cpu cores\s+:\s*)(?<num>\w*)");
+				MatchCollection matches = regex.Matches(output);
+				return Int32.Parse(matches[0].Groups[1].Value);
+			}
+			catch {}
+			return -1;
+		}
+		
+		int GetArchitecture()
+		{
+			try
+			{
+				string output = IOperatingSystem.GetCommandExecutionOutput("cat","/proc/cpuinfo");
+				Regex regex = new Regex(@"flags\s+\s:[\w\s]*");
+				MatchCollection matches = regex.Matches(output);
+				string flags = matches[0].Groups[0].Value;
+				if (flags.Contains(" lm"))
+					return 64;
+			}
+			catch {}
+			return 32;
+		}
+		
+		double GetTotalMemory()
+		{
+			try
+			{
+				string output = IOperatingSystem.GetCommandExecutionOutput("cat","/proc/meminfo");
+				Regex regex = new Regex(@"(?:MemTotal:\s*)(?<memtotal>\d+)");
+				MatchCollection matches = regex.Matches(output);
+				return  double.Parse(matches[0].Groups[1].Value)*1024;
+			}
+			catch {}
+			return -1;
+		}
+		
+		double GetFreeMemory()
+		{
+			try
+			{
+				string output = IOperatingSystem.GetCommandExecutionOutput("cat","/proc/meminfo");
+				Regex regex = new Regex(@"(?:MemFree:\s*)(?<memtotal>\d+)");
+				MatchCollection matches = regex.Matches(output);
+				return  double.Parse(matches[0].Groups[1].Value)*1024;
+			}
+			catch {}
+			return -1;
+		}
+		
+		long GetTotalDisk()
+		{
+			try
+			{
+				string output = IOperatingSystem.GetCommandExecutionOutput("df","-B 1k");
+				Regex regex = new Regex(@"^/[\w/]*\s*(?<total>\d+)\s*(?<used>\d+)\s*(?<available>\d+)");
+				MatchCollection matches = regex.Matches(output);
+				long total=0;
+				foreach (Match match in matches)
+					total += long.Parse(match.Groups["total"].Value);
+				
+				return  total*1024;
+			}
+			catch {}
+			return -1;
+		}
+		
+		long GetFreeDisk()
+		{
+			try
+			{
+				string output = IOperatingSystem.GetCommandExecutionOutput("df","-B 1k");
+				Regex regex = new Regex(@"^/[\w/]*\s*(?<total>\d+)\s*(?<used>\d+)\s*(?<available>\d+)");
+				MatchCollection matches = regex.Matches(output);
+				long total=0;
+				foreach (Match match in matches)
+					total += long.Parse(match.Groups["available"].Value);
+				
+				return  total*1024;
+			}
+			catch {}
+			return -1;
+		}
+		
+		string GetScreenResolution()
+        {
+            try
+            {
+                int deskHeight = Screen.PrimaryScreen.Bounds.Height;
+                int deskWidth = Screen.PrimaryScreen.Bounds.Width;
+                return deskWidth + "x" + deskHeight;
+            }
+            catch{ }
+			return "none";
+        }    
 	}
 }
 
