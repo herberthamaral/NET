@@ -1,6 +1,6 @@
 // **********************************************************************//
 //                                                                       //
-//     DeskMetrics NET - OperatingSystem.cs                              //
+//     DeskMetrics NET - OperatingSystem/WindowsOperatingSystem.cs       //
 //     Copyright (c) 2010-2011 DeskMetrics Limited                       //
 //                                                                       //
 //     http://deskmetrics.com                                            //

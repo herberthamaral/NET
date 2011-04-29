@@ -1,6 +1,6 @@
 ﻿// **********************************************************************//
 //                                                                       //
-//     DeskMetrics NET - Hardware.cs                                     //
+//     DeskMetrics NET - OperatingSystem/Hardware/Hardware.cs            //
 //     Copyright (c) 2010-2011 DeskMetrics Limited                       //
 //                                                                       //
 //     http://deskmetrics.com                                            //

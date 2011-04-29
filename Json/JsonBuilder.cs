@@ -1,6 +1,6 @@
 ﻿// **********************************************************************//
 //                                                                       //
-//     DeskMetrics NET - JsonBuilder.cs                                  //
+//     DeskMetrics NET - Json/JsonBuilder.cs                             //
 //     Copyright (c) 2010-2011 DeskMetrics Limited                       //
 //                                                                       //
 //     http://deskmetrics.com                                            //
