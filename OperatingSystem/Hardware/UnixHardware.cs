@@ -196,7 +196,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
 		{
 			try
 			{
-				string output = IOperatingSystem.GetCommandExecutionOutput("df","-B 1k");
+				string output = IOperatingSystem.GetCommandExecutionOutput("df","-k");
 				Regex regex = new Regex(@"^/[\w/]*\s*(?<total>\d+)\s*(?<used>\d+)\s*(?<available>\d+)");
 				MatchCollection matches = regex.Matches(output);
 				long total=0;

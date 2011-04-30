@@ -52,15 +52,6 @@ namespace DeskMetrics.OperatingSystem.Hardware
 			}
 		}
 
-		public override  string ScreenResolution {
-			get {
-				throw new NotImplementedException ();
-			}
-			set {
-				throw new NotImplementedException ();
-			}
-		}
-
 		public override  string ProcessorBrand {
 			get {
 				throw new NotImplementedException ();
