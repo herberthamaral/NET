@@ -27,13 +27,11 @@ namespace DeskMetrics.OperatingSystem
 		public static IOperatingSystem GetOperatingSystem()
 		{
 			System.OperatingSystem _osInfo = Environment.OSVersion;
-			switch (_osInfo.Platform)
-			{
-            	case PlatformID.MacOSX:
+			if (_osInfo.Platform == PlatformID.Unix)
+				if (IOperatingSystem.GetCommandExecutionOutput("uname","")=="Darwin\n")
 					return new MacOSXOperatingSystem();
-                case PlatformID.Unix:
+				else 
 					return new UnixOperatingSystem();
-			}
 			return new WindowsOperatingSystem();
 		}
 	}

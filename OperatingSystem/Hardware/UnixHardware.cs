@@ -90,7 +90,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
 			set {}
 		}
 
-		public override int ProcessorFrequency {
+		public override double ProcessorFrequency {
 			get {
 				return GetProcessorFrequency();
 			}

@@ -69,7 +69,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
         /// <summary>
         /// Field Processor Frequency
         /// </summary>
-        private int _processorFrequency;
+        private double _processorFrequency;
 
         /// <summary>
         /// GetProcessorFrequency and Set Processor Name
@@ -209,7 +209,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
         /// <summary>
         /// GetProcessorFrequency and Set Processor Frequency
         /// </summary>
-        public override int ProcessorFrequency
+        public override double ProcessorFrequency
         {
             get
             {

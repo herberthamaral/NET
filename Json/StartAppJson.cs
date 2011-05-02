@@ -46,10 +46,10 @@ namespace DeskMetrics.Json
             json.Add("oslng", GetOsInfo.Lcid);
             json.Add("osscn", GetHardwareInfo.ScreenResolution);
             json.Add("cnm", GetHardwareInfo.ProcessorName);
+			json.Add("car", GetHardwareInfo.ProcessorArchicteture);
             json.Add("cbr", GetHardwareInfo.ProcessorBrand);
             json.Add("cfr", GetHardwareInfo.ProcessorFrequency);
             json.Add("ccr", GetHardwareInfo.ProcessorCores);
-            json.Add("car", GetHardwareInfo.ProcessorArchicteture);
             json.Add("mtt", GetHardwareInfo.MemoryTotal);
             json.Add("mfr", GetHardwareInfo.MemoryFree);
             json.Add("dtt", "null");

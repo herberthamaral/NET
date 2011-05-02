@@ -40,9 +40,9 @@
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DeskMetricsNET.csproj">
+    <ProjectReference Include="..\DeskMetrics.csproj">
       <Project>{BD0BA67E-77A2-4B6B-A9B6-4FFAE1609224}</Project>
-      <Name>DeskMetricsNET</Name>
+      <Name>DeskMetrics</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -32,7 +32,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
         public abstract long DiskFree { get; set; }
         public abstract string ScreenResolution { get; set; }
         public abstract string ProcessorBrand { get; set; }
-        public abstract int ProcessorFrequency { get; set; }
+        public abstract double ProcessorFrequency { get; set; }
 
     }
 }

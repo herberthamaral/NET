@@ -15,6 +15,7 @@
 // **********************************************************************//
 
 using System;
+using System.Text.RegularExpressions;
 namespace DeskMetrics.OperatingSystem.Hardware
 {
 	public class MacOSXHadware:UnixHardware
@@ -27,7 +28,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
 		#region IHardware implementation
 		public override string ProcessorName {
 			get {
-				throw new NotImplementedException ();
+				return GetProcessorName();
 			}
 			set {
 				throw new NotImplementedException ();
@@ -36,40 +37,107 @@ namespace DeskMetrics.OperatingSystem.Hardware
 
 		public override int ProcessorArchicteture {
 			get {
-				throw new NotImplementedException ();
+				return GetProcessorArchitecture();
 			}
-			set {
-				throw new NotImplementedException ();
-			}
+			set {}
 		}
 
 		public override  int ProcessorCores {
 			get {
-				throw new NotImplementedException ();
+				return GetProcessorCores();
 			}
-			set {
-				throw new NotImplementedException ();
-			}
+			set {}
 		}
 
 		public override  string ProcessorBrand {
 			get {
-				throw new NotImplementedException ();
+				return "GenuineIntel";
+			}
+			set {}
+		}
+
+		public override double ProcessorFrequency {
+			get {
+				return GetProcessorFrequency();
+			}
+			set {}
+		}
+		
+		public override double MemoryTotal
+		{
+			get
+			{
+				return GetTotalMemory();
+			}
+			set{}
+		}
+		
+		#endregion
+		string _system_profiler;
+		string _sysctl;
+		
+		internal string Sysctl {
+			get {
+				if (string.IsNullOrEmpty(_sysctl))
+					_sysctl = IOperatingSystem.GetCommandExecutionOutput("sysctl","-a hw");
+				return this._sysctl;
 			}
 			set {
-				throw new NotImplementedException ();
+				_sysctl = value;
 			}
 		}
 
-		public override int ProcessorFrequency {
+		internal string SystemProfiler {
 			get {
-				throw new NotImplementedException ();
+				if (string.IsNullOrEmpty(_system_profiler))
+					_system_profiler = IOperatingSystem.GetCommandExecutionOutput("system_profiler","");
+				return this._system_profiler;
 			}
 			set {
-				throw new NotImplementedException ();
+				_system_profiler = value;
 			}
 		}
-		#endregion
+
+		string GetProcessorName()
+		{
+			try
+			{
+				Regex regex = new Regex(@"Processor Name\s*:\\s*(?<processor>[\w\s\d\.]+)");
+				MatchCollection matches = regex.Matches(SystemProfiler);
+				return  matches[0].Groups["processor"].Value;
+			}catch{}
+			
+			return "Generic";
+		}
+		
+		double GetTotalMemory()
+		{
+			Regex regex = new Regex(@"hw\.memsize\s*(:|=)\s*(?<memory>\d+)");
+			MatchCollection matches = regex.Matches(Sysctl);
+			return  double.Parse(matches[0].Groups["memory"].Value);
+		}
+		
+		int GetProcessorCores()
+		{
+			Regex regex = new Regex(@"hw\.availcpu\s*(:|=)\s*(?<cpus>\d+)");
+			MatchCollection matches = regex.Matches(Sysctl);
+			return  int.Parse(matches[0].Groups["cpus"].Value);
+		}
+		
+		int GetProcessorArchitecture()
+		{
+			Regex regex = new Regex(@"hw\.cpu64bit_capable\s*(:|=)\s*(?<capable>\d+)");
+			MatchCollection matches = regex.Matches(Sysctl);
+			if (matches[0].Groups["cpus"].Value=="1")
+				return 64;
+			return 32;
+		}
+		
+		double GetProcessorFrequency()
+		{
+			Regex regex = new Regex(@"hw\.cpufrequency\s*(:|=)\s*(?<cpu_frequency>\d+)");
+			MatchCollection matches = regex.Matches(Sysctl);
+			return  double.Parse(matches[0].Groups["cpu_frequency"].Value);
+		}
 	}
 }
-

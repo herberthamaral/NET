@@ -153,7 +153,7 @@ namespace DeskMetrics.OperatingSystem.Hardware
 			}
 		}
 
-		public override int ProcessorFrequency {
+		public override double ProcessorFrequency {
 			get {
 				throw new NotImplementedException ();
 			}

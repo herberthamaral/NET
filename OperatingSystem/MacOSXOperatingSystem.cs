@@ -15,6 +15,7 @@
 // **********************************************************************//
 
 using System;
+using System.Text.RegularExpressions;
 namespace DeskMetrics.OperatingSystem
 {
 	internal class MacOSXOperatingSystem: UnixOperatingSystem
@@ -27,23 +28,56 @@ namespace DeskMetrics.OperatingSystem
 
 		public override int Architecture {
 			get {
-				throw new NotImplementedException ();
+				return 64;
 			}
 			set {
-				throw new NotImplementedException ();
+				
 			}
 		}
 		
 		public override string Version {
 			get {
-				throw new System.NotImplementedException();
+				return GetVersion();
 			}
 			set {
-				throw new System.NotImplementedException();
 			}
 		}
 		
+		Hardware.IHardware _hardware;
+		public override Hardware.IHardware Hardware {
+			get {
+				if (_hardware == null)
+					_hardware = new DeskMetrics.OperatingSystem.Hardware.MacOSXHadware();
+				return _hardware;
+			}
+			set {}
+		}
+		
 		#endregion
+		
+		string _system_profiler;
+		string SystemProfilerCommandOutput
+		{
+			get{
+				if (string.IsNullOrEmpty(_system_profiler))
+					_system_profiler = GetCommandExecutionOutput("system_profiler","");
+				return _system_profiler;
+			}
+		}
+		
+		double GetTotalMemory()
+		{
+			Regex regex = new Regex(@"^\s{6}Memory:\s*(?<memory>\d+)");
+			MatchCollection matches = regex.Matches(SystemProfilerCommandOutput);
+			return  double.Parse(matches[0].Groups["memory"].Value)*1024*1024*1024;
+		}
+		
+		string GetVersion()
+		{
+			Regex regex = new Regex(@"System Version:\s(?<version>[\w\s\d\.]*)\s");
+			MatchCollection matches = regex.Matches(SystemProfilerCommandOutput);
+			return  matches[0].Groups["version"].Value;
+		}
 	}
 }
 

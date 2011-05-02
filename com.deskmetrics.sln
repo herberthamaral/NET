@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeskMetricsNET", "DeskMetricsNET.csproj", "{BD0BA67E-77A2-4B6B-A9B6-4FFAE1609224}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeskMetrics", "DeskMetrics.csproj", "{BD0BA67E-77A2-4B6B-A9B6-4FFAE1609224}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{113C3C83-6E60-4D2F-97B4-C8A3B136A10C}"
 EndProject

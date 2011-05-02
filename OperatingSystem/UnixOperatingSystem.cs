@@ -32,9 +32,7 @@ namespace DeskMetrics.OperatingSystem
 					_hardware = new DeskMetrics.OperatingSystem.Hardware.UnixHardware();
 				return _hardware;
 			}
-			set {
-				throw new System.NotImplementedException();
-			}
+			set {}
 		}
 		
 		string _frameworkVersion;
