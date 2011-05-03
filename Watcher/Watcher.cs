@@ -192,14 +192,14 @@ namespace DeskMetrics
 
         private Services _services;
 
-        internal Services Services
+        public Services Services
         {
             get {
                 if (_services == null)
                     _services = new Services(this);
                 return _services; 
             }
-            set { _services = value; }
+            private set { _services = value; }
         }
 
         

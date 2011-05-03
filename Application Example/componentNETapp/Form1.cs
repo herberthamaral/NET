@@ -81,10 +81,10 @@ namespace componentNETapp
         private void btnSetProxy_Click(object sender, EventArgs e)
         {
             // Set proxy configuration
-            DeskMetrics.ProxyHost = edtProxyHost.Text;
-            DeskMetrics.ProxyPort = Int32.Parse(edtProxyPort.Text);
-            DeskMetrics.ProxyUserName = edtProxyUser.Text;
-            DeskMetrics.ProxyPassword = edtProxyPass.Text;
+            DeskMetrics.Services.ProxyHost = edtProxyHost.Text;
+            DeskMetrics.Services.ProxyPort = Int32.Parse(edtProxyPort.Text);
+            DeskMetrics.Services.ProxyUserName = edtProxyUser.Text;
+            DeskMetrics.Services.ProxyPassword = edtProxyPass.Text;
 
             MessageBox.Show("OK!");
         }
