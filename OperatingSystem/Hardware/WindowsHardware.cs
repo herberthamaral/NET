@@ -65,100 +65,96 @@ namespace DeskMetrics.OperatingSystem.Hardware
         /// <summary>
         /// Field Processor Frequency
         /// </summary>
-        private int _processorFrequency;
-		
-		public WindowsHardware ()
-		{
-		}
+        private double _processorFrequency;
 		
 		#region IHardware implementation
 		public override  string ProcessorName {
 			get {
-				throw new NotImplementedException ();
+                return _processorName;
 			}
 			set {
-				throw new NotImplementedException ();
-			}
+                _processorName = value;
+            }
 		}
 
 		public override  int ProcessorArchicteture {
 			get {
-				throw new NotImplementedException ();
+                return _processorArchicteture;
 			}
 			set {
-				throw new NotImplementedException ();
+                _processorArchicteture = value;
 			}
 		}
 
 		public override  int ProcessorCores {
 			get {
-				throw new NotImplementedException ();
+                return _processorCore;
 			}
 			set {
-				throw new NotImplementedException ();
+                _processorCore = value;
 			}
 		}
 
 		public override double MemoryTotal {
 			get {
-				throw new NotImplementedException ();
+                return _memoryTotal;
 			}
 			set {
-				throw new NotImplementedException ();
+                _memoryTotal = value;
 			}
 		}
 
 		public override double MemoryFree {
 			get {
-				throw new NotImplementedException ();
+                return _memoryFree;
 			}
 			set {
-				throw new NotImplementedException ();
+                _memoryFree = value;
 			}
 		}
 
 		public override long DiskTotal {
 			get {
-				throw new NotImplementedException ();
+                return _diskTotal;
 			}
 			set {
-				throw new NotImplementedException ();
+                _diskTotal = value;
 			}
 		}
 
 		public override long DiskFree {
 			get {
-				throw new NotImplementedException ();
+                return _diskFree;
 			}
 			set {
-				throw new NotImplementedException ();
+                _diskFree = value;
 			}
 		}
 
 		public override string ScreenResolution {
 			get {
-				throw new NotImplementedException ();
+                return _screenResolution;
 			}
 			set {
-				throw new NotImplementedException ();
+                _screenResolution = value;
 			}
 		}
 
 		public override string ProcessorBrand {
 			get {
-				throw new NotImplementedException ();
+                return _processorBrand;
 			}
 			set {
-				throw new NotImplementedException ();
+                _processorBrand = value;
 			}
 		}
 
 		public override double ProcessorFrequency {
 			get {
-				throw new NotImplementedException ();
+                return _processorFrequency;
 			}
 			set {
-				throw new NotImplementedException ();
+                _processorFrequency = value;
 			}
 		}
 		#endregion
@@ -177,7 +173,14 @@ namespace DeskMetrics.OperatingSystem.Hardware
         {
             get { return arch; }
         }
-		
+
+        public WindowsHardware()
+        {
+            GetProcessorData();
+            GetMemoryData();
+            GetScreenResolution();
+            GetDiskData();
+        }
 		
 		void GetProcessorData()
         {

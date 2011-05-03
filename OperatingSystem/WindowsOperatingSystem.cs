@@ -147,11 +147,9 @@ namespace DeskMetrics.OperatingSystem
 		
 		public override Hardware.IHardware Hardware {
         	get {
-        		throw new System.NotImplementedException();
+                return new Hardware.WindowsHardware();
         	}
-        	set {
-        		throw new System.NotImplementedException();
-        	}
+        	set {}
         }
 		
 		public WindowsOperatingSystem()
